@@ -1,24 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import Index from './pages/Index';
+import Esgran from './pages/Esgran';
+import Tanso from './pages/Tanso';
+import Muni from './pages/Muni';
+import PageHeader from './components/PageHeader';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <PageHeader />
+      <Routes>
+        <Route path='/' element={<Index />} />
+        <Route path='/esgran' element={<Esgran />} />
+        <Route path='/tanso' element={<Tanso />} />
+        <Route path='/muni' element={<Muni />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
