@@ -1,0 +1,25 @@
+import { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import PageFooter from "../../components/PageFooter";
+
+const Index = lazy(() => import('../0_opened/Index'));
+const Esgran = lazy(() => import('../0_opened/Esgran'));
+const Tanso = lazy(() => import('../0_opened/Tanso'));
+const Muni = lazy(() => import('../0_opened/Muni'));
+
+
+const OpenedPages = () => {
+  return (
+    <Suspense fallback={"loading"}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route exact path="/esgran" element={<Esgran />} />
+        <Route exact path='/tanso' element={<Tanso />} />
+        <Route exact path='/muni' element={<Muni />} />
+      </Routes>
+      <PageFooter />
+    </Suspense>
+  )
+}
+
+export default OpenedPages;

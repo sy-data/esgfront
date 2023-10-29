@@ -3,20 +3,21 @@ import { styled } from "@mui/material"
 const Container = styled('div')(({direction}) => ({
   display: "flex",
   flexDirection: direction === 'v' ? 'row' : 'column',
-  width: "100%",
-  height: "100%"
+  flex: 1
 }));
 
 const Section1 = styled('div')(({direction, customWidth}) => ({
   flex: customWidth ? customWidth : direction === 'v' ? 0.4 : 1,
   ...((!customWidth && direction === 'v') && {
     maxWidth: "600px",
-    minWidth: "400px"
-  })
+    minWidth: "400px",
+  }),
+  display: "grid"
 }));
 
 const Section2 = styled('div')(({customWidth}) => ({
   flex: customWidth ? 1 - customWidth : 1,
+  display: "grid"
 }));
 
 const SplitArea = ({ children, direction, customWidth }) => {

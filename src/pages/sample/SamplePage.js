@@ -1,20 +1,24 @@
 import MenuTitle from "../../components/MenuTitle";
 import SplitArea from "../../components/SplitArea";
 import SubTitle from "../../components/SubTitle";
+import ContentBody from "../../components/ContentBody";
 import { StyledTH, StyledTR, StyledTD } from "../../components/TableWrapper";
-import { Table, TableBody } from "@mui/material";
+import { Table, TableRow, TableBody } from "@mui/material";
+import { ContentWithTitie } from "../../components/Styles";
 
 const SamplePage = () => {
   return (
-    <>
+    <ContentWithTitie style={{ backgroundColor: "#AAAAAA"}}>
       <MenuTitle title={"타이틀입니다"} />
       <SplitArea>
-        <>
+        <ContentBody>
           <SubTitle title={"서브타이틀입니다"} />
           <Table sx={{width: "200px", margin: "20px"}}>
             <StyledTH>
-              <StyledTD>1</StyledTD>
-              <StyledTD>2</StyledTD>
+              <TableRow>
+                <StyledTD>1</StyledTD>
+                <StyledTD>2</StyledTD>
+              </TableRow>
             </StyledTH>
             <TableBody>
               <StyledTR>
@@ -31,13 +35,13 @@ const SamplePage = () => {
               </StyledTR>
             </TableBody>
           </Table>
-        </>
+        </ContentBody>
         <SplitArea direction={'h'} customWidth={0.7}>
-          <div>up</div>
-          <div>down</div>
+          <ContentBody>up</ContentBody>
+          <ContentBody>down</ContentBody>
         </SplitArea>
       </SplitArea>
-    </>
+    </ContentWithTitie>
   )
 }
 
