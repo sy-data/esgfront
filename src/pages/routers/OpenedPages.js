@@ -6,6 +6,7 @@ const Index = lazy(() => import('../0_opened/Index'));
 const Esgran = lazy(() => import('../0_opened/Esgran'));
 const Tanso = lazy(() => import('../0_opened/Tanso'));
 const Muni = lazy(() => import('../0_opened/Muni'));
+const SignUp = lazy(() => import ('../0_opened/Signup'))
 
 
 const OpenedPages = () => {
@@ -16,6 +17,7 @@ const OpenedPages = () => {
         <Route exact path="/esgran" element={<Esgran />} />
         <Route exact path='/tanso' element={<Tanso />} />
         <Route exact path='/muni' element={<Muni />} />
+        <Route exact path='/signup' element={<SignUp />}/>
       </Routes>
       <PageFooter />
     </Suspense>
