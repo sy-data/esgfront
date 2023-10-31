@@ -1,10 +1,10 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import { MainContent } from "../../components/Styles";
-import LeftNavigation from "../../components/LeftNavigation";
+import { MainContent } from "../components/Styles";
+import LeftNavigation from "../components/LeftNavigation";
 
-const ManageWorkplace = lazy(() => import('../1_emission_source/ManageWorkplace'));
-const SamplePage = lazy(() => import('../sample/SamplePage'));
+const ManageWorkplace = lazy(() => import('../pages/1_emission_source/ManageWorkplace'));
+const SamplePage = lazy(() => import('../pages/sample/SamplePage'));
 
 const EmissionSource = () => {
   return (
