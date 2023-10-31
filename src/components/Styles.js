@@ -10,7 +10,6 @@ export const MasterLayout = styled('div')(() => ({
 export const MainContent = styled('div')(() => ({
   flex: 1,
   display: 'flex',
-  flexDirection: 'column'
 }));
 
 export const ContentWithTitie = styled('div')(() => ({
