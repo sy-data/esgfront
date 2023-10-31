@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { styled, Select, FormControl } from "@mui/material";
 
 
 export const MasterLayout = styled('div')(() => ({
@@ -18,3 +18,32 @@ export const ContentWithTitie = styled('div')(() => ({
   flexDirection: 'column',
   flex: 1
 }))
+
+
+export const FilterBlock = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-around'
+}));
+
+export const FilterContainer = styled(FormControl)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+}));
+
+FilterContainer.defaultProps = {
+  size: 'small'
+};
+
+export const FilterLabel = styled('div')(() => ({
+  padding: '0px 10px',
+  margin: '0px 10px',
+  height: '100%',
+  backgroundColor: '#999999',
+  display: 'flex',
+  alignItems: 'center'
+}));
+
+export const FilterSelect = styled(Select)(() => ({
+  minWidth: '150px',
+}));
