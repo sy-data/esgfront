@@ -1,8 +1,8 @@
 import PageHeader from './components/PageHeader';
 import { Routes, Route } from 'react-router-dom';
 import { MasterLayout } from './components/Styles';
-import OpenedPages from './pages/routers/OpenedPages';
-import EmissionSource from './pages/routers/EmissionSource';
+import OpenedPages from './routers/OpenedPages';
+import EmissionSource from './routers/EmissionSource';
 
 
 function App() {
