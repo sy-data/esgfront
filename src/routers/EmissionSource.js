@@ -4,6 +4,7 @@ import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 
 const ManageWorkplace = lazy(() => import('../pages/1_emission_source/manage_workplace/ManageWorkplace'));
+const ManageProduct = lazy(() => import('../pages/1_emission_source/manage_product/ManageProduct'))
 const SamplePage = lazy(() => import('../pages/sample/SamplePage'));
 
 const EmissionSource = () => {
@@ -13,6 +14,7 @@ const EmissionSource = () => {
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="workplace" element={<ManageWorkplace />} />
+          <Route exact path="product" element={<ManageProduct />} />
           <Route exact path='sample' element={<SamplePage />} />
         </Routes>
       </Suspense>
