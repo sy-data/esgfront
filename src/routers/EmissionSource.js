@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 
-const ManageWorkplace = lazy(() => import('../pages/1_emission_source/ManageWorkplace'));
+const ManageWorkplace = lazy(() => import('../pages/1_emission_source/manage_workplace/ManageWorkplace'));
 const SamplePage = lazy(() => import('../pages/sample/SamplePage'));
 
 const EmissionSource = () => {
