@@ -6,7 +6,8 @@ const AreaPadding = styled('div')(() => ({
 }))
 
 const PaperStyle = styled(Paper)(() => ({
-  flex: 1
+  flex: 1,
+  padding: '10px'
 }));
 
 const ContentBody = ({children}) => {
