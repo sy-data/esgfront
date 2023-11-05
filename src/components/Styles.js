@@ -21,13 +21,15 @@ export const ContentWithTitie = styled('div')(() => ({
 
 export const FilterBlock = styled('div')(() => ({
   display: 'flex',
-  justifyContent: 'space-around'
+  justifyContent: 'flax-start'
 }));
 
 export const FilterContainer = styled(FormControl)(() => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
+  marginLeft: '20px',
+  marginRight: '40px'
 }));
 
 FilterContainer.defaultProps = {
