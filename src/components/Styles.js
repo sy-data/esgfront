@@ -21,13 +21,15 @@ export const ContentWithTitie = styled('div')(() => ({
 
 export const FilterBlock = styled('div')(() => ({
   display: 'flex',
-  justifyContent: 'space-around'
+  justifyContent: 'flax-start'
 }));
 
 export const FilterContainer = styled(FormControl)(() => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
+  marginLeft: '20px',
+  marginRight: '40px'
 }));
 
 FilterContainer.defaultProps = {
@@ -38,6 +40,7 @@ export const FilterLabel = styled('div')(() => ({
   padding: '0px 10px',
   margin: '0px 10px',
   height: '100%',
+  minWidth: '100px',
   backgroundColor: '#999999',
   display: 'flex',
   alignItems: 'center'
