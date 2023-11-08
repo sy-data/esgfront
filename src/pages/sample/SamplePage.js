@@ -5,7 +5,9 @@ import SubTitle from "../../components/SubTitle";
 import ContentBody from "../../components/ContentBody";
 import { StyledTH, StyledTR, StyledTD } from "../../components/TableWrapper";
 import { Table, TableRow, TableBody, MenuItem, Button } from "@mui/material";
-import { ContentWithTitie, FilterBlock, FilterContainer, FilterLabel, FilterSelect } from "../../components/Styles";
+import { ContentWithTitie, 
+  FilterBlock, FilterLine, FilterContainer, FilterLabel, FilterSelect, 
+  SearchButtonContainer } from "../../components/Styles";
 import BaseYearSelect from "../../components/filters/BaseYearSelect";
 import DefaultSelect from "../../components/filters/DefaultSelect";
 
@@ -15,26 +17,41 @@ const SamplePage = () => {
   const handleChange1 = event => setSelection1(event.target.value);
   
   const baseYearRef = useRef();
-  const selectRef = useRef();
+  const selectRef1 = useRef();
+  const selectRef2 = useRef();
   
   return (
     <ContentWithTitie style={{ backgroundColor: "#AAAAAA"}}>
+      
       <MenuTitle title={"타이틀입니다"} />
+      
       <FilterBlock>
-        <BaseYearSelect ref={baseYearRef} />
-        <Button variant="outlined" size="small" onClick={() => console.log(baseYearRef.current.baseYear)}>연도확인</Button>
-        <DefaultSelect selectLabel="이름을 입력하세요" selectOptions={selection} ref={selectRef} />
-        <Button variant="outlined" size="small" onClick={() => console.log(selection[selectRef.current.selected])}>옵션확인</Button>
-        <FilterContainer>
-          <FilterLabel>필터이름</FilterLabel>
-          <FilterSelect
-            value={selection1}
-            onChange={handleChange1}
-          >
-            {selection.map(s => <MenuItem key={'3'+s} value={s}>{s}</MenuItem>)}
-          </FilterSelect>
-        </FilterContainer>
+        <FilterLine>
+          <BaseYearSelect ref={baseYearRef} />
+          <DefaultSelect selectLabel="이름 입력1" selectOptions={selection} ref={selectRef1} />
+        </FilterLine>
+        
+        <FilterLine>
+          <DefaultSelect selectLabel="이름 입력2" selectOptions={selection} ref={selectRef2} />
+          
+          <FilterContainer>
+            <FilterLabel>필터이름</FilterLabel>
+            <FilterSelect
+              value={selection1}
+              onChange={handleChange1}
+            >
+              {selection.map(s => <MenuItem key={'3'+s} value={s}>{s}</MenuItem>)}
+            </FilterSelect>
+          </FilterContainer>
+        </FilterLine>
       </FilterBlock>
+      
+      <SearchButtonContainer>
+        <Button variant="outlined" size="small" color="btnSearch" onClick={() => console.log(baseYearRef.current.baseYear)}>연도확인</Button>
+        <Button variant="outlined" size="small" color="btnSearch" onClick={() => console.log(selection[selectRef1.current.selected])}>옵션확인1</Button>
+        <Button variant="outlined" size="small" color="btnSearch" onClick={() => console.log(selection[selectRef2.current.selected])}>옵션확인2</Button>
+      </SearchButtonContainer>
+      
       <SplitArea>
         <ContentBody>
           <SubTitle title={"서브타이틀입니다"} />
