@@ -18,10 +18,16 @@ export const ContentWithTitie = styled('div')(() => ({
   flex: 1
 }))
 
-
 export const FilterBlock = styled('div')(() => ({
+  margin: "10px",
+  padding: "10px",
+  backgroundColor: "#FFFFFF",
+  border: "2px black solid"
+}));
+
+export const FilterLine = styled('div')(() => ({
   display: 'flex',
-  justifyContent: 'flax-start'
+  alignItems: 'center'
 }));
 
 export const FilterContainer = styled(FormControl)(() => ({
@@ -39,8 +45,8 @@ FilterContainer.defaultProps = {
 export const FilterLabel = styled('div')(() => ({
   padding: '0px 10px',
   margin: '0px 10px',
-  height: '100%',
-  minWidth: '100px',
+  height: '40px',
+  minWidth: '120px',
   backgroundColor: '#999999',
   display: 'flex',
   alignItems: 'center'
@@ -48,4 +54,11 @@ export const FilterLabel = styled('div')(() => ({
 
 export const FilterSelect = styled(Select)(() => ({
   minWidth: '150px',
+  maxHeight: '37px'
+}));
+
+export const SearchButtonContainer = styled('div')(() => ({
+  padding: '0px 10px',
+  display: 'flex',
+  justifyContent: 'flex-end'
 }));
