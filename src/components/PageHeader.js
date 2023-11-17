@@ -23,7 +23,7 @@ const PageHeader = () => {
       <HeaderItem onClick={() => navigate("/esgran")}>ESG란?</HeaderItem>
       <HeaderItem onClick={() => navigate("/tanso")}>탄소배출관리</HeaderItem>
       <HeaderItem onClick={() => navigate("/muni")}>문의하기</HeaderItem>
-      <HeaderItem>회원가입</HeaderItem>
+      <HeaderItem onClick={() => navigate("/signup")}>회원가입</HeaderItem>
       <div style={{width: '10px', textAlign: 'center'}} onClick={() => loginDev()}>|</div>
       <HeaderItem>로그인</HeaderItem>
     </HeaderContainer>
