@@ -17,7 +17,7 @@ const OpenedPages = () => {
         <Route exact path="/esgran" element={<Esgran />} />
         <Route exact path='/tanso' element={<Tanso />} />
         <Route exact path='/muni' element={<Muni />} />
-        <Route exact path='/signup' element={<SignUp />}/>
+        <Route exact path='/signup/*' element={<SignUp />}/>
       </Routes>
       <PageFooter />
     </Suspense>

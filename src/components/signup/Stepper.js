@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useRecoilValue } from "recoil";
 import { Stepper, Step, StepLabel } from "@mui/material";
 
+import { activeStep } from "./State";
 
-const SignUpStepper = ({steps, activeStep}) => {
+
+const SignUpStepper = () => {
+    const activeStepValue = useRecoilValue(activeStep);
+    
+    const stepsName = ["가입여부 확인", "이용약관 동의", "사업자정보 입력", "이메일 인증"]
 
     return (
-        <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => {
+        <Stepper activeStep={activeStepValue}>
+            {stepsName.map((label, index) => {
                 return (
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>

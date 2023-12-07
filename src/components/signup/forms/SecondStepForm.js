@@ -1,100 +1,108 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { 
-    styled,
     Divider,
     Button,
     Typography,
     Checkbox,
- } from "@mui/material";
+} from "@mui/material";
+import { 
+    FormContainer, 
+    FormHeader, 
+    ButtonSection,
+    SecondFormSection,
+    SecondFormRow,
+    TermsOfUseCheckBox,
+    TermsOfUseContent,
+    AllCheckSection,
+} from "../Styles";
+import { signupSecondFormState, isFirstStepCompleted, activeStep } from "../State";
 
-import { FormContainer, FormHeader, ButtonSection } from "../Styles";
 
- const TermsOfUseSection = styled('div')(() => ({
-    margin: '10px 0'
-}))
+const SecondStepForm = () => {
+    const navigate = useNavigate();
+    const [fields, setFields] = useRecoilState(signupSecondFormState);
+    const isFirstStepCompletedValue = useRecoilValue(isFirstStepCompleted);
+    const setActiveStep = useSetRecoilState(activeStep);
 
-const TermsOfUseRow = styled('div')(() => ({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-}))
+    useEffect(() => {
+        if (!isFirstStepCompletedValue) {
+            navigate('/signup');
+        }
+        setActiveStep(1);
+        window.scrollTo(0, 0);
+    }, []);
 
-const TermsOfUseCheckBox = styled('div')(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '5px'
-}))
-
-const TermsOfUseContent = styled('div')(() => ({
-    width: '100%',
-    height: '100px',
-    background: 'white',
-    overflowY: 'scroll'
-}))
-
-const AllCheckSection = styled('div')(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-}))
-
-const SecondStepForm = ({setActiveStep}) => {
-    const [firstCheck, setFirstCheck] = useState(false);
-    const [secondCheck, setSecondCheck] = useState(false);
-    const [thirdCheck, setThirdCheck] = useState(false);
+    const handleCheck = (field, value) => {
+        setFields((prevFields) => ({
+            ...prevFields,
+            [field]: value,
+        }))
+    }
 
     const handleSubmit = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        if (!Object.values(fields).every((field) => field)) {
+            alert('모든 약관에 동의하세요');
+            return;
+        }
+        navigate('/signup/step3');
     }
 
     return (
         <FormContainer>
             <FormHeader>이용약관 동의</FormHeader>
             <Divider sx={{ borderBottomWidth: 5 }}/>
-            <TermsOfUseSection>
-                <TermsOfUseRow>
+            <SecondFormSection>
+                <SecondFormRow>
                     <Typography variant="subtitle2">E-Scope+ 이용약관</Typography>
                     <TermsOfUseCheckBox>
-                        <Checkbox checked={firstCheck} onChange={(event) => setFirstCheck(event.target.checked)}/>
+                        <Checkbox 
+                            checked={fields.firstCheck} 
+                            onChange={({target: {checked}}) => handleCheck('firstCheck', checked)}/>
                         <Typography variant="body2">약관동의</Typography>
                     </TermsOfUseCheckBox>
-                </TermsOfUseRow>
+                </SecondFormRow>
                     <TermsOfUseContent>
                         약관내용이 들어갑니다.
                     </TermsOfUseContent>
-            </TermsOfUseSection>
-            <TermsOfUseSection>
-                <TermsOfUseRow>
+            </SecondFormSection>
+            <SecondFormSection>
+                <SecondFormRow>
                     <Typography variant="subtitle2">개인정보 수집 및 이용</Typography>
                     <TermsOfUseCheckBox>
-                        <Checkbox checked={secondCheck} onChange={(event) => setSecondCheck(event.target.checked)}/>
+                        <Checkbox 
+                            checked={fields.secondCheck} 
+                            onChange={({target: {checked}}) => handleCheck('secondCheck', checked)}/>
                         <Typography variant="body2">약관동의</Typography>
                     </TermsOfUseCheckBox>
-                </TermsOfUseRow>
+                </SecondFormRow>
                     <TermsOfUseContent>
                         약관내용이 들어갑니다.
                     </TermsOfUseContent>
-            </TermsOfUseSection>
-            <TermsOfUseSection>
-                <TermsOfUseRow>
+            </SecondFormSection>
+            <SecondFormSection>
+                <SecondFormRow>
                     <Typography variant="subtitle2">제3자 정보제공</Typography>
                     <TermsOfUseCheckBox>
-                        <Checkbox checked={thirdCheck} onChange={(event) => setThirdCheck(event.target.checked)}/>
+                        <Checkbox 
+                            checked={fields.thirdCheck} 
+                            onChange={({target: {checked}}) => handleCheck('thirdCheck', checked)}/>
                         <Typography variant="body2">약관동의</Typography>
                     </TermsOfUseCheckBox>
-                </TermsOfUseRow>
+                </SecondFormRow>
                     <TermsOfUseContent>
                         약관내용이 들어갑니다.
                     </TermsOfUseContent>
-            </TermsOfUseSection>
+            </SecondFormSection>
             <AllCheckSection>
                 <Checkbox
-                    checked={firstCheck && secondCheck && thirdCheck}
-                    onChange={(event) => {
-                        const checked = event.target.checked
-                        setFirstCheck(checked);
-                        setSecondCheck(checked);
-                        setThirdCheck(checked);
+                    checked={Object.values(fields).every((field) => field)}
+                    onChange={({target: {checked}}) => {
+                        const newFields = Object.keys(fields).reduce((newObj, key) => {
+                            return { ...newObj, [key]: checked };
+                          }, {});
+                        setFields(newFields);
                     }}
                 />
                 <Typography variant="body2">E-Scope+의 전체 약관에 동의합니다.</Typography>
@@ -102,7 +110,6 @@ const SecondStepForm = ({setActiveStep}) => {
             <Divider sx={{ borderBottomWidth: 5 }}/>
             <ButtonSection>
                 <Button 
-                    disabled={!(firstCheck && secondCheck && thirdCheck)}
                     variant="contained" 
                     onClick={handleSubmit}
                 >

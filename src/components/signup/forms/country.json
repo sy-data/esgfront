@@ -1,4 +1,12 @@
 {
+    "KR": {
+      "2digitCode": "KR",
+      "3digitCode": "KOR",
+      "ISONumbericCode": 410,
+      "CountryNameKR": "대한민국",
+      "CountryNameEN": "KOREA, REPUBLIC OF",
+      "CountryNameOriginal": "한국"
+    },
     "AF": {
       "2digitCode": "AF",
       "3digitCode": "AFG",
@@ -926,14 +934,6 @@
       "CountryNameKR": "조선민주주의인민공화국",
       "CountryNameEN": "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF",
       "CountryNameOriginal": "조선"
-    },
-    "KR": {
-      "2digitCode": "KR",
-      "3digitCode": "KOR",
-      "ISONumbericCode": 410,
-      "CountryNameKR": "대한민국",
-      "CountryNameEN": "KOREA, REPUBLIC OF",
-      "CountryNameOriginal": "한국"
     },
     "KW": {
       "2digitCode": "KW",

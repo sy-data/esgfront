@@ -1,128 +1,169 @@
-import { useState } from "react";
-import { 
-    styled,
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
     Divider,
     InputLabel,
+    Typography,
     Autocomplete,
     TextField,
     Button,
 } from "@mui/material";
+import {
+    FormContainer,
+    FormHeader,
+    ButtonSection,
+    LabelSection,
+    FirstFormSection,
+    FirstFormRow,
+} from "../Styles";
+import { signupFormState, activeStep } from "../State";
 import countriesData from './country.json';
 
-import { FormContainer, FormHeader, ButtonSection } from "../Styles";
- 
-const FormSection = styled('div')(() => ({
-    display: 'flex',
-    flexDirection: 'column',
-}))
 
-const FormRow = styled('div')(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-    justifyContent: 'space-between',
-    width: '60%',
-}))
-
-// TODO: ThirdStepForm에도 정의되어 있음. 합칠 필요 있음
 const countryNames = Object.values(countriesData).map((country) => country.CountryNameKR)
 
-const FirstStepForm = ({setActiveStep}) => {
-    const [fields, setFields] = useState({
-        country: {value: '', error: false},
-        company: {value: '', error: false},
-        email: {value: '', error: false},
-        companyName: {value: '', error: false},
-    })
+const FirstStepForm = () => {
+    const navigate = useNavigate();
+    const [fields, setFields] = useRecoilState(signupFormState);
+    const setActiveStep = useSetRecoilState(activeStep);
 
-    const handleChange = (field, value) => {
+    useEffect(() => {
+        setActiveStep(0);
+        window.scrollTo(0, 0);
+    }, []);
+
+    const handleChange = (field, value, error = false) => {
         setFields((prevFields) => ({
             ...prevFields,
-            [field]: {value, error: false},
+            [field]: { ...fields[field], value: value, error },
         }))
     }
 
-    const validateEmail = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
+    const formatBizNumber = (value) => {
+        const onlyNums = value.replace(/[^\d]/g, '');
+        if (onlyNums.length <= 3) {
+            return onlyNums;
+        }
+        if (onlyNums.length <= 5) {
+            return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
+        }
+        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 5)}-${onlyNums.slice(5, 10)}`;
+    };
+
+    const validateBizNumber = (number) => {
+        const regex = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
+        return regex.test(number);
     }
 
     const handleSubmit = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        const firstForms = ['country', 'companyCategory', 'bizNumber', 'companyName']
+        for (let form of firstForms) {
+            if (fields[form].error) {
+                alert(fields[form].errorText);
+                return;
+            }
+        }
+        navigate('/signup/step2');
     }
-    
+
     return (
         <FormContainer>
             <FormHeader>가입여부 확인</FormHeader>
-            <Divider sx={{ borderBottomWidth: 5 }}/>
-            <FormSection>
-                <FormRow>
-                    <InputLabel>국가</InputLabel>
+            <Divider sx={{ borderBottomWidth: 5 }} />
+            <FirstFormSection>
+                <FirstFormRow>
+                    <LabelSection>
+                        <InputLabel>국가</InputLabel>
+                        <Typography color={'red'}>*</Typography>
+                    </LabelSection>
                     <Autocomplete
                         disableClearable
-                        onChange={(_, value) => handleChange('country', value)}
+                        value={fields.country.value}
                         options={countryNames}
-                        sx={{width: '60%'}}
-                        renderInput={(params) => <TextField {...params} label="국가"/>}
+                        onChange={(_, value) => {
+                            const error = value === null
+                            handleChange('country', value, error);
+                            if (value === '대한민국') {
+                                const error = !validateBizNumber(fields.bizNumber.value);
+                                handleChange('bizNumber', fields.bizNumber.value, error);
+                            } else {
+                                handleChange('bizNumber', fields.bizNumber.value, false);
+                                handleChange('foreignerBizNumber', fields.foreignerBizNumber.value);
+                            }
+                        }}
+                        sx={{ width: '60%' }}
+                        renderInput={(params) => <TextField {...params} label="국가" />}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputLabel>회사구분</InputLabel>
+                </FirstFormRow>
+                <FirstFormRow>
+                    <LabelSection>
+                        <InputLabel>회사구분</InputLabel>
+                        <Typography color={'red'}>*</Typography>
+                    </LabelSection>
                     <Autocomplete
                         disableClearable
-                        onChange={(_, value) => handleChange('company', value)}
+                        value={fields.companyCategory.value}
                         options={['개인사업체', '법인사업체']}
-                        sx={{width: '60%'}}
-                        renderInput={(params) => <TextField {...params} label="회사 구분"/>}
+                        onChange={(_, value) => {
+                            const error = value === null;
+                            handleChange('companyCategory', value, error);
+                            if (value === '법인사업체') {
+                                handleChange('companyNumber', fields.companyNumber.value, true);
+                            } else {
+                                handleChange('companyNumber', fields.companyNumber.value, false);
+                            }
+                        }}
+                        sx={{ width: '60%' }}
+                        renderInput={(params) => <TextField {...params} label="회사 구분" />}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputLabel>이메일</InputLabel>
-                    <TextField 
+                </FirstFormRow>
+                {fields.country.value === '대한민국' && <FirstFormRow>
+                    <LabelSection>
+                        <InputLabel>사업자등록번호</InputLabel>
+                        <Typography color={'red'}>*</Typography>
+                    </LabelSection>
+                    <TextField
                         required
-                        error={fields.email.error}
-                        type="email"
-                        value={fields.email.value}
-                        onBlur={() => {
-                            const error = !validateEmail(fields.email.value);
-                            setFields((prevFields) => ({
-                                ...prevFields,
-                                ['email']: { ...fields['email'], error: error},
-                            }))
+                        type="text"
+                        value={fields.bizNumber.value}
+                        onChange={({ target: { value } }) => {
+                            const formattedValue = formatBizNumber(value);
+                            const error = !validateBizNumber(formattedValue);
+                            handleChange('bizNumber', formattedValue, error);
                         }}
-                        onChange={({target: {value}}) => handleChange('email', value)}
-                        placeholder="example@escope.com"
-                        sx={{width: '60%'}}
+                        placeholder="사업자등록번호를 입력하세요"
+                        sx={{ width: '60%' }}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputLabel>회사명</InputLabel>
-                    <TextField 
-                        required 
-                        error={fields.companyName.error}
+                </FirstFormRow>}
+                <FirstFormRow>
+                    <LabelSection>
+                        <InputLabel>회사명</InputLabel>
+                        <Typography color={'red'}>*</Typography>
+                    </LabelSection>
+                    <TextField
+                        required
                         value={fields.companyName.value}
-                        onBlur={() => {
-                            const error = fields.companyName.value === '';
-                            setFields((prevFields) => ({
-                                ...prevFields,
-                                ['companyName']: { ...fields['companyName'], error: error},
-                            }))
+                        onChange={({ target: { value } }) => {
+                            const error = value === '';
+                            handleChange('companyName', value, error);
                         }}
-                        onChange={({target: {value}}) => handleChange('companyName', value)}
-                        sx={{width: '60%'}}
+                        sx={{ width: '60%' }}
                     />
-                </FormRow>
-            </FormSection>
-            <Divider sx={{ borderBottomWidth: 5 }}/>
+                </FirstFormRow>
+            </FirstFormSection>
+            <Divider sx={{ borderBottomWidth: 5 }} />
             <ButtonSection>
-                <Button 
-                    variant='contained' 
-                    disabled={Object.values(fields).some((field) => field.error)}
+                <Button
+                    variant='contained'
                     onClick={handleSubmit}
                 >
                     가입여부 확인
                 </Button>
-                <Button variant='contained'>취소</Button>
+                <Button 
+                    variant='contained'
+                    onClick={() => navigate('/')}
+                >취소</Button>
             </ButtonSection>
         </FormContainer>
     )

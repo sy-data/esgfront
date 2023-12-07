@@ -4,7 +4,8 @@ import { styled, Select, FormControl } from "@mui/material";
 export const MasterLayout = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
-  width: '100%', height: '100%'
+  width: '100%', 
+  minHeight: '100%'
 }));
 
 export const MainContent = styled('div')(() => ({
