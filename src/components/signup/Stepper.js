@@ -7,7 +7,7 @@ import { activeStep } from "./State";
 const SignUpStepper = () => {
     const activeStepValue = useRecoilValue(activeStep);
     
-    const stepsName = ["가입여부 확인", "이용약관 동의", "사업자정보 입력", "이메일 인증"]
+    const stepsName = ["가입여부 확인", "이용약관 동의", "사업자정보 입력"]
 
     return (
         <Stepper activeStep={activeStepValue}>

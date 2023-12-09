@@ -7,7 +7,7 @@ import SignUpStepper from "../../components/signup/Stepper";
 import FirstStepForm from "../../components/signup/forms/FirstStepForm";
 import SecondStepForm from "../../components/signup/forms/SecondStepForm";
 import ThridStepForm from "../../components/signup/forms/ThirdStepForm";
-import FourthStepForm from "../../components/signup/forms/FourthForm";
+// import FourthStepForm from "../../components/signup/forms/FourthForm";
 
 const StyledSignUpPage = styled('div')(() => ({
     height: '100%'
@@ -23,7 +23,7 @@ const SignUp = () => {
                     <Route path="/*" element={<FirstStepForm/>}/>
                     <Route path="/step2" element={<SecondStepForm/>}/>
                     <Route path="/step3" element={<ThridStepForm/>}/>
-                    <Route path="/step4" element={<FourthStepForm/>}/>
+                    {/* <Route path="/step4" element={<FourthStepForm/>}/> */}
                 </Routes>
             </SignUpMain>
         </StyledSignUpPage>

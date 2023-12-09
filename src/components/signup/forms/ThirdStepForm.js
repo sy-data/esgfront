@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import DaumPostcode from 'react-daum-postcode';
 import { 
     Divider,
     InputLabel,
@@ -19,7 +18,8 @@ import {
     ButtonSection,
     LabelSection,
     ThirdFormSection,
-    AddressRow,
+    InputAndButtonRow,
+    EmailSection,
 } from "../Styles";
 import { 
    signupFormState,
@@ -27,6 +27,8 @@ import {
    isSecondStepCompleted,
    activeStep
 } from "../State";
+import AddressModal from "../modal/Address";
+import EmailVerificationFailModal from "../modal/EmailVerficationFail";
 import countriesData from './country.json';
 
 
@@ -39,6 +41,10 @@ const ThridStepForm = () => {
     const isSecondStepCompletedValue = useRecoilValue(isSecondStepCompleted);
     const setActiveStep = useSetRecoilState(activeStep);
 
+    const [emailVerificationCode, setEmailVerificationCode] = useState('');
+    const [emailVerificationCodeInput, setEmailVerificationCodeInput] = useState('');
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
+    const [emailVerificationFailModalOpen, setEmailVerificationFailModalOpen] = useState(false);
     const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
     const [isIdAvailable, setIsIdAvailable] = useState(false);
 
@@ -53,7 +59,29 @@ const ThridStepForm = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const validateBusinessNumber = (number) => {
+    const formatBizNumber = (value) => {
+        const onlyNums = value.replace(/[^\d]/g, '');
+        if (onlyNums.length <= 3) {
+            return onlyNums;
+        }
+        if (onlyNums.length <= 5) {
+            return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
+        }
+        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 5)}-${onlyNums.slice(5, 10)}`;
+    };
+
+    const formatCompanyNumber = (value) => {
+        const onlyNums = value.replace(/[^\d]/g, '');
+        if (onlyNums.length <= 6) {
+            return onlyNums;
+        }
+        if (onlyNums.length <= 13) {
+            return `${onlyNums.slice(0, 6)}-${onlyNums.slice(6)}`;
+        }
+        return `${onlyNums.slice(0, 6)}-${onlyNums.slice(6, 13)}`;
+    };
+
+    const validateBizNumber = (number) => {
         const regex = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
         return regex.test(number);
     }
@@ -76,6 +104,12 @@ const ThridStepForm = () => {
     const validPassword = (password) => {
         const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
         return regex.test(password);
+    }
+
+    const sendEmailVerificationCode = () => {
+        alert('인증번호가 발송되었습니다.(asdf)');
+        const tempVerificationCode = 'asdf';
+        setEmailVerificationCode(tempVerificationCode);
     }
 
     const checkIdAvailability = () => {
@@ -102,7 +136,7 @@ const ThridStepForm = () => {
             alert('아이디 중복확인을 진행해 주세요');
             return;
         }
-        navigate('/signup/step4');
+        alert(fields);
     }
 
     return (
@@ -160,7 +194,7 @@ const ThridStepForm = () => {
                         const error = value === null
                         handleChange('country', value, error);
                         if (value === '대한민국') {
-                            const error = !validateBusinessNumber(fields.bizNumber.value);
+                            const error = !validateBizNumber(fields.bizNumber.value);
                             handleChange('bizNumber', fields.bizNumber.value, error);
                         } else {
                             handleChange('bizNumber', fields.bizNumber.value, false);
@@ -180,8 +214,9 @@ const ThridStepForm = () => {
                     value={fields.country.value === '대한민국' ? 
                             fields.bizNumber.value : fields.foreignerBizNumber.value}
                     onChange={({target: {value}}) => {
+                        value = formatBizNumber(value);
                         if (fields.country.value === '대한민국') {
-                            const error = !validateBusinessNumber(value);
+                            const error = !validateBizNumber(value);
                             handleChange('bizNumber', value, error);
                         } else {
                             handleChange('foreignerBizNumber', value);
@@ -199,6 +234,7 @@ const ThridStepForm = () => {
                     type="text"
                     value={fields.companyNumber.value}
                     onChange={({target: {value}}) => {
+                        value = formatCompanyNumber(value);
                         const error = !validateCompanyNumber(value);
                         handleChange('companyNumber', value, error);
                     }}
@@ -227,7 +263,7 @@ const ThridStepForm = () => {
                     <InputLabel>주소</InputLabel>
                     <Typography color={'red'}>*</Typography>
                 </LabelSection>
-                <AddressRow style={{gridColumn: 'span 3'}}>
+                <InputAndButtonRow style={{gridColumn: 'span 3'}}>
                     <TextField 
                         disabled 
                         value={fields.zoneCode.value}
@@ -246,12 +282,12 @@ const ThridStepForm = () => {
                     >
                         <SearchOutlinedIcon />
                     </IconButton>
-                </AddressRow>
+                </InputAndButtonRow>
                 <LabelSection>
                     <InputLabel>상세주소</InputLabel>
                     <Typography color={'red'}>*</Typography>
                 </LabelSection>
-                <AddressRow style={{gridColumn: 'span 3'}}>
+                <InputAndButtonRow style={{gridColumn: 'span 3'}}>
                     <TextField 
                         required 
                         value={fields.addressDetail.value}
@@ -262,20 +298,13 @@ const ThridStepForm = () => {
                         sx={{flex: '1'}}
                         placeholder="주소"
                     />
-                </AddressRow>
+                </InputAndButtonRow>
                 <Dialog
                     open={isPostcodeOpen}
                     onClose={() => setIsPostcodeOpen(false)}
                     fullWidth
                 >
-                    <DaumPostcode 
-                        onComplete={(data) => {
-                            handleChange('zoneCode', data.zonecode);
-                            handleChange('address', data.address);
-                            setIsPostcodeOpen(false);
-                        }}
-                        style={{minHeight: '450px'}}
-                    />
+                    <AddressModal setIsOpen={setIsPostcodeOpen}/>
                 </Dialog>
                 <LabelSection>
                     <InputLabel>대표전화번호</InputLabel>
@@ -301,16 +330,57 @@ const ThridStepForm = () => {
                     <InputLabel>대표E-mail</InputLabel>
                     <Typography color={'red'}>*</Typography>
                 </LabelSection>
-                <TextField 
-                    required
-                    type="email"
-                    value={fields.representiveEmail.value}
-                    onChange={({target: {value}}) => {
-                        const error = !validEmail(value);
-                        handleChange('representiveEmail', value, error);
-                    }}
-                    placeholder="대표E-mail을 입력하세요"
-                />
+                <EmailSection>
+                    <InputAndButtonRow>
+                        <TextField 
+                            required
+                            type="email"
+                            value={fields.representiveEmail.value}
+                            onChange={({target: {value}}) => {
+                                const error = !validEmail(value);
+                                handleChange('representiveEmail', value, error);
+                            }}
+                            sx={{width: '70%'}}
+                            placeholder="대표E-mail을 입력하세요"
+                        />
+                        <Button 
+                            variant="contained"
+                            onClick={sendEmailVerificationCode}
+                            sx={{width: '15%'}}
+                        >
+                            인증하기
+                        </Button>
+                    </InputAndButtonRow>
+                    <InputAndButtonRow>
+                        <TextField 
+                            required
+                            type='text'
+                            value={emailVerificationCodeInput}
+                            onChange={({target: {value}}) => {
+                                setEmailVerificationCodeInput(value);
+                            }}
+                            sx={{width: '70%'}}
+                            placeholder="인증번호를 입력하세요"
+                        />
+                        <Button 
+                            variant="contained"
+                            onClick={() => {
+                                setEmailVerificationFailModalOpen(true);
+                                setIsEmailVerified(emailVerificationCodeInput === emailVerificationCode)
+                            }}
+                            sx={{width: '15%'}}
+                        >
+                            확인
+                        </Button>
+                    </InputAndButtonRow>
+                    {emailVerificationCode !== '' && <Typography color='red'>*인증번호가 도착하지 않으셧나요? (클릭)</Typography>}
+                </EmailSection>
+                <Dialog
+                    open={emailVerificationFailModalOpen}
+                    onClose={() => setEmailVerificationFailModalOpen(false)}
+                >
+                    <EmailVerificationFailModal setIsOpen={setEmailVerificationFailModalOpen}/>
+                </Dialog>
                 <InputLabel>홈페이지</InputLabel>
                 <TextField 
                     value={fields.homepage.value}
@@ -355,7 +425,7 @@ const ThridStepForm = () => {
                     <InputLabel>아이디</InputLabel>
                     <Typography color={'red'}>*</Typography>
                 </LabelSection>
-                <AddressRow>
+                <InputAndButtonRow>
                     <TextField 
                         required
                         value={fields.id.value}
@@ -372,12 +442,12 @@ const ThridStepForm = () => {
                     >
                         중복확인
                     </Button>
-                </AddressRow>
+                </InputAndButtonRow>
                 <LabelSection>
                     <InputLabel>비밀번호</InputLabel>
                     <Typography color={'red'}>*</Typography>
                 </LabelSection>
-                <AddressRow>
+                <InputAndButtonRow>
                     <TextField 
                         required
                         type="password"
@@ -398,7 +468,7 @@ const ThridStepForm = () => {
                         }}
                         placeholder="비밀번호 확인"
                     />
-                </AddressRow>
+                </InputAndButtonRow>
                 <LabelSection>
                     <InputLabel>담당자휴대폰</InputLabel>
                     <Typography color={'red'}>*</Typography>

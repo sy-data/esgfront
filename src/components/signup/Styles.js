@@ -79,10 +79,16 @@ export const ThirdFormSection = styled('div')(() => ({
     gap: '20px',
 }));
 
-export const AddressRow = styled('div')(() => ({
+export const InputAndButtonRow = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
     gap: '20px',
+}));
+
+export const EmailSection = styled('div')(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
 }));
 
 // FourthStepForm styles
