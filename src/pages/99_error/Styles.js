@@ -3,7 +3,7 @@ import { styled } from '@mui/material';
 export const Background = styled('div')(() => ({
     backgroundColor: '#AAAAAA',
     width: '100%',
-    height: '100%',
+    height: '100vh',
 }));
 
 export const Overlay = styled('div')(() => ({
