@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PageFooter from "../components/PageFooter";
+import PageNotFound from "../pages/99_error/PageNotFound";
 
 const Index = lazy(() => import('../pages/0_opened/Index'));
 const Esgran = lazy(() => import('../pages/0_opened/Esgran'));
@@ -18,6 +19,7 @@ const OpenedPages = () => {
         <Route exact path='/tanso' element={<Tanso />} />
         <Route exact path='/muni' element={<Muni />} />
         <Route exact path='/signup/*' element={<SignUp />}/>
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
       <PageFooter />
     </Suspense>
