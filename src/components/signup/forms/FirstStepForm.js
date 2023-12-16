@@ -18,8 +18,8 @@ import {
     FirstFormRow,
 } from "../Styles";
 import { signupFormState, activeStep } from "../State";
+import { esgFetch } from "../../FetchWrapper";
 import countriesData from './country.json';
-
 
 const countryNames = Object.values(countriesData).map((country) => country.CountryNameKR)
 
@@ -57,14 +57,41 @@ const FirstStepForm = () => {
     }
 
     const handleSubmit = () => {
+        if (checkErrorFields()) return;
+        if (checkRegister()) return;
+        navigate('/signup/step2');
+    }
+
+    const checkErrorFields = () => {
         const firstForms = ['country', 'companyCategory', 'bizNumber', 'companyName']
         for (let form of firstForms) {
             if (fields[form].error) {
                 alert(fields[form].errorText);
-                return;
+                return true;
             }
         }
-        navigate('/signup/step2');
+        return false;
+    }
+
+    const checkRegister = () => {
+        const url = `/api/companies?` + 
+            `filters[country][$eq]=${convertToCountryCode(fields.country)}&` +
+            `filters[brn][$eq]=${fields.bizNumber.value}&` +
+            `filters[type][$eq]=${fields.companyCategory.value}&` +
+            `filters[name][$eq]=${fields.companyName.value}`;
+        esgFetch(url, 'GET', {}, false).then((response) => {
+            return response.json();
+        }).then(({data: value}) => {
+            if (value.length === 0) {
+                return false;
+            }
+            return true;
+        });
+    }
+
+    const convertToCountryCode = (countryName) => {
+        const country = Object.values(countriesData).find((country) => country.CountryNameKR === countryName.value);
+        return country.Country2digitCode.toLowerCase();
     }
 
     return (

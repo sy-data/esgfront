@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from '@mui/material';
 import theme from './Theme';
 
@@ -12,7 +13,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <App />
+        <RecoilRoot>
+          <App />
+        </RecoilRoot>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>

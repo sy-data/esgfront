@@ -1,6 +1,6 @@
 {
     "KR": {
-      "2digitCode": "KR",
+      "Country2digitCode": "KR",
       "3digitCode": "KOR",
       "ISONumbericCode": 410,
       "CountryNameKR": "대한민국",
@@ -8,7 +8,7 @@
       "CountryNameOriginal": "한국"
     },
     "AF": {
-      "2digitCode": "AF",
+      "Country2digitCode": "AF",
       "3digitCode": "AFG",
       "ISONumbericCode": 4,
       "CountryNameKR": "아프가니스탄",
@@ -16,7 +16,7 @@
       "CountryNameOriginal": "افغانستان"
     },
     "AL": {
-      "2digitCode": "AL",
+      "Country2digitCode": "AL",
       "3digitCode": "ALB",
       "ISONumbericCode": 8,
       "CountryNameKR": "알바니아",
@@ -24,7 +24,7 @@
       "CountryNameOriginal": "Shqipëria"
     },
     "AQ": {
-      "2digitCode": "AQ",
+      "Country2digitCode": "AQ",
       "3digitCode": "ATA",
       "ISONumbericCode": 10,
       "CountryNameKR": "남극",
@@ -32,7 +32,7 @@
       "CountryNameOriginal": "Antarctica"
     },
     "DZ": {
-      "2digitCode": "DZ",
+      "Country2digitCode": "DZ",
       "3digitCode": "DZA",
       "ISONumbericCode": 12,
       "CountryNameKR": "알제리",
@@ -40,7 +40,7 @@
       "CountryNameOriginal": "الجزائر"
     },
     "AS": {
-      "2digitCode": "AS",
+      "Country2digitCode": "AS",
       "3digitCode": "ASM",
       "ISONumbericCode": 16,
       "CountryNameKR": "아메리칸사모아",
@@ -48,7 +48,7 @@
       "CountryNameOriginal": "American Samoa"
     },
     "AD": {
-      "2digitCode": "AD",
+      "Country2digitCode": "AD",
       "3digitCode": "AND",
       "ISONumbericCode": 20,
       "CountryNameKR": "안도라",
@@ -56,7 +56,7 @@
       "CountryNameOriginal": "Andorra"
     },
     "AO": {
-      "2digitCode": "AO",
+      "Country2digitCode": "AO",
       "3digitCode": "AGO",
       "ISONumbericCode": 24,
       "CountryNameKR": "앙골라",
@@ -64,7 +64,7 @@
       "CountryNameOriginal": "Angola"
     },
     "AG": {
-      "2digitCode": "AG",
+      "Country2digitCode": "AG",
       "3digitCode": "ATG",
       "ISONumbericCode": 28,
       "CountryNameKR": "앤티가 바부다",
@@ -72,7 +72,7 @@
       "CountryNameOriginal": "Antigua and Barbuda"
     },
     "AZ": {
-      "2digitCode": "AZ",
+      "Country2digitCode": "AZ",
       "3digitCode": "AZE",
       "ISONumbericCode": 31,
       "CountryNameKR": "아제르바이잔",
@@ -80,7 +80,7 @@
       "CountryNameOriginal": "Azərbaycan"
     },
     "AR": {
-      "2digitCode": "AR",
+      "Country2digitCode": "AR",
       "3digitCode": "ARG",
       "ISONumbericCode": 32,
       "CountryNameKR": "아르헨티나",
@@ -88,7 +88,7 @@
       "CountryNameOriginal": "Argentina"
     },
     "AU": {
-      "2digitCode": "AU",
+      "Country2digitCode": "AU",
       "3digitCode": "AUS",
       "ISONumbericCode": 36,
       "CountryNameKR": "오스트레일리아",
@@ -96,7 +96,7 @@
       "CountryNameOriginal": "Australia"
     },
     "AT": {
-      "2digitCode": "AT",
+      "Country2digitCode": "AT",
       "3digitCode": "AUT",
       "ISONumbericCode": 40,
       "CountryNameKR": "오스트리아",
@@ -104,7 +104,7 @@
       "CountryNameOriginal": "Österreich"
     },
     "BS": {
-      "2digitCode": "BS",
+      "Country2digitCode": "BS",
       "3digitCode": "BHS",
       "ISONumbericCode": 44,
       "CountryNameKR": "바하마",
@@ -112,7 +112,7 @@
       "CountryNameOriginal": "Bahamas"
     },
     "BH": {
-      "2digitCode": "BH",
+      "Country2digitCode": "BH",
       "3digitCode": "BHR",
       "ISONumbericCode": 48,
       "CountryNameKR": "바레인",
@@ -120,7 +120,7 @@
       "CountryNameOriginal": "البحرين"
     },
     "BD": {
-      "2digitCode": "BD",
+      "Country2digitCode": "BD",
       "3digitCode": "BGD",
       "ISONumbericCode": 50,
       "CountryNameKR": "방글라데시",
@@ -128,7 +128,7 @@
       "CountryNameOriginal": "বাংলাদেশ"
     },
     "AM": {
-      "2digitCode": "AM",
+      "Country2digitCode": "AM",
       "3digitCode": "ARM",
       "ISONumbericCode": 51,
       "CountryNameKR": "아르메니아",
@@ -136,7 +136,7 @@
       "CountryNameOriginal": "Հայաստան"
     },
     "BB": {
-      "2digitCode": "BB",
+      "Country2digitCode": "BB",
       "3digitCode": "BRB",
       "ISONumbericCode": 52,
       "CountryNameKR": "바베이도스",
@@ -144,7 +144,7 @@
       "CountryNameOriginal": "Barbados"
     },
     "BE": {
-      "2digitCode": "BE",
+      "Country2digitCode": "BE",
       "3digitCode": "BEL",
       "ISONumbericCode": 56,
       "CountryNameKR": "벨기에",
@@ -152,7 +152,7 @@
       "CountryNameOriginal": "België"
     },
     "BM": {
-      "2digitCode": "BM",
+      "Country2digitCode": "BM",
       "3digitCode": "BMU",
       "ISONumbericCode": 60,
       "CountryNameKR": "버뮤다",
@@ -160,7 +160,7 @@
       "CountryNameOriginal": "Bermuda"
     },
     "BT": {
-      "2digitCode": "BT",
+      "Country2digitCode": "BT",
       "3digitCode": "BTN",
       "ISONumbericCode": 64,
       "CountryNameKR": "부탄",
@@ -168,7 +168,7 @@
       "CountryNameOriginal": "འབྲུག་ཡུལ"
     },
     "BO": {
-      "2digitCode": "BO",
+      "Country2digitCode": "BO",
       "3digitCode": "BOL",
       "ISONumbericCode": 68,
       "CountryNameKR": "볼리비아",
@@ -176,7 +176,7 @@
       "CountryNameOriginal": "Bolivia"
     },
     "BA": {
-      "2digitCode": "BA",
+      "Country2digitCode": "BA",
       "3digitCode": "BIH",
       "ISONumbericCode": 70,
       "CountryNameKR": "보스니아 헤르체고비나",
@@ -184,7 +184,7 @@
       "CountryNameOriginal": "Bosna i Hercegovina"
     },
     "BW": {
-      "2digitCode": "BW",
+      "Country2digitCode": "BW",
       "3digitCode": "BWA",
       "ISONumbericCode": 72,
       "CountryNameKR": "보츠와나",
@@ -192,7 +192,7 @@
       "CountryNameOriginal": "Botswana"
     },
     "BV": {
-      "2digitCode": "BV",
+      "Country2digitCode": "BV",
       "3digitCode": "BVT",
       "ISONumbericCode": 74,
       "CountryNameKR": "부베 섬",
@@ -200,7 +200,7 @@
       "CountryNameOriginal": "Bouvet Island"
     },
     "BR": {
-      "2digitCode": "BR",
+      "Country2digitCode": "BR",
       "3digitCode": "BRA",
       "ISONumbericCode": 76,
       "CountryNameKR": "브라질",
@@ -208,7 +208,7 @@
       "CountryNameOriginal": "Brasil"
     },
     "BZ": {
-      "2digitCode": "BZ",
+      "Country2digitCode": "BZ",
       "3digitCode": "BLZ",
       "ISONumbericCode": 84,
       "CountryNameKR": "벨리즈",
@@ -216,7 +216,7 @@
       "CountryNameOriginal": "Belize"
     },
     "IO": {
-      "2digitCode": "IO",
+      "Country2digitCode": "IO",
       "3digitCode": "IOT",
       "ISONumbericCode": 86,
       "CountryNameKR": "영국령 인도양 지역",
@@ -224,7 +224,7 @@
       "CountryNameOriginal": "British Indian Ocean Territory"
     },
     "SB": {
-      "2digitCode": "SB",
+      "Country2digitCode": "SB",
       "3digitCode": "SLB",
       "ISONumbericCode": 90,
       "CountryNameKR": "솔로몬 제도",
@@ -232,7 +232,7 @@
       "CountryNameOriginal": "Solomon Islands"
     },
     "VG": {
-      "2digitCode": "VG",
+      "Country2digitCode": "VG",
       "3digitCode": "VGB",
       "ISONumbericCode": 92,
       "CountryNameKR": "영국령 버진아일랜드",
@@ -240,7 +240,7 @@
       "CountryNameOriginal": "Virgin Islands, British"
     },
     "BN": {
-      "2digitCode": "BN",
+      "Country2digitCode": "BN",
       "3digitCode": "BRN",
       "ISONumbericCode": 96,
       "CountryNameKR": "브루나이",
@@ -248,7 +248,7 @@
       "CountryNameOriginal": "Brunei Darussalam"
     },
     "BG": {
-      "2digitCode": "BG",
+      "Country2digitCode": "BG",
       "3digitCode": "BGR",
       "ISONumbericCode": 100,
       "CountryNameKR": "불가리아",
@@ -256,7 +256,7 @@
       "CountryNameOriginal": "България"
     },
     "MM": {
-      "2digitCode": "MM",
+      "Country2digitCode": "MM",
       "3digitCode": "MMR",
       "ISONumbericCode": 104,
       "CountryNameKR": "미얀마",
@@ -264,7 +264,7 @@
       "CountryNameOriginal": "Myanmar(Burma)"
     },
     "BI": {
-      "2digitCode": "BI",
+      "Country2digitCode": "BI",
       "3digitCode": "BDI",
       "ISONumbericCode": 108,
       "CountryNameKR": "부룬디",
@@ -272,7 +272,7 @@
       "CountryNameOriginal": "Uburundi"
     },
     "BY": {
-      "2digitCode": "BY",
+      "Country2digitCode": "BY",
       "3digitCode": "BLR",
       "ISONumbericCode": 112,
       "CountryNameKR": "벨라루스",
@@ -280,7 +280,7 @@
       "CountryNameOriginal": "Белару́сь"
     },
     "KH": {
-      "2digitCode": "KH",
+      "Country2digitCode": "KH",
       "3digitCode": "KHM",
       "ISONumbericCode": 116,
       "CountryNameKR": "캄보디아",
@@ -288,7 +288,7 @@
       "CountryNameOriginal": "Kampuchea"
     },
     "CM": {
-      "2digitCode": "CM",
+      "Country2digitCode": "CM",
       "3digitCode": "CMR",
       "ISONumbericCode": 120,
       "CountryNameKR": "카메룬",
@@ -296,7 +296,7 @@
       "CountryNameOriginal": "Cameroun"
     },
     "CA": {
-      "2digitCode": "CA",
+      "Country2digitCode": "CA",
       "3digitCode": "CAN",
       "ISONumbericCode": 124,
       "CountryNameKR": "캐나다",
@@ -304,7 +304,7 @@
       "CountryNameOriginal": "Canada"
     },
     "CV": {
-      "2digitCode": "CV",
+      "Country2digitCode": "CV",
       "3digitCode": "CPV",
       "ISONumbericCode": 132,
       "CountryNameKR": "카보베르데",
@@ -312,7 +312,7 @@
       "CountryNameOriginal": "Cabo Verde"
     },
     "KY": {
-      "2digitCode": "KY",
+      "Country2digitCode": "KY",
       "3digitCode": "CYM",
       "ISONumbericCode": 136,
       "CountryNameKR": "케이맨 제도",
@@ -320,7 +320,7 @@
       "CountryNameOriginal": "Cayman Islands"
     },
     "CF": {
-      "2digitCode": "CF",
+      "Country2digitCode": "CF",
       "3digitCode": "CAF",
       "ISONumbericCode": 140,
       "CountryNameKR": "중앙아프리카 공화국",
@@ -328,7 +328,7 @@
       "CountryNameOriginal": "République Centrafricaine"
     },
     "LK": {
-      "2digitCode": "LK",
+      "Country2digitCode": "LK",
       "3digitCode": "LKA",
       "ISONumbericCode": 144,
       "CountryNameKR": "스리랑카",
@@ -336,7 +336,7 @@
       "CountryNameOriginal": "Sri Lanka"
     },
     "TD": {
-      "2digitCode": "TD",
+      "Country2digitCode": "TD",
       "3digitCode": "TCD",
       "ISONumbericCode": 148,
       "CountryNameKR": "차드",
@@ -344,7 +344,7 @@
       "CountryNameOriginal": "Tchad"
     },
     "CL": {
-      "2digitCode": "CL",
+      "Country2digitCode": "CL",
       "3digitCode": "CHL",
       "ISONumbericCode": 152,
       "CountryNameKR": "칠레",
@@ -352,7 +352,7 @@
       "CountryNameOriginal": "Chile"
     },
     "CN": {
-      "2digitCode": "CN",
+      "Country2digitCode": "CN",
       "3digitCode": "CHN",
       "ISONumbericCode": 156,
       "CountryNameKR": "중화인민공화국",
@@ -360,7 +360,7 @@
       "CountryNameOriginal": "中国"
     },
     "TW": {
-      "2digitCode": "TW",
+      "Country2digitCode": "TW",
       "3digitCode": "TWN",
       "ISONumbericCode": 158,
       "CountryNameKR": "중화민국",
@@ -368,7 +368,7 @@
       "CountryNameOriginal": "台灣"
     },
     "CX": {
-      "2digitCode": "CX",
+      "Country2digitCode": "CX",
       "3digitCode": "CXR",
       "ISONumbericCode": 162,
       "CountryNameKR": "크리스마스 섬",
@@ -376,7 +376,7 @@
       "CountryNameOriginal": "Christmas Island"
     },
     "CC": {
-      "2digitCode": "CC",
+      "Country2digitCode": "CC",
       "3digitCode": "CCK",
       "ISONumbericCode": 166,
       "CountryNameKR": "코코스 제도",
@@ -384,7 +384,7 @@
       "CountryNameOriginal": "Cocos Islands"
     },
     "CO": {
-      "2digitCode": "CO",
+      "Country2digitCode": "CO",
       "3digitCode": "COL",
       "ISONumbericCode": 170,
       "CountryNameKR": "콜롬비아",
@@ -392,7 +392,7 @@
       "CountryNameOriginal": "Colombia"
     },
     "KM": {
-      "2digitCode": "KM",
+      "Country2digitCode": "KM",
       "3digitCode": "COM",
       "ISONumbericCode": 174,
       "CountryNameKR": "코모로",
@@ -400,7 +400,7 @@
       "CountryNameOriginal": "Comores"
     },
     "YT": {
-      "2digitCode": "YT",
+      "Country2digitCode": "YT",
       "3digitCode": "MYT",
       "ISONumbericCode": 175,
       "CountryNameKR": "마요트",
@@ -408,7 +408,7 @@
       "CountryNameOriginal": "Mayotte"
     },
     "CG": {
-      "2digitCode": "CG",
+      "Country2digitCode": "CG",
       "3digitCode": "COG",
       "ISONumbericCode": 178,
       "CountryNameKR": "콩고 공화국",
@@ -416,7 +416,7 @@
       "CountryNameOriginal": "Congo"
     },
     "CD": {
-      "2digitCode": "CD",
+      "Country2digitCode": "CD",
       "3digitCode": "COD",
       "ISONumbericCode": 180,
       "CountryNameKR": "콩고 민주 공화국",
@@ -424,7 +424,7 @@
       "CountryNameOriginal": "Congo, Democratic Republic of the"
     },
     "CK": {
-      "2digitCode": "CK",
+      "Country2digitCode": "CK",
       "3digitCode": "COK",
       "ISONumbericCode": 184,
       "CountryNameKR": "쿡 제도",
@@ -432,7 +432,7 @@
       "CountryNameOriginal": "Cook Islands"
     },
     "CR": {
-      "2digitCode": "CR",
+      "Country2digitCode": "CR",
       "3digitCode": "CRI",
       "ISONumbericCode": 188,
       "CountryNameKR": "코스타리카",
@@ -440,7 +440,7 @@
       "CountryNameOriginal": "Costa Rica"
     },
     "HR": {
-      "2digitCode": "HR",
+      "Country2digitCode": "HR",
       "3digitCode": "HRV",
       "ISONumbericCode": 191,
       "CountryNameKR": "크로아티아",
@@ -448,7 +448,7 @@
       "CountryNameOriginal": "Hrvatska"
     },
     "CU": {
-      "2digitCode": "CU",
+      "Country2digitCode": "CU",
       "3digitCode": "CUB",
       "ISONumbericCode": 192,
       "CountryNameKR": "쿠바",
@@ -456,7 +456,7 @@
       "CountryNameOriginal": "Cuba"
     },
     "CY": {
-      "2digitCode": "CY",
+      "Country2digitCode": "CY",
       "3digitCode": "CYP",
       "ISONumbericCode": 196,
       "CountryNameKR": "키프로스",
@@ -464,7 +464,7 @@
       "CountryNameOriginal": "Κυπρος"
     },
     "CZ": {
-      "2digitCode": "CZ",
+      "Country2digitCode": "CZ",
       "3digitCode": "CZE",
       "ISONumbericCode": 203,
       "CountryNameKR": "체코",
@@ -472,7 +472,7 @@
       "CountryNameOriginal": "Česko"
     },
     "BJ": {
-      "2digitCode": "BJ",
+      "Country2digitCode": "BJ",
       "3digitCode": "BEN",
       "ISONumbericCode": 204,
       "CountryNameKR": "베냉",
@@ -480,7 +480,7 @@
       "CountryNameOriginal": "Bénin"
     },
     "DK": {
-      "2digitCode": "DK",
+      "Country2digitCode": "DK",
       "3digitCode": "DNK",
       "ISONumbericCode": 208,
       "CountryNameKR": "덴마크",
@@ -488,7 +488,7 @@
       "CountryNameOriginal": "Danmark"
     },
     "DM": {
-      "2digitCode": "DM",
+      "Country2digitCode": "DM",
       "3digitCode": "DMA",
       "ISONumbericCode": 212,
       "CountryNameKR": "도미니카 연방",
@@ -496,7 +496,7 @@
       "CountryNameOriginal": "Dominica"
     },
     "DO": {
-      "2digitCode": "DO",
+      "Country2digitCode": "DO",
       "3digitCode": "DOM",
       "ISONumbericCode": 214,
       "CountryNameKR": "도미니카 공화국",
@@ -504,7 +504,7 @@
       "CountryNameOriginal": "Dominican Republic"
     },
     "EC": {
-      "2digitCode": "EC",
+      "Country2digitCode": "EC",
       "3digitCode": "ECU",
       "ISONumbericCode": 218,
       "CountryNameKR": "에콰도르",
@@ -512,7 +512,7 @@
       "CountryNameOriginal": "Ecuador"
     },
     "SV": {
-      "2digitCode": "SV",
+      "Country2digitCode": "SV",
       "3digitCode": "SLV",
       "ISONumbericCode": 222,
       "CountryNameKR": "엘살바도르",
@@ -520,7 +520,7 @@
       "CountryNameOriginal": "El Salvador"
     },
     "GQ": {
-      "2digitCode": "GQ",
+      "Country2digitCode": "GQ",
       "3digitCode": "GNQ",
       "ISONumbericCode": 226,
       "CountryNameKR": "적도 기니",
@@ -528,7 +528,7 @@
       "CountryNameOriginal": "Guinea Ecuatorial"
     },
     "ET": {
-      "2digitCode": "ET",
+      "Country2digitCode": "ET",
       "3digitCode": "ETH",
       "ISONumbericCode": 231,
       "CountryNameKR": "에티오피아",
@@ -536,7 +536,7 @@
       "CountryNameOriginal": "Ityop'iya"
     },
     "ER": {
-      "2digitCode": "ER",
+      "Country2digitCode": "ER",
       "3digitCode": "ERI",
       "ISONumbericCode": 232,
       "CountryNameKR": "에리트레아",
@@ -544,7 +544,7 @@
       "CountryNameOriginal": "Ertra"
     },
     "EE": {
-      "2digitCode": "EE",
+      "Country2digitCode": "EE",
       "3digitCode": "EST",
       "ISONumbericCode": 233,
       "CountryNameKR": "에스토니아",
@@ -552,7 +552,7 @@
       "CountryNameOriginal": "Eesti"
     },
     "FO": {
-      "2digitCode": "FO",
+      "Country2digitCode": "FO",
       "3digitCode": "FRO",
       "ISONumbericCode": 234,
       "CountryNameKR": "페로 제도",
@@ -560,7 +560,7 @@
       "CountryNameOriginal": "Faroe Islands"
     },
     "FK": {
-      "2digitCode": "FK",
+      "Country2digitCode": "FK",
       "3digitCode": "FLK",
       "ISONumbericCode": 238,
       "CountryNameKR": "포클랜드 제도",
@@ -568,7 +568,7 @@
       "CountryNameOriginal": "Falkland Islands"
     },
     "GS": {
-      "2digitCode": "GS",
+      "Country2digitCode": "GS",
       "3digitCode": "SGS",
       "ISONumbericCode": 239,
       "CountryNameKR": "사우스조지아 사우스샌드위치 제도",
@@ -576,7 +576,7 @@
       "CountryNameOriginal": "South Georgia and the South Sandwich Islands"
     },
     "FJ": {
-      "2digitCode": "FJ",
+      "Country2digitCode": "FJ",
       "3digitCode": "FJI",
       "ISONumbericCode": 242,
       "CountryNameKR": "피지",
@@ -584,7 +584,7 @@
       "CountryNameOriginal": "Fiji"
     },
     "FI": {
-      "2digitCode": "FI",
+      "Country2digitCode": "FI",
       "3digitCode": "FIN",
       "ISONumbericCode": 246,
       "CountryNameKR": "핀란드",
@@ -592,7 +592,7 @@
       "CountryNameOriginal": "Suomi"
     },
     "AX": {
-      "2digitCode": "AX",
+      "Country2digitCode": "AX",
       "3digitCode": "ALA",
       "ISONumbericCode": 248,
       "CountryNameKR": "올란드 제도",
@@ -600,7 +600,7 @@
       "CountryNameOriginal": "Aland Islands"
     },
     "FR": {
-      "2digitCode": "FR",
+      "Country2digitCode": "FR",
       "3digitCode": "FRA",
       "ISONumbericCode": 250,
       "CountryNameKR": "프랑스",
@@ -608,7 +608,7 @@
       "CountryNameOriginal": "France"
     },
     "GF": {
-      "2digitCode": "GF",
+      "Country2digitCode": "GF",
       "3digitCode": "GUF",
       "ISONumbericCode": 254,
       "CountryNameKR": "프랑스령 기아나",
@@ -616,7 +616,7 @@
       "CountryNameOriginal": "French Guiana"
     },
     "PF": {
-      "2digitCode": "PF",
+      "Country2digitCode": "PF",
       "3digitCode": "PYF",
       "ISONumbericCode": 258,
       "CountryNameKR": "프랑스령 폴리네시아",
@@ -624,7 +624,7 @@
       "CountryNameOriginal": "French Polynesia"
     },
     "TF": {
-      "2digitCode": "TF",
+      "Country2digitCode": "TF",
       "3digitCode": "ATF",
       "ISONumbericCode": 260,
       "CountryNameKR": "프랑스령 남부와 남극 지역",
@@ -632,7 +632,7 @@
       "CountryNameOriginal": "French Southern Territories"
     },
     "DJ": {
-      "2digitCode": "DJ",
+      "Country2digitCode": "DJ",
       "3digitCode": "DJI",
       "ISONumbericCode": 262,
       "CountryNameKR": "지부티",
@@ -640,7 +640,7 @@
       "CountryNameOriginal": "Djibouti"
     },
     "GA": {
-      "2digitCode": "GA",
+      "Country2digitCode": "GA",
       "3digitCode": "GAB",
       "ISONumbericCode": 266,
       "CountryNameKR": "가봉",
@@ -648,7 +648,7 @@
       "CountryNameOriginal": "Gabon"
     },
     "GE": {
-      "2digitCode": "GE",
+      "Country2digitCode": "GE",
       "3digitCode": "GEO",
       "ISONumbericCode": 268,
       "CountryNameKR": "조지아",
@@ -656,7 +656,7 @@
       "CountryNameOriginal": "საქართველო"
     },
     "GM": {
-      "2digitCode": "GM",
+      "Country2digitCode": "GM",
       "3digitCode": "GMB",
       "ISONumbericCode": 270,
       "CountryNameKR": "감비아",
@@ -664,7 +664,7 @@
       "CountryNameOriginal": "Gambia"
     },
     "PS": {
-      "2digitCode": "PS",
+      "Country2digitCode": "PS",
       "3digitCode": "PSE",
       "ISONumbericCode": 275,
       "CountryNameKR": "팔레스타인",
@@ -672,7 +672,7 @@
       "CountryNameOriginal": "Palestinian Territories"
     },
     "DE": {
-      "2digitCode": "DE",
+      "Country2digitCode": "DE",
       "3digitCode": "DEU",
       "ISONumbericCode": 276,
       "CountryNameKR": "독일",
@@ -680,7 +680,7 @@
       "CountryNameOriginal": "Deutschland"
     },
     "GH": {
-      "2digitCode": "GH",
+      "Country2digitCode": "GH",
       "3digitCode": "GHA",
       "ISONumbericCode": 288,
       "CountryNameKR": "가나",
@@ -688,7 +688,7 @@
       "CountryNameOriginal": "Ghana"
     },
     "GI": {
-      "2digitCode": "GI",
+      "Country2digitCode": "GI",
       "3digitCode": "GIB",
       "ISONumbericCode": 292,
       "CountryNameKR": "지브롤터",
@@ -696,7 +696,7 @@
       "CountryNameOriginal": "Gibraltar"
     },
     "KI": {
-      "2digitCode": "KI",
+      "Country2digitCode": "KI",
       "3digitCode": "KIR",
       "ISONumbericCode": 296,
       "CountryNameKR": "키리바시",
@@ -704,7 +704,7 @@
       "CountryNameOriginal": "Kiribati"
     },
     "GR": {
-      "2digitCode": "GR",
+      "Country2digitCode": "GR",
       "3digitCode": "GRC",
       "ISONumbericCode": 300,
       "CountryNameKR": "그리스",
@@ -712,7 +712,7 @@
       "CountryNameOriginal": "Ελλάς"
     },
     "GL": {
-      "2digitCode": "GL",
+      "Country2digitCode": "GL",
       "3digitCode": "GRL",
       "ISONumbericCode": 304,
       "CountryNameKR": "그린란드",
@@ -720,7 +720,7 @@
       "CountryNameOriginal": "Greenland"
     },
     "GD": {
-      "2digitCode": "GD",
+      "Country2digitCode": "GD",
       "3digitCode": "GRD",
       "ISONumbericCode": 308,
       "CountryNameKR": "그레나다",
@@ -728,7 +728,7 @@
       "CountryNameOriginal": "Grenada"
     },
     "GP": {
-      "2digitCode": "GP",
+      "Country2digitCode": "GP",
       "3digitCode": "GLP",
       "ISONumbericCode": 312,
       "CountryNameKR": "과들루프",
@@ -736,7 +736,7 @@
       "CountryNameOriginal": "Guadeloupe"
     },
     "GU": {
-      "2digitCode": "GU",
+      "Country2digitCode": "GU",
       "3digitCode": "GUM",
       "ISONumbericCode": 316,
       "CountryNameKR": "괌",
@@ -744,7 +744,7 @@
       "CountryNameOriginal": "Guam"
     },
     "GT": {
-      "2digitCode": "GT",
+      "Country2digitCode": "GT",
       "3digitCode": "GTM",
       "ISONumbericCode": 320,
       "CountryNameKR": "과테말라",
@@ -752,7 +752,7 @@
       "CountryNameOriginal": "Guatemala"
     },
     "GN": {
-      "2digitCode": "GN",
+      "Country2digitCode": "GN",
       "3digitCode": "GIN",
       "ISONumbericCode": 324,
       "CountryNameKR": "기니",
@@ -760,7 +760,7 @@
       "CountryNameOriginal": "Guinée"
     },
     "GY": {
-      "2digitCode": "GY",
+      "Country2digitCode": "GY",
       "3digitCode": "GUY",
       "ISONumbericCode": 328,
       "CountryNameKR": "가이아나",
@@ -768,7 +768,7 @@
       "CountryNameOriginal": "Guyana"
     },
     "HT": {
-      "2digitCode": "HT",
+      "Country2digitCode": "HT",
       "3digitCode": "HTI",
       "ISONumbericCode": 332,
       "CountryNameKR": "아이티",
@@ -776,7 +776,7 @@
       "CountryNameOriginal": "Haïti"
     },
     "HM": {
-      "2digitCode": "HM",
+      "Country2digitCode": "HM",
       "3digitCode": "HMD",
       "ISONumbericCode": 334,
       "CountryNameKR": "허드 맥도널드 제도",
@@ -784,7 +784,7 @@
       "CountryNameOriginal": "Heard Island and McDonald Islands"
     },
     "VA": {
-      "2digitCode": "VA",
+      "Country2digitCode": "VA",
       "3digitCode": "VAT",
       "ISONumbericCode": 336,
       "CountryNameKR": "바티칸 시국",
@@ -792,7 +792,7 @@
       "CountryNameOriginal": "Città del Vaticano"
     },
     "HN": {
-      "2digitCode": "HN",
+      "Country2digitCode": "HN",
       "3digitCode": "HND",
       "ISONumbericCode": 340,
       "CountryNameKR": "온두라스",
@@ -800,7 +800,7 @@
       "CountryNameOriginal": "Honduras"
     },
     "HK": {
-      "2digitCode": "HK",
+      "Country2digitCode": "HK",
       "3digitCode": "HKG",
       "ISONumbericCode": 344,
       "CountryNameKR": "홍콩",
@@ -808,7 +808,7 @@
       "CountryNameOriginal": "Hong Kong"
     },
     "HU": {
-      "2digitCode": "HU",
+      "Country2digitCode": "HU",
       "3digitCode": "HUN",
       "ISONumbericCode": 348,
       "CountryNameKR": "헝가리",
@@ -816,7 +816,7 @@
       "CountryNameOriginal": "Magyarország"
     },
     "IS": {
-      "2digitCode": "IS",
+      "Country2digitCode": "IS",
       "3digitCode": "ISL",
       "ISONumbericCode": 352,
       "CountryNameKR": "아이슬란드",
@@ -824,7 +824,7 @@
       "CountryNameOriginal": "Ísland"
     },
     "IN": {
-      "2digitCode": "IN",
+      "Country2digitCode": "IN",
       "3digitCode": "IND",
       "ISONumbericCode": 356,
       "CountryNameKR": "인도",
@@ -832,7 +832,7 @@
       "CountryNameOriginal": "India"
     },
     "ID": {
-      "2digitCode": "ID",
+      "Country2digitCode": "ID",
       "3digitCode": "IDN",
       "ISONumbericCode": 360,
       "CountryNameKR": "인도네시아",
@@ -840,7 +840,7 @@
       "CountryNameOriginal": "Indonesia"
     },
     "IR": {
-      "2digitCode": "IR",
+      "Country2digitCode": "IR",
       "3digitCode": "IRN",
       "ISONumbericCode": 364,
       "CountryNameKR": "이란",
@@ -848,7 +848,7 @@
       "CountryNameOriginal": "ایران"
     },
     "IQ": {
-      "2digitCode": "IQ",
+      "Country2digitCode": "IQ",
       "3digitCode": "IRQ",
       "ISONumbericCode": 368,
       "CountryNameKR": "이라크",
@@ -856,7 +856,7 @@
       "CountryNameOriginal": "العراق"
     },
     "IE": {
-      "2digitCode": "IE",
+      "Country2digitCode": "IE",
       "3digitCode": "IRL",
       "ISONumbericCode": 372,
       "CountryNameKR": "아일랜드",
@@ -864,7 +864,7 @@
       "CountryNameOriginal": "Ireland"
     },
     "IL": {
-      "2digitCode": "IL",
+      "Country2digitCode": "IL",
       "3digitCode": "ISR",
       "ISONumbericCode": 376,
       "CountryNameKR": "이스라엘",
@@ -872,7 +872,7 @@
       "CountryNameOriginal": "ישראל"
     },
     "IT": {
-      "2digitCode": "IT",
+      "Country2digitCode": "IT",
       "3digitCode": "ITA",
       "ISONumbericCode": 380,
       "CountryNameKR": "이탈리아",
@@ -880,7 +880,7 @@
       "CountryNameOriginal": "Italia"
     },
     "CI": {
-      "2digitCode": "CI",
+      "Country2digitCode": "CI",
       "3digitCode": "CIV",
       "ISONumbericCode": 384,
       "CountryNameKR": "코트디부아르",
@@ -888,7 +888,7 @@
       "CountryNameOriginal": "Côte d'Ivoire"
     },
     "JM": {
-      "2digitCode": "JM",
+      "Country2digitCode": "JM",
       "3digitCode": "JAM",
       "ISONumbericCode": 388,
       "CountryNameKR": "자메이카",
@@ -896,7 +896,7 @@
       "CountryNameOriginal": "Jamaica"
     },
     "JP": {
-      "2digitCode": "JP",
+      "Country2digitCode": "JP",
       "3digitCode": "JPN",
       "ISONumbericCode": 392,
       "CountryNameKR": "일본",
@@ -904,7 +904,7 @@
       "CountryNameOriginal": "日本"
     },
     "KZ": {
-      "2digitCode": "KZ",
+      "Country2digitCode": "KZ",
       "3digitCode": "KAZ",
       "ISONumbericCode": 398,
       "CountryNameKR": "카자흐스탄",
@@ -912,7 +912,7 @@
       "CountryNameOriginal": "Қазақстан"
     },
     "JO": {
-      "2digitCode": "JO",
+      "Country2digitCode": "JO",
       "3digitCode": "JOR",
       "ISONumbericCode": 400,
       "CountryNameKR": "요르단",
@@ -920,7 +920,7 @@
       "CountryNameOriginal": "الاردن"
     },
     "KE": {
-      "2digitCode": "KE",
+      "Country2digitCode": "KE",
       "3digitCode": "KEN",
       "ISONumbericCode": 404,
       "CountryNameKR": "케냐",
@@ -928,7 +928,7 @@
       "CountryNameOriginal": "Kenya"
     },
     "KP": {
-      "2digitCode": "KP",
+      "Country2digitCode": "KP",
       "3digitCode": "PRK",
       "ISONumbericCode": 408,
       "CountryNameKR": "조선민주주의인민공화국",
@@ -936,7 +936,7 @@
       "CountryNameOriginal": "조선"
     },
     "KW": {
-      "2digitCode": "KW",
+      "Country2digitCode": "KW",
       "3digitCode": "KWT",
       "ISONumbericCode": 414,
       "CountryNameKR": "쿠웨이트",
@@ -944,7 +944,7 @@
       "CountryNameOriginal": "الكويت"
     },
     "KG": {
-      "2digitCode": "KG",
+      "Country2digitCode": "KG",
       "3digitCode": "KGZ",
       "ISONumbericCode": 417,
       "CountryNameKR": "키르기스스탄",
@@ -952,7 +952,7 @@
       "CountryNameOriginal": "Кыргызстан"
     },
     "LA": {
-      "2digitCode": "LA",
+      "Country2digitCode": "LA",
       "3digitCode": "LAO",
       "ISONumbericCode": 418,
       "CountryNameKR": "라오스",
@@ -960,7 +960,7 @@
       "CountryNameOriginal": "ນລາວ"
     },
     "LB": {
-      "2digitCode": "LB",
+      "Country2digitCode": "LB",
       "3digitCode": "LBN",
       "ISONumbericCode": 422,
       "CountryNameKR": "레바논",
@@ -968,7 +968,7 @@
       "CountryNameOriginal": "لبنان"
     },
     "LS": {
-      "2digitCode": "LS",
+      "Country2digitCode": "LS",
       "3digitCode": "LSO",
       "ISONumbericCode": 426,
       "CountryNameKR": "레소토",
@@ -976,7 +976,7 @@
       "CountryNameOriginal": "Lesotho"
     },
     "LV": {
-      "2digitCode": "LV",
+      "Country2digitCode": "LV",
       "3digitCode": "LVA",
       "ISONumbericCode": 428,
       "CountryNameKR": "라트비아",
@@ -984,7 +984,7 @@
       "CountryNameOriginal": "Latvija"
     },
     "LR": {
-      "2digitCode": "LR",
+      "Country2digitCode": "LR",
       "3digitCode": "LBR",
       "ISONumbericCode": 430,
       "CountryNameKR": "라이베리아",
@@ -992,7 +992,7 @@
       "CountryNameOriginal": "Liberia"
     },
     "LY": {
-      "2digitCode": "LY",
+      "Country2digitCode": "LY",
       "3digitCode": "LBY",
       "ISONumbericCode": 434,
       "CountryNameKR": "리비아",
@@ -1000,7 +1000,7 @@
       "CountryNameOriginal": "ليبيا"
     },
     "LI": {
-      "2digitCode": "LI",
+      "Country2digitCode": "LI",
       "3digitCode": "LIE",
       "ISONumbericCode": 438,
       "CountryNameKR": "리히텐슈타인",
@@ -1008,7 +1008,7 @@
       "CountryNameOriginal": "Liechtenstein"
     },
     "LT": {
-      "2digitCode": "LT",
+      "Country2digitCode": "LT",
       "3digitCode": "LTU",
       "ISONumbericCode": 440,
       "CountryNameKR": "리투아니아",
@@ -1016,7 +1016,7 @@
       "CountryNameOriginal": "Lietuva"
     },
     "LU": {
-      "2digitCode": "LU",
+      "Country2digitCode": "LU",
       "3digitCode": "LUX",
       "ISONumbericCode": 442,
       "CountryNameKR": "룩셈부르크",
@@ -1024,7 +1024,7 @@
       "CountryNameOriginal": "Lëtzebuerg"
     },
     "MO": {
-      "2digitCode": "MO",
+      "Country2digitCode": "MO",
       "3digitCode": "MAC",
       "ISONumbericCode": 446,
       "CountryNameKR": "마카오",
@@ -1032,7 +1032,7 @@
       "CountryNameOriginal": "Macao"
     },
     "MG": {
-      "2digitCode": "MG",
+      "Country2digitCode": "MG",
       "3digitCode": "MDG",
       "ISONumbericCode": 450,
       "CountryNameKR": "마다가스카르",
@@ -1040,7 +1040,7 @@
       "CountryNameOriginal": "Madagasikara"
     },
     "MW": {
-      "2digitCode": "MW",
+      "Country2digitCode": "MW",
       "3digitCode": "MWI",
       "ISONumbericCode": 454,
       "CountryNameKR": "말라위",
@@ -1048,7 +1048,7 @@
       "CountryNameOriginal": "Malawi"
     },
     "MY": {
-      "2digitCode": "MY",
+      "Country2digitCode": "MY",
       "3digitCode": "MYS",
       "ISONumbericCode": 458,
       "CountryNameKR": "말레이시아",
@@ -1056,7 +1056,7 @@
       "CountryNameOriginal": "Malaysia"
     },
     "MV": {
-      "2digitCode": "MV",
+      "Country2digitCode": "MV",
       "3digitCode": "MDV",
       "ISONumbericCode": 462,
       "CountryNameKR": "몰디브",
@@ -1064,7 +1064,7 @@
       "CountryNameOriginal": "ގުޖޭއްރާ ޔާއްރިހޫމްޖ"
     },
     "ML": {
-      "2digitCode": "ML",
+      "Country2digitCode": "ML",
       "3digitCode": "MLI",
       "ISONumbericCode": 466,
       "CountryNameKR": "말리",
@@ -1072,7 +1072,7 @@
       "CountryNameOriginal": "Mali"
     },
     "MT": {
-      "2digitCode": "MT",
+      "Country2digitCode": "MT",
       "3digitCode": "MLT",
       "ISONumbericCode": 470,
       "CountryNameKR": "몰타",
@@ -1080,7 +1080,7 @@
       "CountryNameOriginal": "Malta"
     },
     "MQ": {
-      "2digitCode": "MQ",
+      "Country2digitCode": "MQ",
       "3digitCode": "MTQ",
       "ISONumbericCode": 474,
       "CountryNameKR": "마르티니크",
@@ -1088,7 +1088,7 @@
       "CountryNameOriginal": "Martinique"
     },
     "MR": {
-      "2digitCode": "MR",
+      "Country2digitCode": "MR",
       "3digitCode": "MRT",
       "ISONumbericCode": 478,
       "CountryNameKR": "모리타니",
@@ -1096,7 +1096,7 @@
       "CountryNameOriginal": "موريتانيا"
     },
     "MU": {
-      "2digitCode": "MU",
+      "Country2digitCode": "MU",
       "3digitCode": "MUS",
       "ISONumbericCode": 480,
       "CountryNameKR": "모리셔스",
@@ -1104,7 +1104,7 @@
       "CountryNameOriginal": "Mauritius"
     },
     "MX": {
-      "2digitCode": "MX",
+      "Country2digitCode": "MX",
       "3digitCode": "MEX",
       "ISONumbericCode": 484,
       "CountryNameKR": "멕시코",
@@ -1112,7 +1112,7 @@
       "CountryNameOriginal": "México"
     },
     "MC": {
-      "2digitCode": "MC",
+      "Country2digitCode": "MC",
       "3digitCode": "MCO",
       "ISONumbericCode": 492,
       "CountryNameKR": "모나코",
@@ -1120,7 +1120,7 @@
       "CountryNameOriginal": "Monaco"
     },
     "MN": {
-      "2digitCode": "MN",
+      "Country2digitCode": "MN",
       "3digitCode": "MNG",
       "ISONumbericCode": 496,
       "CountryNameKR": "몽골",
@@ -1128,7 +1128,7 @@
       "CountryNameOriginal": "Монгол Улс"
     },
     "MD": {
-      "2digitCode": "MD",
+      "Country2digitCode": "MD",
       "3digitCode": "MDA",
       "ISONumbericCode": 498,
       "CountryNameKR": "몰도바",
@@ -1136,7 +1136,7 @@
       "CountryNameOriginal": "Moldova"
     },
     "ME": {
-      "2digitCode": "ME",
+      "Country2digitCode": "ME",
       "3digitCode": "MNE",
       "ISONumbericCode": 499,
       "CountryNameKR": "몬테네그로",
@@ -1144,7 +1144,7 @@
       "CountryNameOriginal": "Црна Гора"
     },
     "MS": {
-      "2digitCode": "MS",
+      "Country2digitCode": "MS",
       "3digitCode": "MSR",
       "ISONumbericCode": 500,
       "CountryNameKR": "몬트세랫",
@@ -1152,7 +1152,7 @@
       "CountryNameOriginal": "Montserrat"
     },
     "MA": {
-      "2digitCode": "MA",
+      "Country2digitCode": "MA",
       "3digitCode": "MAR",
       "ISONumbericCode": 504,
       "CountryNameKR": "모로코",
@@ -1160,7 +1160,7 @@
       "CountryNameOriginal": "المغرب"
     },
     "MZ": {
-      "2digitCode": "MZ",
+      "Country2digitCode": "MZ",
       "3digitCode": "MOZ",
       "ISONumbericCode": 508,
       "CountryNameKR": "모잠비크",
@@ -1168,7 +1168,7 @@
       "CountryNameOriginal": "Moçambique"
     },
     "OM": {
-      "2digitCode": "OM",
+      "Country2digitCode": "OM",
       "3digitCode": "OMN",
       "ISONumbericCode": 512,
       "CountryNameKR": "오만",
@@ -1176,7 +1176,7 @@
       "CountryNameOriginal": "عمان"
     },
     "NA": {
-      "2digitCode": "NA",
+      "Country2digitCode": "NA",
       "3digitCode": "NAM",
       "ISONumbericCode": 516,
       "CountryNameKR": "나미비아",
@@ -1184,7 +1184,7 @@
       "CountryNameOriginal": "Namibia"
     },
     "NR": {
-      "2digitCode": "NR",
+      "Country2digitCode": "NR",
       "3digitCode": "NRU",
       "ISONumbericCode": 520,
       "CountryNameKR": "나우루",
@@ -1192,7 +1192,7 @@
       "CountryNameOriginal": "Naoero"
     },
     "NP": {
-      "2digitCode": "NP",
+      "Country2digitCode": "NP",
       "3digitCode": "NPL",
       "ISONumbericCode": 524,
       "CountryNameKR": "네팔",
@@ -1200,7 +1200,7 @@
       "CountryNameOriginal": "नेपाल"
     },
     "NL": {
-      "2digitCode": "NL",
+      "Country2digitCode": "NL",
       "3digitCode": "NLD",
       "ISONumbericCode": 528,
       "CountryNameKR": "네덜란드",
@@ -1208,7 +1208,7 @@
       "CountryNameOriginal": "Nederland"
     },
     "AN": {
-      "2digitCode": "AN",
+      "Country2digitCode": "AN",
       "3digitCode": "ANT",
       "ISONumbericCode": 530,
       "CountryNameKR": "네덜란드령 안틸레스",
@@ -1216,7 +1216,7 @@
       "CountryNameOriginal": "Netherlands Antilles"
     },
     "AW": {
-      "2digitCode": "AW",
+      "Country2digitCode": "AW",
       "3digitCode": "ABW",
       "ISONumbericCode": 533,
       "CountryNameKR": "아루바",
@@ -1224,7 +1224,7 @@
       "CountryNameOriginal": "Aruba"
     },
     "NC": {
-      "2digitCode": "NC",
+      "Country2digitCode": "NC",
       "3digitCode": "NCL",
       "ISONumbericCode": 540,
       "CountryNameKR": "누벨칼레도니",
@@ -1232,7 +1232,7 @@
       "CountryNameOriginal": "New Caledonia"
     },
     "VU": {
-      "2digitCode": "VU",
+      "Country2digitCode": "VU",
       "3digitCode": "VUT",
       "ISONumbericCode": 548,
       "CountryNameKR": "바누아투",
@@ -1240,7 +1240,7 @@
       "CountryNameOriginal": "Vanuatu"
     },
     "NZ": {
-      "2digitCode": "NZ",
+      "Country2digitCode": "NZ",
       "3digitCode": "NZL",
       "ISONumbericCode": 554,
       "CountryNameKR": "뉴질랜드",
@@ -1248,7 +1248,7 @@
       "CountryNameOriginal": "New Zealand"
     },
     "NI": {
-      "2digitCode": "NI",
+      "Country2digitCode": "NI",
       "3digitCode": "NIC",
       "ISONumbericCode": 558,
       "CountryNameKR": "니카라과",
@@ -1256,7 +1256,7 @@
       "CountryNameOriginal": "Nicaragua"
     },
     "NE": {
-      "2digitCode": "NE",
+      "Country2digitCode": "NE",
       "3digitCode": "NER",
       "ISONumbericCode": 562,
       "CountryNameKR": "니제르",
@@ -1264,7 +1264,7 @@
       "CountryNameOriginal": "Niger"
     },
     "NG": {
-      "2digitCode": "NG",
+      "Country2digitCode": "NG",
       "3digitCode": "NGA",
       "ISONumbericCode": 566,
       "CountryNameKR": "나이지리아",
@@ -1272,7 +1272,7 @@
       "CountryNameOriginal": "Nigeria"
     },
     "NU": {
-      "2digitCode": "NU",
+      "Country2digitCode": "NU",
       "3digitCode": "NIU",
       "ISONumbericCode": 570,
       "CountryNameKR": "니우에",
@@ -1280,7 +1280,7 @@
       "CountryNameOriginal": "Niue"
     },
     "NF": {
-      "2digitCode": "NF",
+      "Country2digitCode": "NF",
       "3digitCode": "NFK",
       "ISONumbericCode": 574,
       "CountryNameKR": "노퍽 섬",
@@ -1288,7 +1288,7 @@
       "CountryNameOriginal": "Norfolk Island"
     },
     "NO": {
-      "2digitCode": "NO",
+      "Country2digitCode": "NO",
       "3digitCode": "NOR",
       "ISONumbericCode": 578,
       "CountryNameKR": "노르웨이",
@@ -1296,7 +1296,7 @@
       "CountryNameOriginal": "Norge"
     },
     "MP": {
-      "2digitCode": "MP",
+      "Country2digitCode": "MP",
       "3digitCode": "MNP",
       "ISONumbericCode": 580,
       "CountryNameKR": "북마리아나 제도",
@@ -1304,7 +1304,7 @@
       "CountryNameOriginal": "Northern Mariana Islands"
     },
     "UM": {
-      "2digitCode": "UM",
+      "Country2digitCode": "UM",
       "3digitCode": "UMI",
       "ISONumbericCode": 581,
       "CountryNameKR": "미국령 군소 제도",
@@ -1312,7 +1312,7 @@
       "CountryNameOriginal": "United States minor outlying islands"
     },
     "FM": {
-      "2digitCode": "FM",
+      "Country2digitCode": "FM",
       "3digitCode": "FSM",
       "ISONumbericCode": 583,
       "CountryNameKR": "미크로네시아 연방",
@@ -1320,7 +1320,7 @@
       "CountryNameOriginal": "Micronesia"
     },
     "MH": {
-      "2digitCode": "MH",
+      "Country2digitCode": "MH",
       "3digitCode": "MHL",
       "ISONumbericCode": 584,
       "CountryNameKR": "마셜 제도",
@@ -1328,7 +1328,7 @@
       "CountryNameOriginal": "Marshall Islands"
     },
     "PW": {
-      "2digitCode": "PW",
+      "Country2digitCode": "PW",
       "3digitCode": "PLW",
       "ISONumbericCode": 585,
       "CountryNameKR": "팔라우",
@@ -1336,7 +1336,7 @@
       "CountryNameOriginal": "Belau"
     },
     "PK": {
-      "2digitCode": "PK",
+      "Country2digitCode": "PK",
       "3digitCode": "PAK",
       "ISONumbericCode": 586,
       "CountryNameKR": "파키스탄",
@@ -1344,7 +1344,7 @@
       "CountryNameOriginal": "پاکستان"
     },
     "PA": {
-      "2digitCode": "PA",
+      "Country2digitCode": "PA",
       "3digitCode": "PAN",
       "ISONumbericCode": 591,
       "CountryNameKR": "파나마",
@@ -1352,7 +1352,7 @@
       "CountryNameOriginal": "Panamá"
     },
     "PG": {
-      "2digitCode": "PG",
+      "Country2digitCode": "PG",
       "3digitCode": "PNG",
       "ISONumbericCode": 598,
       "CountryNameKR": "파푸아 뉴기니",
@@ -1360,7 +1360,7 @@
       "CountryNameOriginal": "Papua New Guinea"
     },
     "PY": {
-      "2digitCode": "PY",
+      "Country2digitCode": "PY",
       "3digitCode": "PRY",
       "ISONumbericCode": 600,
       "CountryNameKR": "파라과이",
@@ -1368,7 +1368,7 @@
       "CountryNameOriginal": "Paraguay"
     },
     "PE": {
-      "2digitCode": "PE",
+      "Country2digitCode": "PE",
       "3digitCode": "PER",
       "ISONumbericCode": 604,
       "CountryNameKR": "페루",
@@ -1376,7 +1376,7 @@
       "CountryNameOriginal": "Perú"
     },
     "PH": {
-      "2digitCode": "PH",
+      "Country2digitCode": "PH",
       "3digitCode": "PHL",
       "ISONumbericCode": 608,
       "CountryNameKR": "필리핀",
@@ -1384,7 +1384,7 @@
       "CountryNameOriginal": "Pilipinas"
     },
     "PN": {
-      "2digitCode": "PN",
+      "Country2digitCode": "PN",
       "3digitCode": "PCN",
       "ISONumbericCode": 612,
       "CountryNameKR": "핏케언 제도",
@@ -1392,7 +1392,7 @@
       "CountryNameOriginal": "Pitcairn"
     },
     "PL": {
-      "2digitCode": "PL",
+      "Country2digitCode": "PL",
       "3digitCode": "POL",
       "ISONumbericCode": 616,
       "CountryNameKR": "폴란드",
@@ -1400,7 +1400,7 @@
       "CountryNameOriginal": "Polska"
     },
     "PT": {
-      "2digitCode": "PT",
+      "Country2digitCode": "PT",
       "3digitCode": "PRT",
       "ISONumbericCode": 620,
       "CountryNameKR": "포르투갈",
@@ -1408,7 +1408,7 @@
       "CountryNameOriginal": "Portugal"
     },
     "GW": {
-      "2digitCode": "GW",
+      "Country2digitCode": "GW",
       "3digitCode": "GNB",
       "ISONumbericCode": 624,
       "CountryNameKR": "기니비사우",
@@ -1416,7 +1416,7 @@
       "CountryNameOriginal": "Guiné-Bissau"
     },
     "TL": {
-      "2digitCode": "TL",
+      "Country2digitCode": "TL",
       "3digitCode": "TLS",
       "ISONumbericCode": 626,
       "CountryNameKR": "동티모르",
@@ -1424,7 +1424,7 @@
       "CountryNameOriginal": "Timor-Leste"
     },
     "PR": {
-      "2digitCode": "PR",
+      "Country2digitCode": "PR",
       "3digitCode": "PRI",
       "ISONumbericCode": 630,
       "CountryNameKR": "푸에르토리코",
@@ -1432,7 +1432,7 @@
       "CountryNameOriginal": "Puerto Rico"
     },
     "QA": {
-      "2digitCode": "QA",
+      "Country2digitCode": "QA",
       "3digitCode": "QAT",
       "ISONumbericCode": 634,
       "CountryNameKR": "카타르",
@@ -1440,7 +1440,7 @@
       "CountryNameOriginal": "قطر"
     },
     "RE": {
-      "2digitCode": "RE",
+      "Country2digitCode": "RE",
       "3digitCode": "REU",
       "ISONumbericCode": 638,
       "CountryNameKR": "레위니옹",
@@ -1448,7 +1448,7 @@
       "CountryNameOriginal": "Reunion"
     },
     "RO": {
-      "2digitCode": "RO",
+      "Country2digitCode": "RO",
       "3digitCode": "ROU",
       "ISONumbericCode": 642,
       "CountryNameKR": "루마니아",
@@ -1456,7 +1456,7 @@
       "CountryNameOriginal": "România"
     },
     "RU": {
-      "2digitCode": "RU",
+      "Country2digitCode": "RU",
       "3digitCode": "RUS",
       "ISONumbericCode": 643,
       "CountryNameKR": "러시아",
@@ -1464,7 +1464,7 @@
       "CountryNameOriginal": "Россия"
     },
     "RW": {
-      "2digitCode": "RW",
+      "Country2digitCode": "RW",
       "3digitCode": "RWA",
       "ISONumbericCode": 646,
       "CountryNameKR": "르완다",
@@ -1472,7 +1472,7 @@
       "CountryNameOriginal": "Rwanda"
     },
     "SH": {
-      "2digitCode": "SH",
+      "Country2digitCode": "SH",
       "3digitCode": "SHN",
       "ISONumbericCode": 654,
       "CountryNameKR": "세인트헬레나",
@@ -1480,7 +1480,7 @@
       "CountryNameOriginal": "Saint Helena"
     },
     "KN": {
-      "2digitCode": "KN",
+      "Country2digitCode": "KN",
       "3digitCode": "KNA",
       "ISONumbericCode": 659,
       "CountryNameKR": "세인트키츠 네비스",
@@ -1488,7 +1488,7 @@
       "CountryNameOriginal": "Saint Kitts and Nevis"
     },
     "AI": {
-      "2digitCode": "AI",
+      "Country2digitCode": "AI",
       "3digitCode": "AIA",
       "ISONumbericCode": 660,
       "CountryNameKR": "앵귈라",
@@ -1496,7 +1496,7 @@
       "CountryNameOriginal": "Anguilla"
     },
     "LC": {
-      "2digitCode": "LC",
+      "Country2digitCode": "LC",
       "3digitCode": "LCA",
       "ISONumbericCode": 662,
       "CountryNameKR": "세인트루시아",
@@ -1504,7 +1504,7 @@
       "CountryNameOriginal": "Saint Lucia"
     },
     "PM": {
-      "2digitCode": "PM",
+      "Country2digitCode": "PM",
       "3digitCode": "SPM",
       "ISONumbericCode": 666,
       "CountryNameKR": "생피에르 미클롱",
@@ -1512,7 +1512,7 @@
       "CountryNameOriginal": "Saint Pierre and Miquelon"
     },
     "VC": {
-      "2digitCode": "VC",
+      "Country2digitCode": "VC",
       "3digitCode": "VCT",
       "ISONumbericCode": 670,
       "CountryNameKR": "세인트빈센트 그레나딘",
@@ -1520,7 +1520,7 @@
       "CountryNameOriginal": "Saint Vincent and the Grenadines"
     },
     "SM": {
-      "2digitCode": "SM",
+      "Country2digitCode": "SM",
       "3digitCode": "SMR",
       "ISONumbericCode": 674,
       "CountryNameKR": "산마리노",
@@ -1528,7 +1528,7 @@
       "CountryNameOriginal": "San Marino"
     },
     "ST": {
-      "2digitCode": "ST",
+      "Country2digitCode": "ST",
       "3digitCode": "STP",
       "ISONumbericCode": 678,
       "CountryNameKR": "상투메 프린시페",
@@ -1536,7 +1536,7 @@
       "CountryNameOriginal": "São Tomé and Príncipe"
     },
     "SA": {
-      "2digitCode": "SA",
+      "Country2digitCode": "SA",
       "3digitCode": "SAU",
       "ISONumbericCode": 682,
       "CountryNameKR": "사우디아라비아",
@@ -1544,7 +1544,7 @@
       "CountryNameOriginal": "المملكة العربية السعودية"
     },
     "SN": {
-      "2digitCode": "SN",
+      "Country2digitCode": "SN",
       "3digitCode": "SEN",
       "ISONumbericCode": 686,
       "CountryNameKR": "세네갈",
@@ -1552,7 +1552,7 @@
       "CountryNameOriginal": "Sénégal"
     },
     "RS": {
-      "2digitCode": "RS",
+      "Country2digitCode": "RS",
       "3digitCode": "SRB",
       "ISONumbericCode": 688,
       "CountryNameKR": "세르비아",
@@ -1560,7 +1560,7 @@
       "CountryNameOriginal": "Србија"
     },
     "SC": {
-      "2digitCode": "SC",
+      "Country2digitCode": "SC",
       "3digitCode": "SYC",
       "ISONumbericCode": 690,
       "CountryNameKR": "세이셸",
@@ -1568,7 +1568,7 @@
       "CountryNameOriginal": "Seychelles"
     },
     "SL": {
-      "2digitCode": "SL",
+      "Country2digitCode": "SL",
       "3digitCode": "SLE",
       "ISONumbericCode": 694,
       "CountryNameKR": "시에라리온",
@@ -1576,7 +1576,7 @@
       "CountryNameOriginal": "Sierra Leone"
     },
     "SG": {
-      "2digitCode": "SG",
+      "Country2digitCode": "SG",
       "3digitCode": "SGP",
       "ISONumbericCode": 702,
       "CountryNameKR": "싱가포르",
@@ -1584,7 +1584,7 @@
       "CountryNameOriginal": "Singapura"
     },
     "SK": {
-      "2digitCode": "SK",
+      "Country2digitCode": "SK",
       "3digitCode": "SVK",
       "ISONumbericCode": 703,
       "CountryNameKR": "슬로바키아",
@@ -1592,7 +1592,7 @@
       "CountryNameOriginal": "Slovensko"
     },
     "VN": {
-      "2digitCode": "VN",
+      "Country2digitCode": "VN",
       "3digitCode": "VNM",
       "ISONumbericCode": 704,
       "CountryNameKR": "베트남",
@@ -1600,7 +1600,7 @@
       "CountryNameOriginal": "Việt Nam"
     },
     "SI": {
-      "2digitCode": "SI",
+      "Country2digitCode": "SI",
       "3digitCode": "SVN",
       "ISONumbericCode": 705,
       "CountryNameKR": "슬로베니아",
@@ -1608,7 +1608,7 @@
       "CountryNameOriginal": "Slovenija"
     },
     "SO": {
-      "2digitCode": "SO",
+      "Country2digitCode": "SO",
       "3digitCode": "SOM",
       "ISONumbericCode": 706,
       "CountryNameKR": "소말리아",
@@ -1616,7 +1616,7 @@
       "CountryNameOriginal": "Soomaaliya"
     },
     "ZA": {
-      "2digitCode": "ZA",
+      "Country2digitCode": "ZA",
       "3digitCode": "ZAF",
       "ISONumbericCode": 710,
       "CountryNameKR": "남아프리카 공화국",
@@ -1624,7 +1624,7 @@
       "CountryNameOriginal": "South Africa"
     },
     "ZW": {
-      "2digitCode": "ZW",
+      "Country2digitCode": "ZW",
       "3digitCode": "ZWE",
       "ISONumbericCode": 716,
       "CountryNameKR": "짐바브웨",
@@ -1632,7 +1632,7 @@
       "CountryNameOriginal": "Zimbabwe"
     },
     "ES": {
-      "2digitCode": "ES",
+      "Country2digitCode": "ES",
       "3digitCode": "ESP",
       "ISONumbericCode": 724,
       "CountryNameKR": "스페인",
@@ -1640,7 +1640,7 @@
       "CountryNameOriginal": "España"
     },
     "SS": {
-      "2digitCode": "SS",
+      "Country2digitCode": "SS",
       "3digitCode": "SSD",
       "ISONumbericCode": 728,
       "CountryNameKR": "남수단",
@@ -1648,7 +1648,7 @@
       "CountryNameOriginal": "South Sudan"
     },
     "EH": {
-      "2digitCode": "EH",
+      "Country2digitCode": "EH",
       "3digitCode": "ESH",
       "ISONumbericCode": 732,
       "CountryNameKR": "서사하라",
@@ -1656,7 +1656,7 @@
       "CountryNameOriginal": "الصحراء الغربية"
     },
     "SD": {
-      "2digitCode": "SD",
+      "Country2digitCode": "SD",
       "3digitCode": "SDN",
       "ISONumbericCode": 736,
       "CountryNameKR": "수단",
@@ -1664,7 +1664,7 @@
       "CountryNameOriginal": "السودان"
     },
     "SR": {
-      "2digitCode": "SR",
+      "Country2digitCode": "SR",
       "3digitCode": "SUR",
       "ISONumbericCode": 740,
       "CountryNameKR": "수리남",
@@ -1672,7 +1672,7 @@
       "CountryNameOriginal": "Suriname"
     },
     "SJ": {
-      "2digitCode": "SJ",
+      "Country2digitCode": "SJ",
       "3digitCode": "SJM",
       "ISONumbericCode": 744,
       "CountryNameKR": "스발바르 얀마옌",
@@ -1680,7 +1680,7 @@
       "CountryNameOriginal": "Svalbard and Jan Mayen"
     },
     "SZ": {
-      "2digitCode": "SZ",
+      "Country2digitCode": "SZ",
       "3digitCode": "SWZ",
       "ISONumbericCode": 748,
       "CountryNameKR": "스와질란드",
@@ -1688,7 +1688,7 @@
       "CountryNameOriginal": "Swaziland"
     },
     "SE": {
-      "2digitCode": "SE",
+      "Country2digitCode": "SE",
       "3digitCode": "SWE",
       "ISONumbericCode": 752,
       "CountryNameKR": "스웨덴",
@@ -1696,7 +1696,7 @@
       "CountryNameOriginal": "Sverige"
     },
     "CH": {
-      "2digitCode": "CH",
+      "Country2digitCode": "CH",
       "3digitCode": "CHE",
       "ISONumbericCode": 756,
       "CountryNameKR": "스위스",
@@ -1704,7 +1704,7 @@
       "CountryNameOriginal": "Schweiz"
     },
     "SY": {
-      "2digitCode": "SY",
+      "Country2digitCode": "SY",
       "3digitCode": "SYR",
       "ISONumbericCode": 760,
       "CountryNameKR": "시리아",
@@ -1712,7 +1712,7 @@
       "CountryNameOriginal": "سوريا"
     },
     "TJ": {
-      "2digitCode": "TJ",
+      "Country2digitCode": "TJ",
       "3digitCode": "TJK",
       "ISONumbericCode": 762,
       "CountryNameKR": "타지키스탄",
@@ -1720,7 +1720,7 @@
       "CountryNameOriginal": "Тоҷикистон"
     },
     "TH": {
-      "2digitCode": "TH",
+      "Country2digitCode": "TH",
       "3digitCode": "THA",
       "ISONumbericCode": 764,
       "CountryNameKR": "타이",
@@ -1728,7 +1728,7 @@
       "CountryNameOriginal": "ราชอาณาจักรไทย"
     },
     "TG": {
-      "2digitCode": "TG",
+      "Country2digitCode": "TG",
       "3digitCode": "TGO",
       "ISONumbericCode": 768,
       "CountryNameKR": "토고",
@@ -1736,7 +1736,7 @@
       "CountryNameOriginal": "Togo"
     },
     "TK": {
-      "2digitCode": "TK",
+      "Country2digitCode": "TK",
       "3digitCode": "TKL",
       "ISONumbericCode": 772,
       "CountryNameKR": "토켈라우",
@@ -1744,7 +1744,7 @@
       "CountryNameOriginal": "Tokelau"
     },
     "TO": {
-      "2digitCode": "TO",
+      "Country2digitCode": "TO",
       "3digitCode": "TON",
       "ISONumbericCode": 776,
       "CountryNameKR": "통가",
@@ -1752,7 +1752,7 @@
       "CountryNameOriginal": "Tonga"
     },
     "TT": {
-      "2digitCode": "TT",
+      "Country2digitCode": "TT",
       "3digitCode": "TTO",
       "ISONumbericCode": 780,
       "CountryNameKR": "트리니다드 토바고",
@@ -1760,7 +1760,7 @@
       "CountryNameOriginal": "Trinidad and Tobago"
     },
     "AE": {
-      "2digitCode": "AE",
+      "Country2digitCode": "AE",
       "3digitCode": "ARE",
       "ISONumbericCode": 784,
       "CountryNameKR": "아랍에미리트",
@@ -1768,7 +1768,7 @@
       "CountryNameOriginal": "الإمارات العربيّة المتّحدة"
     },
     "TN": {
-      "2digitCode": "TN",
+      "Country2digitCode": "TN",
       "3digitCode": "TUN",
       "ISONumbericCode": 788,
       "CountryNameKR": "튀니지",
@@ -1776,7 +1776,7 @@
       "CountryNameOriginal": "تونس"
     },
     "TR": {
-      "2digitCode": "TR",
+      "Country2digitCode": "TR",
       "3digitCode": "TUR",
       "ISONumbericCode": 792,
       "CountryNameKR": "터키",
@@ -1784,7 +1784,7 @@
       "CountryNameOriginal": "Türkiye"
     },
     "TM": {
-      "2digitCode": "TM",
+      "Country2digitCode": "TM",
       "3digitCode": "TKM",
       "ISONumbericCode": 795,
       "CountryNameKR": "투르크메니스탄",
@@ -1792,7 +1792,7 @@
       "CountryNameOriginal": "Türkmenistan"
     },
     "TC": {
-      "2digitCode": "TC",
+      "Country2digitCode": "TC",
       "3digitCode": "TCA",
       "ISONumbericCode": 796,
       "CountryNameKR": "터크스 케이커스 제도",
@@ -1800,7 +1800,7 @@
       "CountryNameOriginal": "Turks and Caicos Islands"
     },
     "TV": {
-      "2digitCode": "TV",
+      "Country2digitCode": "TV",
       "3digitCode": "TUV",
       "ISONumbericCode": 798,
       "CountryNameKR": "투발루",
@@ -1808,7 +1808,7 @@
       "CountryNameOriginal": "Tuvalu"
     },
     "UG": {
-      "2digitCode": "UG",
+      "Country2digitCode": "UG",
       "3digitCode": "UGA",
       "ISONumbericCode": 800,
       "CountryNameKR": "우간다",
@@ -1816,7 +1816,7 @@
       "CountryNameOriginal": "Uganda"
     },
     "UA": {
-      "2digitCode": "UA",
+      "Country2digitCode": "UA",
       "3digitCode": "UKR",
       "ISONumbericCode": 804,
       "CountryNameKR": "우크라이나",
@@ -1824,7 +1824,7 @@
       "CountryNameOriginal": "Україна"
     },
     "MK": {
-      "2digitCode": "MK",
+      "Country2digitCode": "MK",
       "3digitCode": "MKD",
       "ISONumbericCode": 807,
       "CountryNameKR": "마케도니아 공화국",
@@ -1832,7 +1832,7 @@
       "CountryNameOriginal": "Македонија"
     },
     "EG": {
-      "2digitCode": "EG",
+      "Country2digitCode": "EG",
       "3digitCode": "EGY",
       "ISONumbericCode": 818,
       "CountryNameKR": "이집트",
@@ -1840,7 +1840,7 @@
       "CountryNameOriginal": "مصر"
     },
     "GB": {
-      "2digitCode": "GB",
+      "Country2digitCode": "GB",
       "3digitCode": "GBR",
       "ISONumbericCode": 826,
       "CountryNameKR": "영국",
@@ -1848,7 +1848,7 @@
       "CountryNameOriginal": "United Kingdom"
     },
     "GG": {
-      "2digitCode": "GG",
+      "Country2digitCode": "GG",
       "3digitCode": "GGY",
       "ISONumbericCode": 831,
       "CountryNameKR": "건지 섬",
@@ -1856,7 +1856,7 @@
       "CountryNameOriginal": "Guernsey"
     },
     "JE": {
-      "2digitCode": "JE",
+      "Country2digitCode": "JE",
       "3digitCode": "JEY",
       "ISONumbericCode": 832,
       "CountryNameKR": "저지 섬",
@@ -1864,7 +1864,7 @@
       "CountryNameOriginal": "Jersey"
     },
     "IM": {
-      "2digitCode": "IM",
+      "Country2digitCode": "IM",
       "3digitCode": "IMN",
       "ISONumbericCode": 833,
       "CountryNameKR": "맨 섬",
@@ -1872,7 +1872,7 @@
       "CountryNameOriginal": "Isle of Man"
     },
     "TZ": {
-      "2digitCode": "TZ",
+      "Country2digitCode": "TZ",
       "3digitCode": "TZA",
       "ISONumbericCode": 834,
       "CountryNameKR": "탄자니아",
@@ -1880,7 +1880,7 @@
       "CountryNameOriginal": "Tanzania"
     },
     "US": {
-      "2digitCode": "US",
+      "Country2digitCode": "US",
       "3digitCode": "USA",
       "ISONumbericCode": 840,
       "CountryNameKR": "미국",
@@ -1888,7 +1888,7 @@
       "CountryNameOriginal": "United States"
     },
     "VI": {
-      "2digitCode": "VI",
+      "Country2digitCode": "VI",
       "3digitCode": "VIR",
       "ISONumbericCode": 850,
       "CountryNameKR": "미국령 버진아일랜드",
@@ -1896,7 +1896,7 @@
       "CountryNameOriginal": "Virgin Islands, U.S."
     },
     "BF": {
-      "2digitCode": "BF",
+      "Country2digitCode": "BF",
       "3digitCode": "BFA",
       "ISONumbericCode": 854,
       "CountryNameKR": "부르키나파소",
@@ -1904,7 +1904,7 @@
       "CountryNameOriginal": "Burkina Faso"
     },
     "UY": {
-      "2digitCode": "UY",
+      "Country2digitCode": "UY",
       "3digitCode": "URY",
       "ISONumbericCode": 858,
       "CountryNameKR": "우루과이",
@@ -1912,7 +1912,7 @@
       "CountryNameOriginal": "Uruguay"
     },
     "UZ": {
-      "2digitCode": "UZ",
+      "Country2digitCode": "UZ",
       "3digitCode": "UZB",
       "ISONumbericCode": 860,
       "CountryNameKR": "우즈베키스탄",
@@ -1920,7 +1920,7 @@
       "CountryNameOriginal": "O'zbekiston"
     },
     "VE": {
-      "2digitCode": "VE",
+      "Country2digitCode": "VE",
       "3digitCode": "VEN",
       "ISONumbericCode": 862,
       "CountryNameKR": "베네수엘라",
@@ -1928,7 +1928,7 @@
       "CountryNameOriginal": "Venezuela"
     },
     "WF": {
-      "2digitCode": "WF",
+      "Country2digitCode": "WF",
       "3digitCode": "WLF",
       "ISONumbericCode": 876,
       "CountryNameKR": "왈리스 퓌튀나",
@@ -1936,7 +1936,7 @@
       "CountryNameOriginal": "Wallis and Futuna"
     },
     "WS": {
-      "2digitCode": "WS",
+      "Country2digitCode": "WS",
       "3digitCode": "WSM",
       "ISONumbericCode": 882,
       "CountryNameKR": "사모아",
@@ -1944,7 +1944,7 @@
       "CountryNameOriginal": "Samoa"
     },
     "YE": {
-      "2digitCode": "YE",
+      "Country2digitCode": "YE",
       "3digitCode": "YEM",
       "ISONumbericCode": 887,
       "CountryNameKR": "예멘",
@@ -1952,7 +1952,7 @@
       "CountryNameOriginal": "اليمن"
     },
     "ZM": {
-      "2digitCode": "ZM",
+      "Country2digitCode": "ZM",
       "3digitCode": "ZMB",
       "ISONumbericCode": 894,
       "CountryNameKR": "잠비아",

@@ -29,7 +29,7 @@ export function esgFetch(url, method="GET", body={}, requiredAuth=true){
     alert("401 페이지로 이동 필요");
     window.location.href = "/";
   }
-  return fetch(url, {
+  return fetch(`http://ec2-13-209-12-137.ap-northeast-2.compute.amazonaws.com:1337${url}`, {
     method: method,
     headers: {
       ...(method==="POST" && {'Content-Type': 'application/json'}),
