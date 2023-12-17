@@ -56,9 +56,9 @@ const FirstStepForm = () => {
         return regex.test(number);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (checkErrorFields()) return;
-        if (checkRegister()) return;
+        if (await checkRegister()) return;
         navigate('/signup/step2');
     }
 
@@ -73,20 +73,25 @@ const FirstStepForm = () => {
         return false;
     }
 
-    const checkRegister = () => {
+    const checkRegister = async () => {
         const url = `/api/companies?` + 
             `filters[country][$eq]=${convertToCountryCode(fields.country)}&` +
             `filters[brn][$eq]=${fields.bizNumber.value}&` +
-            `filters[type][$eq]=${fields.companyCategory.value}&` +
+            `filters[type][$eq]=${fields.companyCategory.value === "개인사업체" ? "personal" : "company"}&` +
             `filters[name][$eq]=${fields.companyName.value}`;
-        esgFetch(url, 'GET', {}, false).then((response) => {
-            return response.json();
+        const result = esgFetch(url, 'GET', {}, false).then((response) => {
+            if (response.ok) return response.json();
+            else throw new Error(`${response.status} ${response.statusText}`);
         }).then(({data: value}) => {
             if (value.length === 0) {
                 return false;
             }
+            alert('이미 등록된 회사입니다.');
             return true;
+        }).catch((error) => {
+            alert(error);
         });
+        return result;
     }
 
     const convertToCountryCode = (countryName) => {

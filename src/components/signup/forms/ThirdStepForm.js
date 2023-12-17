@@ -30,6 +30,7 @@ import {
 import AddressModal from "../modal/Address";
 import EmailVerificationFailModal from "../modal/EmailVerficationFail";
 import countriesData from './country.json';
+import { esgFetch } from "../../FetchWrapper";
 
 
 const countryNames = Object.values(countriesData).map((country) => country.CountryNameKR)
@@ -107,9 +108,14 @@ const ThridStepForm = () => {
     }
 
     const sendEmailVerificationCode = () => {
-        alert('인증번호가 발송되었습니다.(asdf)');
-        const tempVerificationCode = 'asdf';
-        setEmailVerificationCode(tempVerificationCode);
+        if (validEmail(fields.representiveEmail.value)) {
+            // TODO: API 연결 필요
+            alert('인증번호가 발송되었습니다.(asdf)');
+            const tempVerificationCode = 'asdf';
+            setEmailVerificationCode(tempVerificationCode);
+        } else {
+            alert('이메일을 정확히 입력해 주세요');
+        }
     }
 
     const checkIdAvailability = () => {
@@ -125,18 +131,98 @@ const ThridStepForm = () => {
         }));
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        if (checkErrorFields()) return;
+        const companyBody = convertCompanyFieldsToBody();
+        const companyId = await registerCompany(companyBody);
+        if (companyId === undefined) return
+        const userBody = convertUserFieldsToBody(companyId);
+        const jwt = await registerUser(userBody);
+        if (jwt === undefined) return
+        localStorage.setItem('token', jwt);
+        alert('회원가입이 완료되었습니다.');
+    }
+
+    const checkErrorFields = () => {
         const errorfields = Object.values(fields).filter((field) => field.error);
         for (let field of errorfields) {
             alert(field.errorText);
-            return;
+            return true;
         }
-
+        if (!isEmailVerified) {
+            alert('이메일 인증을 진행해 주세요');
+            return true;
+        }
         if (!isIdAvailable) {
             alert('아이디 중복확인을 진행해 주세요');
-            return;
+            return true;
         }
-        alert(fields);
+        return false;
+    }
+
+    const convertCompanyFieldsToBody = () => {
+        const body = {
+            "data": {
+                "name": fields.companyName.value,
+                "country": convertToCountryCode(fields.country.value),
+                "type": fields.companyCategory.value === "개인사업체" ? "personal" : "company",
+                "brn": fields.bizNumber.value ? fields.bizNumber.value : 
+                    fields.foreignerBizNumber.value ? fields.foreignerBizNumber.value : null,
+                "lpn": fields.companyNumber.value ? fields.companyNumber.value : null,
+                "ceo": fields.representiveName.value,
+                "manager": fields.managerName.value ? fields.managerName.value : null,
+                "address": fields.address.value,
+                "address_detail": fields.addressDetail.value,
+                "phone": fields.representivePhone.value,
+                "fax": fields.fax.value ? fields.fax.value : null,
+                "email": fields.representiveEmail.value,
+                "homepage": fields.homepage.value ? fields.homepage.value : null,
+                "main_product": fields.mainItem.value,
+                "size": fields.companyScale.value ? fields.companyScale.value : null,
+            }
+        }
+        return body;
+    }
+
+    const convertToCountryCode = (countryName) => {
+        const country = Object.values(countriesData).find((country) => country.CountryNameKR === countryName);
+        return country.Country2digitCode.toLowerCase();
+    }
+
+    const registerCompany = async (companyBody) => {
+        const companyId = esgFetch('/api/companies', 'POST', companyBody, false)
+            .then((response) => response.json())
+            .then((data) => {
+                if ("error" in data) {
+                    console.error(data);
+                }
+                return data.data.id;
+            })
+        return companyId;
+    }
+
+    const convertUserFieldsToBody = (companyId) => {
+        const body = {
+            "username": fields.id.value,
+            "email": fields.representiveEmail.value,
+            "password": fields.password.value,
+            "company" : {
+                "id": companyId
+            }
+        }
+        return body;
+    }
+
+    const registerUser = async (userBody) => {
+        const jwt = esgFetch('/api/auth/local/register', 'POST', userBody, false)
+            .then((response) => response.json())
+            .then((data) => {
+                if ("error" in data) {
+                    console.error(data);
+                }
+                return data.jwt;
+            })
+        return jwt;
     }
 
     return (

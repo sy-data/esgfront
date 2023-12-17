@@ -10,8 +10,8 @@ const AddressModal = ({setIsOpen}) => {
             onComplete={(data) => {
                 setFields((prevFields) => ({
                     ...prevFields,
-                    zoneCode: { ...prevFields.zoneCode, value: data.zonecode },
-                    address: { ...prevFields.address, value: data.address },
+                    zoneCode: { ...prevFields.zoneCode, value: data.zonecode, error: false },
+                    address: { ...prevFields.address, value: data.address, error: false },
                 }))
                 setIsOpen(false);
             }}
