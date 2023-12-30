@@ -1,4 +1,6 @@
 export function loginDev(){
+  console.log(process.env.REACT_APP_DEV_API_ACCOUNT);
+  console.log(process.env.REACT_APP_DEV_API_PASSWORD)
   fetch('/api/auth/local', {
     method: "POST",
     headers: {

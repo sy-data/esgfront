@@ -60,5 +60,6 @@ export const FilterSelect = styled(Select)(() => ({
 export const SearchButtonContainer = styled('div')(() => ({
   padding: '0px 10px',
   display: 'flex',
-  justifyContent: 'flex-end'
+  justifyContent: 'flex-end',
+  gap: '10px',
 }));
