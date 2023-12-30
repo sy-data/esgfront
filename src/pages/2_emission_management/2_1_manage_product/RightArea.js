@@ -21,10 +21,12 @@ const ProductManagement = () => {
     const [rows, setRows] = useState([]);
     const [newRowId, setNewRowId] = useState(null);
 
+    // TODO: 나중에 삭제해야 함
     useEffect(() => {
         console.log(apiRef);
     }, [apiRef])
 
+    // TODO: 서버에서 데이터 가져오는 로직 추가
     useEffect(() => {
         setRows([
             { id: 1, productName: "쓸모있는거", unit: "ton", rate: 40, etc: "안녕하세요" },
@@ -33,6 +35,7 @@ const ProductManagement = () => {
         ]);
     }, []);
 
+    // 컬럼 속성
     const dummyColumns = [
         { field: "productName", headerName: "생산품명", flex: 2, editable: true },
         { field: "unit", headerName: "단위", flex: 1 },
@@ -73,6 +76,18 @@ const ProductManagement = () => {
         // TODO: 서버에 저장하는 로직 추가
     }
 
+    // 삭제 버튼 눌렀을 때
+    const handleDeleteButton = () => {
+        const selectedRows = apiRef.current.getSelectedRows();
+        if (selectedRows.length === 0) {
+            alert("삭제할 생산품을 선택하지 않았습니다.");
+            return;
+        }
+        const selectedIds = [...selectedRows.keys()]
+        const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
+        setRows(updatedRows); // TODO: 서버에서 삭제하는 로직 추가
+    }
+
     useEffect(() => {
         if (newRowId) {
             apiRef.current.startRowEditMode({ id: newRowId });
@@ -87,7 +102,7 @@ const ProductManagement = () => {
                 <SearchButtonContainer>
                     <Button variant="outlined" size="small" color="btnSearch" onClick={handleAddButton}>신규</Button>
                     <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton}>저장</Button>
-                    <Button variant="outlined" size="small" color="btnSearch">검색</Button>
+                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleDeleteButton}>삭제</Button>
                 </SearchButtonContainer>
             </SubTitle>
             <div style={{ height: '90%' }}>
