@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { useGridApiRef } from "@mui/x-data-grid";
+
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
-import { useGridApiRef } from "@mui/x-data-grid";
-import { NoPaginationDataGrid } from "./Styles.js";
+import CustomDataGrid from "./CustomDataGrid.js";
 
 const NoRowsOverlay = () => {
   return (
@@ -14,10 +15,10 @@ const NoRowsOverlay = () => {
 
 const FacilityList = () => {
     const apiRef = useGridApiRef();
-    const [rows, setRows] = useState([]);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        setRows([
+        setData([
             {id: 1, name: '사업장1', number: '111-11-11111'},
             {id: 2, name: '사업장2', number: '111-11-11112'},
             {id: 3, name: '사업장3', number: '111-11-11113'}
@@ -33,20 +34,19 @@ const FacilityList = () => {
     return (
         <ContentBody>
             <SubTitle title={"사업장목록"} />
-            <div style={{height: '90%'}}>
-                <NoPaginationDataGrid 
-                    apiRef={apiRef} 
-                    rows={rows} 
-                    columns={dummyColumns} 
-                    editable={false}
-                    slots={{ noRowsOverlay: NoRowsOverlay}}
-                    disableColumnMenu={true}
-                    disableRowSelectionOnClick
-                    columnHeaderHeight={40}
-                    rowHeight={30}
-                    autoHeight
-                />
-            </div>
+            <CustomDataGrid
+                data={data}
+                apiRef={apiRef} 
+                columns={dummyColumns} 
+                editable={false}
+                slots={{ noRowsOverlay: NoRowsOverlay}}
+                disableColumnMenu={true}
+                disableRowSelectionOnClick
+                columnHeaderHeight={40}
+                rowHeight={30}
+                autoHeight
+                pageSize={5}
+            />
         </ContentBody>
     )
 }

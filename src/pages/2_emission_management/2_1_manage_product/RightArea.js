@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
+import CustomDataGrid from "./CustomDataGrid.js";
 import { SearchButtonContainer } from "../../../components/Styles";
 import { Button } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
-import { NoPaginationDataGrid } from "./Styles.js";
 
 
 const NoRowsOverlay = () => {
@@ -18,6 +18,7 @@ const NoRowsOverlay = () => {
 
 const ProductManagement = () => {
     const apiRef = useGridApiRef();
+    const [data, setData] = useState([]);
     const [rows, setRows] = useState([]);
     const [newRowId, setNewRowId] = useState(null);
 
@@ -28,10 +29,20 @@ const ProductManagement = () => {
 
     // TODO: 서버에서 데이터 가져오는 로직 추가
     useEffect(() => {
-        setRows([
+        setData([
             { id: 1, productName: "쓸모있는거", unit: "ton", rate: 40, etc: "안녕하세요" },
             { id: 2, productName: "쓸모있을까", unit: "ton", rate: 10, etc: "저는" },
             { id: 3, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 4, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 5, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 6, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 7, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 8, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 9, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 10, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 11, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 12, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
+            { id: 13, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
         ]);
     }, []);
 
@@ -105,20 +116,19 @@ const ProductManagement = () => {
                     <Button variant="outlined" size="small" color="btnSearch" onClick={handleDeleteButton}>삭제</Button>
                 </SearchButtonContainer>
             </SubTitle>
-            <div style={{ height: '90%' }}>
-                <NoPaginationDataGrid
-                    apiRef={apiRef}
-                    rows={rows}
-                    columns={dummyColumns}
-                    editMode="row"
-                    slots={{ noRowsOverlay: NoRowsOverlay }}
-                    checkboxSelection={true}
-                    disableColumnMenu={true}
-                    columnHeaderHeight={40}
-                    rowHeight={30}
-                    autoHeight
-                />
-            </div>
+            <CustomDataGrid
+                data={data}
+                apiRef={apiRef}
+                columns={dummyColumns}
+                editMode="row"
+                slots={{ noRowsOverlay: NoRowsOverlay }}
+                checkboxSelection={true}
+                disableColumnMenu={true}
+                columnHeaderHeight={40}
+                rowHeight={30}
+                autoHeight
+                pageSize={5}
+            />
         </ContentBody>
     )
 }
