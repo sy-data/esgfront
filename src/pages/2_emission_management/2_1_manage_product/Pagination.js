@@ -28,7 +28,7 @@ const Pagination = (props) => {
 
     useEffect(() => {
         props.setRows(props.data.slice((currentPage - 1) * props.pageSize, currentPage * props.pageSize));
-    }, [currentPage]);
+    }, [currentPage, props.data]);
     
     const totalPageNum = useMemo(() => {
         return Math.ceil(props.data.length / props.pageSize);
@@ -39,7 +39,9 @@ const Pagination = (props) => {
         <PaginationContainer>
             <NonStyeldButton onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&lt;</NonStyeldButton>
             {Array.from({ length: totalPageNum}, (_, index) => (
-                <NonStyeldButton key={index} onClick={() => setCurrentPage(index + 1)}>{index + 1}</NonStyeldButton>
+                <NonStyeldButton key={index} onClick={() => setCurrentPage(index + 1)}>
+                    {index + 1 === currentPage ? <b>{index + 1}</b> : index + 1}
+                </NonStyeldButton>
             ))}
             <NonStyeldButton onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPageNum}>&gt;</NonStyeldButton>
         </PaginationContainer>

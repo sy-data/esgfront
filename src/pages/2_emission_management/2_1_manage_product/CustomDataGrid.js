@@ -1,8 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
+
+import Pagination from "./Pagination.js";
+
 import { styled } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-import Pagination from "./Pagination.js";
 
 const NoPaginationDataGrid = styled(DataGrid)({
     '& .MuiDataGrid-footerContainer': {

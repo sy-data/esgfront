@@ -19,7 +19,6 @@ const NoRowsOverlay = () => {
 const ProductManagement = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
-    const [rows, setRows] = useState([]);
     const [newRowId, setNewRowId] = useState(null);
 
     // TODO: 나중에 삭제해야 함
@@ -55,15 +54,16 @@ const ProductManagement = () => {
     ]
 
     // 신규 버튼 눌렀을 때
+    // TODO: 페이징 처리가 되어있을 경우 신규 버튼을 눌렀을 때 마지막 페이지로 이동하도록 수정해야 하는 건지 질문
     const handleAddButton = () => {
         const newRow = {
-            id: rows.length + 1,
+            id: data.length + 1,
             productName: "",
             unit: "ton",
             rate: 0,
             etc: "",
         }
-        setRows([...rows, newRow]);
+        setData([...data, newRow]);
         setNewRowId(newRow.id);
     }
 
@@ -94,9 +94,10 @@ const ProductManagement = () => {
             alert("삭제할 생산품을 선택하지 않았습니다.");
             return;
         }
-        const selectedIds = [...selectedRows.keys()]
-        const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
-        setRows(updatedRows); // TODO: 서버에서 삭제하는 로직 추가
+        const selectedIds = [...selectedRows.values()].map(row => row.id);
+        const updatedData = data.filter(row => !selectedIds.includes(row.id));
+        setData(updatedData); // TODO: 서버에서 삭제하는 로직 추가
+        apiRef.current.setRowSelectionModel([]);
     }
 
     useEffect(() => {
@@ -109,7 +110,7 @@ const ProductManagement = () => {
 
     return (
         <ContentBody>
-            <SubTitle title={"사업장별 생사품 관리"}>
+            <SubTitle title={"사업장별 생산품 관리"}>
                 <SearchButtonContainer>
                     <Button variant="outlined" size="small" color="btnSearch" onClick={handleAddButton}>신규</Button>
                     <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton}>저장</Button>

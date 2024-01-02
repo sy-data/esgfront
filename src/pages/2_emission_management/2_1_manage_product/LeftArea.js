@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useGridApiRef } from "@mui/x-data-grid";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
 import CustomDataGrid from "./CustomDataGrid.js";
+import { UserCompanyId, SelectedYear, SelectedFactoryId } from "./States";
+import { esgFetch } from "../../../components/FetchWrapper.js";
 
 const NoRowsOverlay = () => {
   return (
@@ -16,17 +19,33 @@ const NoRowsOverlay = () => {
 const FacilityList = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
+    const userCompanyId = useRecoilValue(UserCompanyId);
+    const selectedYear = useRecoilValue(SelectedYear);
+    const setSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
 
     useEffect(() => {
-        setData([
-            {id: 1, name: '사업장1', number: '111-11-11111'},
-            {id: 2, name: '사업장2', number: '111-11-11112'},
-            {id: 3, name: '사업장3', number: '111-11-11113'}
-        ])
-    }, []);
+        const url = `/api/factories?` + 
+            `filters[company][id]=${userCompanyId}&` +
+            `filters[company][createdAt][$gte]=${selectedYear}-01-01&` + 
+            `filters[company][createdAt][$lte]=${selectedYear}-12-31`;
+        const result = esgFetch(url, 'GET').then(response => {
+            if (response.ok) return response.json();
+            else throw new Error(`${response.status} ${response.statusText}`);
+        }).then(({data: value}) => {
+            const newData = value.map((v, i) => {
+                return {
+                    index: i+1,
+                    id: v.id,
+                    name: v.attributes.name,
+                    number: '111-11-11111' // TODO: 사업자 등록번호 수정 필요
+                }
+            });
+            setData(newData);
+        });
+    }, [userCompanyId, selectedYear]);
 
     const dummyColumns = [
-        { field: 'id', headerName: 'No', flex: 1 },
+        { field: 'index', headerName: 'No', flex: 1 },
         { field: 'name', headerName: '사업장명', flex: 2 },
         { field: 'number', headerName: '사업자번호', flex: 2 },
     ]
