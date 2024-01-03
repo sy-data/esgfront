@@ -23,12 +23,13 @@ const FacilityList = () => {
     const selectedYear = useRecoilValue(SelectedYear);
     const setSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
 
+    // 사업장 목록 조회
     useEffect(() => {
         const url = `/api/factories?` + 
             `filters[company][id]=${userCompanyId}&` +
             `filters[company][createdAt][$gte]=${selectedYear}-01-01&` + 
             `filters[company][createdAt][$lte]=${selectedYear}-12-31`;
-        const result = esgFetch(url, 'GET').then(response => {
+        esgFetch(url, 'GET').then(response => {
             if (response.ok) return response.json();
             else throw new Error(`${response.status} ${response.statusText}`);
         }).then(({data: value}) => {
@@ -60,11 +61,11 @@ const FacilityList = () => {
                 editable={false}
                 slots={{ noRowsOverlay: NoRowsOverlay}}
                 disableColumnMenu={true}
-                disableRowSelectionOnClick
                 columnHeaderHeight={40}
                 rowHeight={30}
                 autoHeight
                 pageSize={5}
+                onRowClick={(params) => setSelectedFacotyId(params.row.id)}
             />
         </ContentBody>
     )

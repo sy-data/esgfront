@@ -11,13 +11,13 @@ import FacilityList from "./LeftArea";
 import ProductManagement from "./RightArea";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 import { useSetRecoilState } from "recoil";
-import { UserCompanyId } from "./States";
+import { UserCompanyId, SelectedYear } from "./States";
 
 const EmissionProductManagement = () => {
   const selection = [2021, 2022, 2023];
   const setUserCompanyId = useSetRecoilState(UserCompanyId);
-  const [selection1, setSelection1] = useState(selection[0]);
-  const handleChange1 = event => setSelection1(event.target.value);
+  const setSelectedYear = useSetRecoilState(SelectedYear);
+  const baseYearRef = useRef();
 
   // TODO
   // 유저의 회사 아이디를 설정
@@ -32,9 +32,6 @@ const EmissionProductManagement = () => {
     });
   }, []);
 
-  
-  const baseYearRef = useRef();
-
   return (
     <ContentWithTitie style={{ backgroundColor: "#AAAAAA"}}>
       
@@ -42,7 +39,7 @@ const EmissionProductManagement = () => {
       
       <FilterBlock>
         <FilterLine>
-          <BaseYearSelect ref={baseYearRef} />
+          <BaseYearSelect ref={baseYearRef} onBaseYearChanged={(newValue) => setSelectedYear(newValue)}/>
         </FilterLine>
       </FilterBlock>
       

@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { Button } from "@mui/material";
+import { useGridApiRef } from "@mui/x-data-grid";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
 import CustomDataGrid from "./CustomDataGrid.js";
 import { SearchButtonContainer } from "../../../components/Styles";
-import { Button } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
+import { esgFetch } from "../../../components/FetchWrapper.js";
+import { SelectedFactoryId } from "./States";
 
 
 const NoRowsOverlay = () => {
@@ -20,6 +23,7 @@ const ProductManagement = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
     const [newRowId, setNewRowId] = useState(null);
+    const selectedFactoryId = useRecoilValue(SelectedFactoryId);
 
     // TODO: 나중에 삭제해야 함
     useEffect(() => {
@@ -28,29 +32,30 @@ const ProductManagement = () => {
 
     // TODO: 서버에서 데이터 가져오는 로직 추가
     useEffect(() => {
-        setData([
-            { id: 1, productName: "쓸모있는거", unit: "ton", rate: 40, etc: "안녕하세요" },
-            { id: 2, productName: "쓸모있을까", unit: "ton", rate: 10, etc: "저는" },
-            { id: 3, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 4, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 5, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 6, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 7, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 8, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 9, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 10, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 11, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 12, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-            { id: 13, productName: "예쁜쓰레기", unit: "ton", rate: 20, etc: "오지환입니다." },
-        ]);
-    }, []);
+        const url = `/api/products?filters[factory][id][$eq]=${selectedFactoryId}`;
+        esgFetch(url, 'GET').then(response => {
+            if (response.ok) return response.json();
+            else throw new Error(`${response.status} ${response.statusText}`);
+        }).then(({data: value}) => {
+            const newData = value.map((v) => {
+                return {
+                    id: v.id,
+                    name: v.attributes.name,
+                    unit: 'ton', // TODO: 단위는 ton으로 고정인가??
+                    rate: v.attributes.rate,
+                    description: v.attributes.description
+                }
+            });
+            setData(newData);
+        });
+    }, [selectedFactoryId]);
 
     // 컬럼 속성
     const dummyColumns = [
-        { field: "productName", headerName: "생산품명", flex: 2, editable: true },
+        { field: "name", headerName: "생산품명", flex: 2, editable: true },
         { field: "unit", headerName: "단위", flex: 1 },
         { field: "rate", headerName: "비율", flex: 1, editable: true },
-        { field: "etc", headerName: "비고", flex: 2, editable: true },
+        { field: "description", headerName: "비고", flex: 2, editable: true },
     ]
 
     // 신규 버튼 눌렀을 때
