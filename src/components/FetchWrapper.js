@@ -34,7 +34,7 @@ export function esgFetch(url, method="GET", body={}, requiredAuth=true){
   return fetch(url, {
     method: method,
     headers: {
-      ...(method==="POST" && {'Content-Type': 'application/json'}),
+      ...((method==="POST" || method=="PUT") && {'Content-Type': 'application/json'}),
       ...(requiredAuth && {'Authorization': `Bearer ${token}`})
     },
     ...(Object.keys(body).length > 0 && {'body': JSON.stringify(body)})

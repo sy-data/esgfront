@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 
 import Pagination from "./Pagination.js";
 
@@ -18,17 +18,41 @@ const TableContainer = styled('div')({
     gap: '7px'
 });
 
-const CustomDataGrid = (props) => {
-    const { data, pageSize, ...rest } = props;
+const CustomDataGrid = (props, ref) => {
+    const { data, pageSize, ...otherProps } = props;
     const [rows, setRows] = useState([]);
+    const [focusRow, setFocusRow] = useState(null);
+    const paginationRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        focusRow: (row) => {
+            if (rows.map(v => v.id).includes(row.id)) {
+                props.apiRef.current.startRowEditMode({ id: row.id });
+                props.apiRef.current.setCellFocus(row.id, "name");
+            } else { // 포커스를 맞추기 위해 페이지를 변경해야 하는 경우
+                paginationRef.current.changePage(Math.ceil(row.index / pageSize));
+                setFocusRow(row);
+            }
+        }
+    }));
+
+    // 페이지 변경 후 포커스 설정
+    useEffect(() => {
+        if(focusRow) {
+            props.apiRef.current.startRowEditMode({ id: focusRow.id });
+            props.apiRef.current.setCellFocus(focusRow.id, "name");
+            setFocusRow(null);
+        }
+    }, [rows]);
 
     return (
         <TableContainer>
             <NoPaginationDataGrid
                 rows={rows}
-                {...rest}
+                {...otherProps}
             />
             <Pagination
+                ref={paginationRef}
                 data={data}
                 pageSize={pageSize}
                 setRows={setRows}
@@ -37,4 +61,4 @@ const CustomDataGrid = (props) => {
     )
 }
 
-export default CustomDataGrid;
+export default forwardRef(CustomDataGrid);

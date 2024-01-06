@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo  } from 'react';
+import { useState, useEffect, useMemo, useImperativeHandle, forwardRef } from 'react';
 import { styled } from '@mui/material';
 
 const PaginationContainer = styled('div')({
@@ -19,17 +19,26 @@ const NonStyeldButton = styled('button')({
     },
 });
 
-const Pagination = (props) => {
+const Pagination = (props, ref) => {
     const [ currentPage, setCurrentPage ] = useState(0);
 
+    // 현재 페이지 초기화
     useEffect(() => {
         setCurrentPage(1);
     }, []);
 
+    // 페이지 변경 시 table에 표시할 데이터 변경
     useEffect(() => {
         props.setRows(props.data.slice((currentPage - 1) * props.pageSize, currentPage * props.pageSize));
     }, [currentPage, props.data]);
+
+    // 부모 컴포넌트에서 페이지 변경 함수 호출 가능하도록 설정
+    useImperativeHandle(ref, () => ({
+        currentPageNum: currentPage,
+        changePage: (page) => setCurrentPage(page)
+    }));
     
+    // 데이터 개수에 따라 페이지 개수 계산
     const totalPageNum = useMemo(() => {
         return Math.ceil(props.data.length / props.pageSize);
     }, [props.data]);
@@ -47,4 +56,4 @@ const Pagination = (props) => {
         </PaginationContainer>
     )
 }
-export default Pagination;
+export default forwardRef(Pagination);

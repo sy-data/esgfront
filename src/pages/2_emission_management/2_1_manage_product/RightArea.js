@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
-import { Button } from "@mui/material";
+import { Button, LinearProgress } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 
 import ContentBody from "../../../components/ContentBody";
@@ -20,25 +20,28 @@ const NoRowsOverlay = () => {
 }
 
 const ProductManagement = () => {
-    const apiRef = useGridApiRef();
+    const pageSize = 20;
+    
     const [data, setData] = useState([]);
-    const [newRowId, setNewRowId] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [addedRows, setAddedRows] = useState([]);
+    const [updatedRows, setUpdatedRows] = useState([]);
+
+    const gridApiRef = useGridApiRef();
+    const gridRef = useRef(null);
+    
     const selectedFactoryId = useRecoilValue(SelectedFactoryId);
 
-    // TODO: 나중에 삭제해야 함
-    useEffect(() => {
-        console.log(apiRef);
-    }, [apiRef])
-
-    // TODO: 서버에서 데이터 가져오는 로직 추가
-    useEffect(() => {
+    // 생산품 목록 가져오는 함수
+    const fetchProducts = async () => {
+        setLoading(true);
         const url = `/api/products?filters[factory][id][$eq]=${selectedFactoryId}`;
-        esgFetch(url, 'GET').then(response => {
-            if (response.ok) return response.json();
-            else throw new Error(`${response.status} ${response.statusText}`);
-        }).then(({data: value}) => {
-            const newData = value.map((v) => {
+        const response = await esgFetch(url, 'GET');
+        if (response.ok) {
+            const { data: value } = await response.json();
+            const newData = value.map((v, i) => {
                 return {
+                    index: i + 1,
                     id: v.id,
                     name: v.attributes.name,
                     unit: 'ton', // TODO: 단위는 ton으로 고정인가??
@@ -47,7 +50,19 @@ const ProductManagement = () => {
                 }
             });
             setData(newData);
-        });
+        } else {
+            console.error(`${response.status} ${response.statusText}`);
+        }
+    }
+
+    // DataGrid에 데이터가 표시되면 로딩 상태 변경
+    useEffect(() => {
+        setLoading(false);
+    }, [data]);
+
+    // 선택된 사업장이 바뀌면 사업장별 생산품 목록 조회
+    useEffect(() => {
+        fetchProducts();
     }, [selectedFactoryId]);
 
     // 컬럼 속성
@@ -58,82 +73,169 @@ const ProductManagement = () => {
         { field: "description", headerName: "비고", flex: 2, editable: true },
     ]
 
+    // 백엔드에 저장하기 전에 사용할 random id 생성 함수
+    const generateRandomId = () => {
+        let randomId;
+        const max = 100000;
+        const min = 1;
+        do {
+            randomId = Math.floor(Math.random() * (max - min + 1)) + min;
+        } while (data.map(row => row.id).includes(randomId));
+        return randomId;
+    }
+
     // 신규 버튼 눌렀을 때
-    // TODO: 페이징 처리가 되어있을 경우 신규 버튼을 눌렀을 때 마지막 페이지로 이동하도록 수정해야 하는 건지 질문
     const handleAddButton = () => {
         const newRow = {
-            id: data.length + 1,
-            productName: "",
+            index: data.length + 1,
+            id: generateRandomId(),
+            name: "",
             unit: "ton",
             rate: 0,
-            etc: "",
+            description: "",
         }
+        setAddedRows([...addedRows, newRow]);
         setData([...data, newRow]);
-        setNewRowId(newRow.id);
+        gridRef.current.focusRow(newRow);
     }
 
     // 저장 버튼 눌렀을 때
     const handleSaveButton = () => {
-        const updatedRows = apiRef.current.getRowModels();
-        let sum = 0;
-        for (const [id, row] of updatedRows.entries()) {
-            sum += row.rate;
-            if (row.productName.length === 0) {
-                alert("생산품명을 입력해주세요.");
-                apiRef.current.startRowEditMode({ id: id });
-                apiRef.current.setCellFocus(id, "productName");
-                return;
-            }
-        }
+        const sum = data.reduce((acc, cur) => acc + cur.rate, 0);
         if (sum > 100) {
             alert("생산품 비율의 총 합은 100을 초과할 수 없습니다.");
             return;
         }
-        // TODO: 서버에 저장하는 로직 추가
+        const noNameData = data.filter(row => row.name.length === 0);
+        if (noNameData.length > 0) {
+            alert("생산품명을 입력해주세요.");
+            gridRef.current.focusRow(noNameData[0]);
+            return;
+        }
+
+        for (let row of addedRows) {
+            const body = {
+                data: {
+                    name: row.name,
+                    rate: row.rate,
+                    description: row.description,
+                    factory: {
+                        id: selectedFactoryId
+                    },
+                    // TODO: 단위(unit) 추가 필요
+                }
+            }
+            esgFetch('/api/products', 'POST', body).then(response => {
+                if (response.ok) setAddedRows([]);
+            });
+        }
+
+        for (let row of updatedRows) {
+            const body = {
+                data: {
+                    name: row.name,
+                    rate: row.rate,
+                    description: row.description,
+                }
+            }
+            esgFetch(`/api/products/${row.id}`, 'PUT', body).then(response => {
+                if (response.ok) setUpdatedRows([]);
+            });
+        }
+
+        fetchProducts();
     }
 
     // 삭제 버튼 눌렀을 때
     const handleDeleteButton = () => {
-        const selectedRows = apiRef.current.getSelectedRows();
+        const selectedRows = gridApiRef.current.getSelectedRows();
         if (selectedRows.length === 0) {
             alert("삭제할 생산품을 선택하지 않았습니다.");
             return;
         }
         const selectedIds = [...selectedRows.values()].map(row => row.id);
-        const updatedData = data.filter(row => !selectedIds.includes(row.id));
-        setData(updatedData); // TODO: 서버에서 삭제하는 로직 추가
-        apiRef.current.setRowSelectionModel([]);
+        for (let id of selectedIds) {
+            esgFetch(`/api/products/${id}`, 'DELETE').then(response => {
+                if (response.ok) {
+                    fetchProducts();
+                    gridApiRef.current.setRowSelectionModel([]);
+                }
+            })
+        }
     }
 
-    useEffect(() => {
-        if (newRowId) {
-            apiRef.current.startRowEditMode({ id: newRowId });
-            apiRef.current.setCellFocus(newRowId, "productName");
-            setNewRowId(null);
+    // 행이 업데이트 되었을 때
+    const processRowUpdate = (row) => {
+        if (row.name === '' && addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 아무 입력도 없이 포커스를 잃었을 때
+            const newAddedRows = addedRows.filter(addedRow => addedRow.id !== row.id);
+            setAddedRows(newAddedRows);
+            const newData = data.filter(data => data.id !== row.id);
+            setData(newData);
+            return row;
         }
-    }, [newRowId]);
+
+        if (addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 수정된 경우
+            const addedRowsId = addedRows.map(row => row.id);
+            const newAddedRows = addedRows.map(addedRow => {
+                if (row.id === addedRow.id) {
+                    return row;
+                }
+                return addedRow;
+            });
+            setAddedRows(newAddedRows);
+        } else { // 기존 행이 수정된 경우
+            const updatedRowsId = updatedRows.map(row => row.id);
+            if (!updatedRowsId.includes(row.id)) {
+                setUpdatedRows([...updatedRows, row]);
+            } else {
+                const newUpdatedRows = updatedRows.map(row => {
+                    if (row.id === row.id) {
+                        return row;
+                    }
+                    return row;
+                });
+                setUpdatedRows(newUpdatedRows);
+            }
+        }
+        const newData = data.map((data) => {
+            if (row.id === data.id) {
+                return row;
+            }
+            return data;
+        });
+        setData(newData);
+        return row;
+    }
 
     return (
         <ContentBody>
             <SubTitle title={"사업장별 생산품 관리"}>
                 <SearchButtonContainer>
-                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleAddButton}>신규</Button>
-                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton}>저장</Button>
-                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleDeleteButton}>삭제</Button>
+                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleAddButton} disabled={selectedFactoryId === null}>신규</Button>
+                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton} disabled={selectedFactoryId === null}>저장</Button>
+                    <Button variant="outlined" size="small" color="btnSearch" onClick={handleDeleteButton} disabled={selectedFactoryId === null}>삭제</Button>
                 </SearchButtonContainer>
             </SubTitle>
             <CustomDataGrid
+                apiRef={gridApiRef}
+                ref={gridRef}
                 data={data}
-                apiRef={apiRef}
                 columns={dummyColumns}
                 editMode="row"
-                slots={{ noRowsOverlay: NoRowsOverlay }}
+                processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={(error) => {console.error(error)}}
+                slots={{ 
+                    noRowsOverlay: NoRowsOverlay,
+                    loadingOverlay: LinearProgress,
+                }}
+                loading={loading}
+                setLoading={setLoading}
                 checkboxSelection={true}
                 disableColumnMenu={true}
                 columnHeaderHeight={40}
                 rowHeight={30}
                 autoHeight
-                pageSize={5}
+                pageSize={pageSize}
             />
         </ContentBody>
     )
