@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useGridApiRef } from "@mui/x-data-grid";
+import { LinearProgress } from "@mui/material";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
@@ -19,31 +20,41 @@ const NoRowsOverlay = () => {
 const FacilityList = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const userCompanyId = useRecoilValue(UserCompanyId);
     const selectedYear = useRecoilValue(SelectedYear);
     const setSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
 
-    // 사업장 목록 조회
-    useEffect(() => {
+    const fetchFactories = async () => {
+        setLoading(true);
         const url = `/api/factories?` + 
             `filters[company][id]=${userCompanyId}&` +
             `filters[company][createdAt][$gte]=${selectedYear}-01-01&` + 
             `filters[company][createdAt][$lte]=${selectedYear}-12-31`;
-        esgFetch(url, 'GET').then(response => {
-            if (response.ok) return response.json();
-            else throw new Error(`${response.status} ${response.statusText}`);
-        }).then(({data: value}) => {
+        const response = await esgFetch(url, 'GET');
+        if (response.ok) {
+            const { data: value } = await response.json();
             const newData = value.map((v, i) => {
                 return {
-                    index: i+1,
+                    index: i + 1,
                     id: v.id,
                     name: v.attributes.name,
                     number: '111-11-11111' // TODO: 사업자 등록번호 수정 필요
                 }
             });
             setData(newData);
-        });
+        }
+    }
+
+    // 사업장 목록 조회
+    useEffect(() => {
+        fetchFactories();
     }, [userCompanyId, selectedYear]);
+
+    // DataGrid에 데이터가 표시되면 로딩 상태 변경
+    useEffect(() => {
+        setLoading(false);
+    }, [data])
 
     const dummyColumns = [
         { field: 'index', headerName: 'No', flex: 1 },
@@ -59,7 +70,11 @@ const FacilityList = () => {
                 apiRef={apiRef} 
                 columns={dummyColumns} 
                 editable={false}
-                slots={{ noRowsOverlay: NoRowsOverlay}}
+                slots={{ 
+                    noRowsOverlay: NoRowsOverlay ,
+                    loadingOverlay: LinearProgress,
+                }}
+                loading={loading}
                 disableColumnMenu={true}
                 columnHeaderHeight={40}
                 rowHeight={30}

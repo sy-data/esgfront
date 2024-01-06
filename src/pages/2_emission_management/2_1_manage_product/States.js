@@ -7,7 +7,7 @@ export const UserCompanyId = atom({
 
 export const SelectedYear = atom({
     key: 'selectedYear',
-    default: '2023'
+    default: '2024'
 });
 
 export const SelectedFactoryId = atom({

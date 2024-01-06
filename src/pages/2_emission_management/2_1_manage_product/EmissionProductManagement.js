@@ -39,12 +39,13 @@ const EmissionProductManagement = () => {
       
       <FilterBlock>
         <FilterLine>
-          <BaseYearSelect ref={baseYearRef} onBaseYearChanged={(newValue) => setSelectedYear(newValue)}/>
+          <BaseYearSelect ref={baseYearRef}/>
         </FilterLine>
       </FilterBlock>
       
       <SearchButtonContainer>
-        <Button variant="outlined" size="small" color="btnSearch">검색</Button>
+        {/* 검색 버튼이 필요한가? 그냥 년도 선택하면 바로 조회되게 하면 되지 않을까? */}
+        <Button variant="outlined" size="small" color="btnSearch" onClick={() => setSelectedYear(baseYearRef.current.baseYear)}>검색</Button>
       </SearchButtonContainer>
       
       <SplitArea>
