@@ -16,9 +16,8 @@ const EmissionSource = () => {
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="workplace" element={<ManageWorkplace />} />
-          <Route exact path="product" element={<ManageProduct />} />
+          <Route exact path="product" element={<ManageEmissionProduct/>} />
           <Route exact path='sample' element={<SamplePage />} />
-          <Route exact path='emission-management/product' element={<ManageEmissionProduct/>} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </Suspense>
