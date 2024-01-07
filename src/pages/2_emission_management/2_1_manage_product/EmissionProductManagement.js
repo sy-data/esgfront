@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import MenuTitle from "../../../components/MenuTitle";
 import SplitArea from "../../../components/SplitArea";
 import { Button } from "@mui/material";
@@ -14,7 +14,6 @@ import { useSetRecoilState } from "recoil";
 import { UserCompanyId, SelectedYear } from "./States";
 
 const EmissionProductManagement = () => {
-  const selection = [2021, 2022, 2023];
   const setUserCompanyId = useSetRecoilState(UserCompanyId);
   const setSelectedYear = useSetRecoilState(SelectedYear);
   const baseYearRef = useRef();
