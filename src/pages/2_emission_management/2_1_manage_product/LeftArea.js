@@ -5,7 +5,7 @@ import { LinearProgress } from "@mui/material";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
-import CustomDataGrid from "./CustomDataGrid.js";
+import CustomDataGrid from "../../../components/datagrid/CustomDataGrid.js";
 import { UserCompanyId, SelectedYear, SelectedFactoryId } from "./States";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 

@@ -13,7 +13,7 @@ import { useGridApiRef } from "@mui/x-data-grid";
 
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
-import CustomDataGrid from "./CustomDataGrid.js";
+import CustomDataGrid from "../../../components/datagrid/CustomDataGrid.js";
 import { SearchButtonContainer } from "../../../components/Styles";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 import { SelectedFactoryId } from "./States";
