@@ -1,4 +1,6 @@
 export function loginDev(){
+  console.log(process.env.REACT_APP_DEV_API_ACCOUNT);
+  console.log(process.env.REACT_APP_DEV_API_PASSWORD)
   fetch('/api/auth/local', {
     method: "POST",
     headers: {
@@ -32,7 +34,7 @@ export function esgFetch(url, method="GET", body={}, requiredAuth=true){
   return fetch(url, {
     method: method,
     headers: {
-      ...(method==="POST" && {'Content-Type': 'application/json'}),
+      ...((method==="POST" || method=="PUT") && {'Content-Type': 'application/json'}),
       ...(requiredAuth && {'Authorization': `Bearer ${token}`})
     },
     ...(Object.keys(body).length > 0 && {'body': JSON.stringify(body)})
