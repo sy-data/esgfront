@@ -6,7 +6,8 @@ import { LinearProgress } from "@mui/material";
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid.js";
-import { UserCompanyId, SelectedYear, SelectedFactoryId } from "./States";
+import { SelectedYear, SelectedFactoryId } from "./States";
+import { UserCompanyId } from "../../../States/States";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 
 const NoRowsOverlay = () => {
