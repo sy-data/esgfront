@@ -39,7 +39,7 @@ const FacilityList = () => {
                     index: i + 1,
                     id: v.id,
                     name: v.attributes.name,
-                    number: '111-11-11111' // TODO: 사업자 등록번호 수정 필요
+                    number: v.attributes.brn
                 }
             });
             setData(newData);
