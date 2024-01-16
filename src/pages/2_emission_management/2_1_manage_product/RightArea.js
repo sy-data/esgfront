@@ -35,6 +35,7 @@ const ProductManagement = () => {
   const [addedRows, setAddedRows] = useState([]);
   const [updatedRows, setUpdatedRows] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [units, setUnits] = useState([]);
 
   const gridApiRef = useGridApiRef();
   const gridRef = useRef(null);
@@ -44,7 +45,7 @@ const ProductManagement = () => {
   // 생산품 목록 가져오는 함수
   const fetchProducts = async () => {
     setLoading(true);
-    const url = `/api/products?filters[factory][id][$eq]=${selectedFactoryId}`;
+    const url = `/api/products?filters[factory][id][$eq]=${selectedFactoryId}&populate=unit`;
     const response = await esgFetch(url, 'GET');
     if (response.ok) {
       const { data: value } = await response.json();
@@ -53,7 +54,7 @@ const ProductManagement = () => {
           index: i + 1,
           id: v.id,
           name: v.attributes.name,
-          unit: 'ton', // TODO: 단위는 ton으로 고정인가??
+          unit: v.attributes.unit.data.attributes.type,
           rate: v.attributes.rate,
           description: v.attributes.description
         }
@@ -63,6 +64,21 @@ const ProductManagement = () => {
       console.error(`${response.status} ${response.statusText}`);
     }
   }
+
+  // ton으로 시작하는 단위 목록 가져오는 함수
+  useEffect(() => {
+    const url = `/api/type-units?filters[type][$contains]=ton`;
+    esgFetch(url, 'GET').then(response => {
+      if (response.ok) {
+        response.json().then(({data: values}) => {
+          const listOfUnits = values.map(value => {
+            return {id: value.id, type: value.attributes.type}
+          });
+          setUnits(listOfUnits);
+        })
+      }
+    });
+  }, []);
 
   // DataGrid에 데이터가 표시되면 로딩 상태 변경
   useEffect(() => {
@@ -77,8 +93,8 @@ const ProductManagement = () => {
   // 컬럼 속성
   const dummyColumns = [
     { field: "name", headerName: "생산품명", flex: 2, editable: true },
-    { field: "unit", headerName: "단위", flex: 1 },
-    { field: "rate", headerName: "비율", flex: 1, editable: true },
+    { field: "unit", headerName: "단위", flex: 1, type: 'singleSelect', editable: true, valueOptions: units.map(unit => unit.type) },
+    { field: "rate", headerName: "비율", flex: 1, editable: true, type: 'number'}, // TODO: 음수로 입력되는 것 방지
     { field: "description", headerName: "비고", flex: 2, editable: true },
   ]
 
@@ -99,7 +115,7 @@ const ProductManagement = () => {
       index: data.length + 1,
       id: generateRandomId(),
       name: "",
-      unit: "ton",
+      unit: units[0].type,
       rate: 0,
       description: "",
     }
@@ -111,6 +127,7 @@ const ProductManagement = () => {
   // 저장 버튼 눌렀을 때
   const handleSaveButton = () => {
     const sum = data.reduce((acc, cur) => acc + cur.rate, 0);
+    console.log(sum);
     if (sum > 100) {
       alert("생산품 비율의 총 합은 100을 초과할 수 없습니다.");
       return;
@@ -131,7 +148,9 @@ const ProductManagement = () => {
           factory: {
             id: selectedFactoryId
           },
-          // TODO: 단위(unit) 추가 필요
+          unit: {
+            id: units.filter(unit => unit.type === row.unit)[0].id
+          }
         }
       }
       esgFetch('/api/products', 'POST', body).then(response => {
@@ -145,6 +164,9 @@ const ProductManagement = () => {
           name: row.name,
           rate: row.rate,
           description: row.description,
+          unit: {
+            id: units.filter(unit => unit.type === row.unit)[0].id
+          }
         }
       }
       esgFetch(`/api/products/${row.id}`, 'PUT', body).then(response => {
@@ -155,7 +177,7 @@ const ProductManagement = () => {
     fetchProducts();
   }
 
-  // 삭제 버튼 눌렀을 때
+  // 삭제 버튼 눌렀을 때 삭제 다이얼로그 열기
   const handleDeleteButton = () => {
     const selectedRows = gridApiRef.current.getSelectedRows();
     if (selectedRows.length === 0) {
@@ -165,6 +187,7 @@ const ProductManagement = () => {
     setOpenDeleteDialog(true);
   }
 
+  // 삭제 다이얼로그에서 삭제 버튼 눌렀을 때 DELETE 요청 전송
   const handleDeleteDialog = () => {
     const selectedRows = gridApiRef.current.getSelectedRows();
     const selectedIds = [...selectedRows.values()].map(row => row.id);
@@ -179,7 +202,7 @@ const ProductManagement = () => {
     setOpenDeleteDialog(false);
   }
 
-  // 행이 업데이트 되었을 때
+  // 행이 업데이트 되었을 때 addedRow와 updatedRow에 추가
   const processRowUpdate = (row) => {
     if (row.name === '' && addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 아무 입력도 없이 포커스를 잃었을 때
       const newAddedRows = addedRows.filter(addedRow => addedRow.id !== row.id);
@@ -190,7 +213,6 @@ const ProductManagement = () => {
     }
 
     if (addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 수정된 경우
-      const addedRowsId = addedRows.map(row => row.id);
       const newAddedRows = addedRows.map(addedRow => {
         if (row.id === addedRow.id) {
           return row;

@@ -1,10 +1,5 @@
 import { atom } from 'recoil';
 
-export const UserCompanyId = atom({
-    key: 'userCompanyId',
-    default: null
-});
-
 export const SelectedYear = atom({
     key: 'selectedYear',
     default: '2024'
