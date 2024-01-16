@@ -15,7 +15,7 @@ const NoPaginationDataGrid = styled(DataGrid)({
 const TableContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',
-    gap: '7px'
+    gap: '7px',
 });
 
 const CustomDataGrid = (props, ref) => {
