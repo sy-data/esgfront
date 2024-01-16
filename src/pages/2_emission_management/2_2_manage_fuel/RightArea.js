@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import {
   Button,
   LinearProgress,
+  Box
 } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 
@@ -78,16 +79,16 @@ const ProductManagement = () => {
 
   // 컬럼 속성
   const dummyColumns = [
-    { field: "name", headerName: "시설명", flex: 2, editable: true },
-    { field: "type_facility", headerName: "배출시설", flex: 1 },
-    { field: "size", headerName: "규모", flex: 1, editable: true },
-    { field: "activity", headerName: "배출활동", flex: 1, editable: true },
-    { field: "type_industry", headerName: "산업군", flex: 1, editable: true },
-    { field: "formula", headerName: "산정식", flex: 1, editable: true },
-    { field: "formula_version", headerName: "산정식버전", flex: 1, editable: true },
-    { field: "fuel_name", headerName: "연료명", flex: 1, editable: true },
-    { field: "level_1", headerName: "배출 규정등급", flex: 1, editable: true },
-    { field: "level_2", headerName: "배출 적용등급", flex: 1, editable: true },
+    { field: "name", headerName: "시설명", width: 150, editable: true },
+    { field: "type_facility", headerName: "배출시설", width: 150 },
+    { field: "size", headerName: "규모", width: 150, editable: true },
+    { field: "activity", headerName: "배출활동", width: 150, editable: true },
+    { field: "type_industry", headerName: "산업군", width: 150, editable: true },
+    { field: "formula", headerName: "산정식", width: 150, editable: true },
+    { field: "formula_version", headerName: "산정식버전", width: 150, editable: true },
+    { field: "fuel_name", headerName: "연료명", width: 150, editable: true },
+    { field: "level_1", headerName: "배출 규정등급", width: 150, editable: true },
+    { field: "level_2", headerName: "배출 적용등급", width: 150, editable: true },
   ]
 
   // 저장 버튼 눌렀을 때
@@ -157,27 +158,29 @@ const ProductManagement = () => {
           <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton} disabled={selectedFactoryId === null}>저장</Button>
         </SearchButtonContainer>
       </SubTitle>
-      <CustomDataGrid
-        apiRef={gridApiRef}
-        ref={gridRef}
-        data={data}
-        columns={dummyColumns}
-        editMode="row"
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={(error) => { console.error(error) }}
-        slots={{
-          noRowsOverlay: NoRowsOverlay,
-          loadingOverlay: LinearProgress,
-        }}
-        loading={loading}
-        setLoading={setLoading}
-        checkboxSelection={true}
-        disableColumnMenu={true}
-        columnHeaderHeight={40}
-        rowHeight={30}
-        autoHeight
-        pageSize={pageSize}
-      />
+      <Box sx={{overflow: 'auto', width: '950px'}}>
+        <CustomDataGrid
+          apiRef={gridApiRef}
+          ref={gridRef}
+          data={data}
+          columns={dummyColumns}
+          editMode="row"
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={(error) => { console.error(error) }}
+          slots={{
+            noRowsOverlay: NoRowsOverlay,
+            loadingOverlay: LinearProgress,
+          }}
+          loading={loading}
+          setLoading={setLoading}
+          checkboxSelection={true}
+          disableColumnMenu={true}
+          columnHeaderHeight={40}
+          rowHeight={30}
+          autoHeight
+          pageSize={pageSize}
+        />
+      </Box>
     </ContentBody>
   )
 }
