@@ -94,7 +94,22 @@ const ProductManagement = () => {
   const dummyColumns = [
     { field: "name", headerName: "생산품명", flex: 2, editable: true },
     { field: "unit", headerName: "단위", flex: 1, type: 'singleSelect', editable: true, valueOptions: units.map(unit => unit.type) },
-    { field: "rate", headerName: "비율", flex: 1, editable: true, type: 'number'}, // TODO: 음수로 입력되는 것 방지
+    { 
+      field: "rate", 
+      headerName: "비율", 
+      flex: 1, 
+      editable: true, 
+      type: 'number',
+      valueParser: (value) => {
+        if (value < 0) {
+          return 0;
+        }
+        if (value > 100) {
+          return 100;
+        }
+        return value;
+      }
+    }, // TODO: 음수로 입력되는 것 방지
     { field: "description", headerName: "비고", flex: 2, editable: true },
   ]
 
@@ -125,7 +140,7 @@ const ProductManagement = () => {
   }
 
   // 저장 버튼 눌렀을 때
-  const handleSaveButton = () => {
+  const handleSaveButton = async () => {
     const sum = data.reduce((acc, cur) => acc + cur.rate, 0);
     console.log(sum);
     if (sum > 100) {
@@ -139,6 +154,7 @@ const ProductManagement = () => {
       return;
     }
 
+    // Transaction 처리 필요
     for (let row of addedRows) {
       const body = {
         data: {
@@ -153,10 +169,13 @@ const ProductManagement = () => {
           }
         }
       }
-      esgFetch('/api/products', 'POST', body).then(response => {
-        if (response.ok) setAddedRows([]);
-      });
+      const response = await esgFetch('/api/products', 'POST', body);
+      if (!response.ok) {
+        alert("생산품 정보를 저장하는데 실패했습니다.");
+        return;
+      }
     }
+    setAddedRows([]);
 
     for (let row of updatedRows) {
       const body = {
@@ -169,9 +188,12 @@ const ProductManagement = () => {
           }
         }
       }
-      esgFetch(`/api/products/${row.id}`, 'PUT', body).then(response => {
-        if (response.ok) setUpdatedRows([]);
-      });
+      const response = await esgFetch(`/api/products/${row.id}`, 'PUT', body);
+      if (!response.ok) {
+        alert("생산품 정보를 저장하는데 실패했습니다.");
+        return;
+      }
+      setUpdatedRows([]);
     }
 
     fetchProducts();
