@@ -7,7 +7,7 @@ import {
   FilterBlock, FilterLine, 
   SearchButtonContainer } from "../../../components/Styles";
 import BaseYearSelect from "../../../components/filters/BaseYearSelect";
-import FacilityList from "./LeftArea";
+import FactoryList from "./LeftArea";
 import ProductManagement from "./RightArea";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 import { useSetRecoilState } from "recoil";
@@ -48,7 +48,7 @@ const EmissionFuelManagement = () => {
       </SearchButtonContainer>
       
       <SplitArea>
-        <FacilityList/>
+        <FactoryList/>
         <ProductManagement/>
       </SplitArea>
     </ContentWithTitie>

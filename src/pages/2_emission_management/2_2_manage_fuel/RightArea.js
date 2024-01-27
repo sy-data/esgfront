@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import qs from "qs";
 import { useRecoilValue } from "recoil";
 import {
   Button,
@@ -28,43 +29,85 @@ const ProductManagement = () => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [addedRows, setAddedRows] = useState([]);
   const [updatedRows, setUpdatedRows] = useState([]);
+  const [combustionOptions, setCombustionOptions] = useState([]);
+  const [industryTypeOptions, setIndustryTypeOptions] = useState([]);
+  const [formulaOptions, setFormulaOptions] = useState([]);
+  const [fuelOptions, setFuelOptions] = useState([]);
 
   const gridApiRef = useGridApiRef();
   const gridRef = useRef(null);
 
   const selectedFactoryId = useRecoilValue(SelectedFactoryId);
 
-  const dummyData = [
-    { index: 1, id: 1, name: '내연발전기', type_facility: '발전용 내연기관', size: 'A그룹', activity: '액체연료연소', type_industry: '제조업/건설업', formula: '액체연료연소', formula_version: 1, fuel_name: '가스/디젤 오일(경유', level_1: 'Tier 1', level_2: 'Tier 1'},
-    { index: 2, id: 2, name: '내연발전기', type_facility: '발전용 내연기관', size: 'A그룹', activity: '액체연료연소', type_industry: '제조업/건설업', formula: '액체연료연소', formula_version: 1, fuel_name: '가스/디젤 오일(경유', level_1: 'Tier 1', level_2: 'Tier 1'},
-    { index: 3, id: 3, name: '내연발전기', type_facility: '발전용 내연기관', size: 'A그룹', activity: '액체연료연소', type_industry: '제조업/건설업', formula: '액체연료연소', formula_version: 1, fuel_name: '가스/디젤 오일(경유', level_1: 'Tier 1', level_2: 'Tier 1'},
-  ]
+  useEffect(() => {
+    // 배출활동 선택 목록 가져오기
+    esgFetch(`/api/type-combustions`, 'GET')
+    .then(response => response.json())
+    .then(data => setCombustionOptions(data.data.map((v, i) => v.attributes.type)));
+
+    // 산업군 선택 목록 가져오기
+    esgFetch(`/api/type-industries`, 'GET')
+    .then(response => response.json())
+    .then(data => setIndustryTypeOptions(data.data.map((v, i) => v.attributes.type)));
+
+    // 산정식 선택 목록 가져오기
+    esgFetch(`/api/formulas`, 'GET')
+    .then(response => response.json())
+    .then(data => setFormulaOptions(data.data.map((v, i) => {
+      return {
+        name: v.attributes.name,
+        version: v.attributes.version
+      }
+    })));
+
+    // 연료명 선택 목록 가져오기
+    esgFetch(`/api/fuels`, 'GET')
+    .then(response => response.json())
+    .then(data => setFuelOptions(data.data.map((v, i) => v.attributes.name)));
+  }, []);
 
   // 시설 목록 가져오는 함수
   const fetchFacilities = async () => {
     setLoading(true);
-    setData(dummyData);
-    // TODO: 시설 정보 불러오는 부분 Backend 변경되면 연결하기
-    // const url = `/api/facilities?filters[factory][id][$eq]=${selectedFactoryId}`;
-    // const response = await esgFetch(url, 'GET');
-    // if (response.ok) {
-    //   const { data: value } = await response.json();
-    //   const newData = value.map((v, i) => {
-    //     return {
-    //       index: i + 1,
-    //       id: v.id,
-    //       name: v.attributes.name,
-    //       unit: 'ton',
-    //       rate: v.attributes.rate,
-    //       description: v.attributes.description
-    //     }
-    //   });
-    //   setData(newData);
-    // } else {
-    //   console.error(`${response.status} ${response.statusText}`);
-    // }
+    // TODO: 시설 정보 불러오는 API 작성
+    const url = `/api/combustions?`;
+    const query = qs.stringify({
+      populate: [
+        'facility',
+        'facility.type_facility',
+        'type',
+        'facility.type_industry',
+        'formula',
+        'fuel',
+        'combustion_regulation',
+        'combustion_practice'
+      ]
+    })
+    const response = await esgFetch(url+query, 'GET');
+    if (response.ok) {
+      const { data: value } = await response.json();
+      console.log(value);
+      const newData = value.map((v, i) => {
+        return {
+          index: i + 1,
+          id: v.id,
+          name: v.attributes.facility.data.attributes.name,
+          facility: v.attributes.facility.data.attributes.type_facility.data.attributes.type,
+          size: v.attributes.facility.data.attributes.size,
+          combustion: v.attributes.type.data.attributes.type,
+          industry_type: v.attributes.facility.data.attributes.type_industry.data.attributes.type,
+          formula: v.attributes.formula.data.attributes.name,
+          formula_version: v.attributes.formula.data.attributes.version,
+          fuel_name: v.attributes.fuel.data.attributes.name,
+          regulation: v.attributes.combustion_regulation.data.attributes.name,
+          practice: v.attributes.combustion_practice.data.attributes.name,
+        }
+      });
+      setData(newData);
+    } else {
+      console.error(`${response.status} ${response.statusText}`);
+    }
   }
 
   // DataGrid에 데이터가 표시되면 로딩 상태 변경
@@ -78,18 +121,55 @@ const ProductManagement = () => {
   }, [selectedFactoryId]);
 
   // 컬럼 속성
-  const dummyColumns = [
-    { field: "name", headerName: "시설명", width: 150, editable: true },
-    { field: "type_facility", headerName: "배출시설", width: 150 },
-    { field: "size", headerName: "규모", width: 150, editable: true },
-    { field: "activity", headerName: "배출활동", width: 150, editable: true },
-    { field: "type_industry", headerName: "산업군", width: 150, editable: true },
-    { field: "formula", headerName: "산정식", width: 150, editable: true },
-    { field: "formula_version", headerName: "산정식버전", width: 150, editable: true },
-    { field: "fuel_name", headerName: "연료명", width: 150, editable: true },
-    { field: "level_1", headerName: "배출 규정등급", width: 150, editable: true },
-    { field: "level_2", headerName: "배출 적용등급", width: 150, editable: true },
-  ]
+  const dummyColumns = useMemo(() => {
+    return [
+      { field: "name", headerName: "시설명", width: 150, editable: true }, // name
+      { field: "facility", headerName: "배출시설", width: 150 }, // facility
+      { field: "size", headerName: "규모", width: 150 }, // size
+      { 
+        field: "combustion", 
+        headerName: "배출활동", 
+        width: 150, 
+        editable: true, 
+        type: 'singleSelect',
+        valueOptions: combustionOptions
+      }, // combustion의 type
+      { 
+        field: "industry_type", 
+        headerName: "산업군", 
+        width: 150, 
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: industryTypeOptions
+      }, // type_industry의 type
+      { 
+        field: "formula", 
+        headerName: "산정식", 
+        width: 150, 
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: formulaOptions.map(formula => formula.name)
+      }, // combustions의 formula의 name
+      { 
+        field: "formula_version", 
+        headerName: "산정식버전", 
+        width: 150,
+        // TODO: 산정식 Table에 데이터가 생기면 테스트 해봐야 함
+        // valueGetter: (params) => formulaOptions.find(formula => formula.name === params.row.formula).version
+      }, // combustions의 formula의 version
+      { 
+        field: "fuel_name", 
+        headerName: "연료명", 
+        width: 150, 
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: fuelOptions
+      }, // combustions의 fuel의 name
+      { field: "regulation", headerName: "배출 규정등급", width: 150 }, // combustions의 regulation
+      { field: "practice", headerName: "배출 적용등급", width: 150 }, // combustions의 practice
+    ]
+  }, [combustionOptions, industryTypeOptions, formulaOptions, fuelOptions]);
+  
 
   // 저장 버튼 눌렀을 때
   const handleSaveButton = () => {

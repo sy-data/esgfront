@@ -17,7 +17,7 @@ const NoRowsOverlay = () => {
   )
 }
 
-const FacilityList = () => {
+const FactoryList = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,8 +26,8 @@ const FacilityList = () => {
     const setSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
 
     const fetchFactories = async () => {
-        // setLoading(true);
-        const url = `/api/facilities?` + 
+        setLoading(true);
+        const url = `/api/factories?` + 
             `filters[company][id]=${userCompanyId}&` +
             `filters[company][createdAt][$gte]=${selectedYear}-01-01&` + 
             `filters[company][createdAt][$lte]=${selectedYear}-12-31`;
@@ -39,10 +39,10 @@ const FacilityList = () => {
                     index: i + 1,
                     id: v.id,
                     name: v.attributes.name,
-                    number: '111-11-11111' // TODO: 사업자 등록번호 수정 필요
+                    number: v.attributes.brn
                 }
             });
-            // setData(newData);
+            setData(newData);
         }
     }
 
@@ -86,4 +86,4 @@ const FacilityList = () => {
     )
 }
 
-export default FacilityList;
+export default FactoryList;
