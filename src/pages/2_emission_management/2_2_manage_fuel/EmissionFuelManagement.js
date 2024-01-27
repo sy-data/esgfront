@@ -8,10 +8,10 @@ import {
   SearchButtonContainer } from "../../../components/Styles";
 import BaseYearSelect from "../../../components/filters/BaseYearSelect";
 import FactoryList from "./LeftArea";
-import ProductManagement from "./RightArea";
+import CombustionManagement from "./RightArea";
 import { esgFetch } from "../../../components/FetchWrapper.js";
 import { useSetRecoilState } from "recoil";
-import { UserCompanyId, SelectedYear } from "./States";
+import { UserCompanyId, SelectedYear, SelectedFactory } from "./States";
 
 const EmissionFuelManagement = () => {
   const setUserCompanyId = useSetRecoilState(UserCompanyId);
@@ -49,7 +49,7 @@ const EmissionFuelManagement = () => {
       
       <SplitArea>
         <FactoryList/>
-        <ProductManagement/>
+        <CombustionManagement/>
       </SplitArea>
     </ContentWithTitie>
   )
