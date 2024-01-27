@@ -24,7 +24,7 @@ const NoRowsOverlay = () => {
   )
 }
 
-const ProductManagement = () => {
+const CombustionManagement = () => {
   const pageSize = 20;
 
   const [data, setData] = useState([]);
@@ -44,18 +44,28 @@ const ProductManagement = () => {
     // 배출활동 선택 목록 가져오기
     esgFetch(`/api/type-combustions`, 'GET')
     .then(response => response.json())
-    .then(data => setCombustionOptions(data.data.map((v, i) => v.attributes.type)));
+    .then(data => setCombustionOptions(data.data.map((v, i) => {
+      return {
+        id: v.id, type: v.attributes.type
+      }
+    })));
 
     // 산업군 선택 목록 가져오기
     esgFetch(`/api/type-industries`, 'GET')
     .then(response => response.json())
-    .then(data => setIndustryTypeOptions(data.data.map((v, i) => v.attributes.type)));
+    .then(data => setIndustryTypeOptions(data.data.map((v, i) => { 
+      return {
+        id: v.id,
+        type: v.attributes.type
+      }
+    })));
 
     // 산정식 선택 목록 가져오기
     esgFetch(`/api/formulas`, 'GET')
     .then(response => response.json())
     .then(data => setFormulaOptions(data.data.map((v, i) => {
       return {
+        id: v.id,
         name: v.attributes.name,
         version: v.attributes.version
       }
@@ -64,14 +74,18 @@ const ProductManagement = () => {
     // 연료명 선택 목록 가져오기
     esgFetch(`/api/fuels`, 'GET')
     .then(response => response.json())
-    .then(data => setFuelOptions(data.data.map((v, i) => v.attributes.name)));
+    .then(data => setFuelOptions(data.data.map((v, i) => { 
+      return {
+        id: v.id,
+        name: v.attributes.name
+      }
+    })));
   }, []);
 
   // 시설 목록 가져오는 함수
-  const fetchFacilities = async () => {
+  const fetchCombustions = async () => {
     setLoading(true);
-    // TODO: 시설 정보 불러오는 API 작성
-    const url = `/api/combustions?`;
+    const url = `/api/combustions?filters[facility][factory][id][$eq]=${selectedFactoryId}&`;
     const query = qs.stringify({
       populate: [
         'facility',
@@ -92,6 +106,7 @@ const ProductManagement = () => {
         return {
           index: i + 1,
           id: v.id,
+          facility_id: v.attributes.facility.data.id,
           name: v.attributes.facility.data.attributes.name,
           facility: v.attributes.facility.data.attributes.type_facility.data.attributes.type,
           size: v.attributes.facility.data.attributes.size,
@@ -117,7 +132,7 @@ const ProductManagement = () => {
 
   // 선택된 사업장이 바뀌면 사업장별 생산품 목록 조회
   useEffect(() => {
-    fetchFacilities();
+    fetchCombustions();
   }, [selectedFactoryId]);
 
   // 컬럼 속성
@@ -132,7 +147,7 @@ const ProductManagement = () => {
         width: 150, 
         editable: true, 
         type: 'singleSelect',
-        valueOptions: combustionOptions
+        valueOptions: combustionOptions.map(combustion => combustion.type)
       }, // combustion의 type
       { 
         field: "industry_type", 
@@ -140,7 +155,7 @@ const ProductManagement = () => {
         width: 150, 
         editable: true,
         type: 'singleSelect',
-        valueOptions: industryTypeOptions
+        valueOptions: industryTypeOptions.map(industryType => industryType.type)
       }, // type_industry의 type
       { 
         field: "formula", 
@@ -163,7 +178,7 @@ const ProductManagement = () => {
         width: 150, 
         editable: true,
         type: 'singleSelect',
-        valueOptions: fuelOptions
+        valueOptions: fuelOptions.map(fuel => fuel.name)
       }, // combustions의 fuel의 name
       { field: "regulation", headerName: "배출 규정등급", width: 150 }, // combustions의 regulation
       { field: "practice", headerName: "배출 적용등급", width: 150 }, // combustions의 practice
@@ -173,69 +188,83 @@ const ProductManagement = () => {
 
   // 저장 버튼 눌렀을 때
   const handleSaveButton = () => {
-    // for (let row of addedRows) {
-    //   const body = {
-    //     data: {
-    //       name: row.name,
-    //       rate: row.rate,
-    //       description: row.description,
-    //       factory: {
-    //         id: selectedFactoryId
-    //       },
-    //       // TODO: 단위(unit) 추가 필요
-    //     }
-    //   }
-    //   esgFetch('/api/facilities', 'POST', body).then(response => {
-    //     if (response.ok) setAddedRows([]);
-    //   });
-    // }
+    console.log(updatedRows);
+    let success = true;
+    for (let row of updatedRows) {
+      // 배출활동 수정
+      const combustion_body = {
+        data: {
+          type: {
+            id: combustionOptions.find(combustion => combustion.type === row.combustion).id
+          },
+          formula: {
+            id: formulaOptions.find(formula => formula.name === row.formula).id
+          },
+          fuel: {
+            id: fuelOptions.find(fuel => fuel.name === row.fuel_name).id
+          }
+        }
+      }
+      esgFetch(`/api/combustions/${row.id}`, 'PUT', combustion_body)
+      .then(response => {
+        if (!response.ok) {
+          success = false;
+        }
+      });
 
-    // for (let row of updatedRows) {
-    //   const body = {
-    //     data: {
-    //       name: row.name,
-    //       rate: row.rate,
-    //       description: row.description,
-    //     }
-    //   }
-    //   esgFetch(`/api/facilities/${row.id}`, 'PUT', body).then(response => {
-    //     if (response.ok) setUpdatedRows([]);
-    //   });
-    // }
+      // 산업군 수정
+      const facility_body = {
+        data: {
+          type_industry: {
+            id: industryTypeOptions.find(industryType => industryType.type === row.industry_type).id
+          }
+        }
+      }
+      esgFetch(`/api/facilities/${row.facility_id}`, 'PUT', facility_body)
+      .then(response => {
+        if (!response.ok) {
+          success = false;
+        }
+      });
 
-    // fetchFacilities();
+    }
+    if (success) {
+      setUpdatedRows([]);
+      fetchCombustions();
+    }
+
   }
 
   // 행이 업데이트 되었을 때
-  const processRowUpdate = (row) => {
+  const processRowUpdate = (updatedRowData) => {
     // 기존 행이 수정된 경우
     const updatedRowsId = updatedRows.map(row => row.id);
-    if (!updatedRowsId.includes(row.id)) {
-      setUpdatedRows([...updatedRows, row]);
+    if (!updatedRowsId.includes(updatedRowData.id)) {
+      setUpdatedRows([...updatedRows, updatedRowData]);
     } else {
       const newUpdatedRows = updatedRows.map(row => {
-        if (row.id === row.id) {
-          return row;
+        if (row.id === updatedRowData.id) {
+          return updatedRowData;
         }
         return row;
       });
       setUpdatedRows(newUpdatedRows);
     }
     const newData = data.map((data) => {
-      if (row.id === data.id) {
-        return row;
+      if (updatedRowData.id === data.id) {
+        return updatedRowData;
       }
       return data;
     });
     setData(newData);
-    return row;
+    return updatedRowData;
   }
 
   return (
     <ContentBody>
       <SubTitle title={"시설 정보"}>
         <SearchButtonContainer>
-          <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton} disabled={selectedFactoryId === null}>저장</Button>
+          <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton} disabled={updatedRows.length === 0}>저장</Button>
         </SearchButtonContainer>
       </SubTitle>
       <Box sx={{overflow: 'auto', width: '950px'}}>
@@ -265,4 +294,4 @@ const ProductManagement = () => {
   )
 }
 
-export default ProductManagement;
+export default CombustionManagement;
