@@ -20,7 +20,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [noEmptyInput, setNoEmptyInput] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
   const [userState, setUserState] = useRecoilState(userStateAtom);
   const [loginFailCount, setLoginFailCount] = useRecoilState(loginFailCountAtom);
