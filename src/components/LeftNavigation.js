@@ -14,9 +14,9 @@ const LeftNavigation = () => {
     >
       <TreeItem nodeId="0" label="샘플페이지" onClick={() => navigate("/e_s/sample")} />
       <TreeItem nodeId="1" label="시설정보관리">
-        <TreeItem nodeId="1-1" label="사업장관리" onClick={() => navigate("/facility/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="1-2" label="사업장별 시설정보 관리" onClick={() => navigate("/facility/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="1-3" label="시설 이력 조회" onClick={() => navigate("/facility/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="1-1" label="사업장관리" onClick={() => navigate("/facility/workplace")} icon={<ArrowRight />} />
+        <TreeItem nodeId="1-2" label="사업장별 시설정보 관리" onClick={() => navigate("/facility/information")} icon={<ArrowRight />} />
+        <TreeItem nodeId="1-3" label="시설 이력 조회" onClick={() => navigate("/facility/history")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="2" label="배출원 관리">
         <TreeItem nodeId="2-1" label="사업장별 생산품 관리" onClick={() => navigate("/source/product")} icon={<ArrowRight />} />
