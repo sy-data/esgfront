@@ -138,9 +138,9 @@ const CombustionManagement = () => {
   // 컬럼 속성
   const dummyColumns = useMemo(() => {
     return [
-      { field: "name", headerName: "시설명", width: 150, editable: true }, // name
-      { field: "facility", headerName: "배출시설", width: 150 }, // facility
-      { field: "size", headerName: "규모", width: 150 }, // size
+      { field: "name", headerName: "시설명", width: 150, editable: true },
+      { field: "facility", headerName: "배출시설", width: 150 }, 
+      { field: "size", headerName: "규모", width: 150 },
       { 
         field: "combustion", 
         headerName: "배출활동", 
@@ -148,7 +148,7 @@ const CombustionManagement = () => {
         editable: true, 
         type: 'singleSelect',
         valueOptions: combustionOptions.map(combustion => combustion.type)
-      }, // combustion의 type
+      }, 
       { 
         field: "industry_type", 
         headerName: "산업군", 
@@ -156,7 +156,7 @@ const CombustionManagement = () => {
         editable: true,
         type: 'singleSelect',
         valueOptions: industryTypeOptions.map(industryType => industryType.type)
-      }, // type_industry의 type
+      }, 
       { 
         field: "formula", 
         headerName: "산정식", 
@@ -164,14 +164,14 @@ const CombustionManagement = () => {
         editable: true,
         type: 'singleSelect',
         valueOptions: formulaOptions.map(formula => formula.name)
-      }, // combustions의 formula의 name
+      }, 
       { 
         field: "formula_version", 
         headerName: "산정식버전", 
         width: 150,
         // TODO: 산정식 Table에 데이터가 생기면 테스트 해봐야 함
         // valueGetter: (params) => formulaOptions.find(formula => formula.name === params.row.formula).version
-      }, // combustions의 formula의 version
+      }, 
       { 
         field: "fuel_name", 
         headerName: "연료명", 
@@ -179,9 +179,11 @@ const CombustionManagement = () => {
         editable: true,
         type: 'singleSelect',
         valueOptions: fuelOptions.map(fuel => fuel.name)
-      }, // combustions의 fuel의 name
-      { field: "regulation", headerName: "배출 규정등급", width: 150 }, // combustions의 regulation
-      { field: "practice", headerName: "배출 적용등급", width: 150 }, // combustions의 practice
+      },
+      // TODO: 배출활동/산정식/연료명에 따라 자동으로 변경
+      { field: "regulation", headerName: "배출 규정등급", width: 150 },
+      // TODO: 배출활동/산정식/연료명에 따라 자동으로 변경
+      { field: "practice", headerName: "배출 적용등급", width: 150 },
     ]
   }, [combustionOptions, industryTypeOptions, formulaOptions, fuelOptions]);
   
@@ -267,7 +269,7 @@ const CombustionManagement = () => {
           <Button variant="outlined" size="small" color="btnSearch" onClick={handleSaveButton} disabled={updatedRows.length === 0}>저장</Button>
         </SearchButtonContainer>
       </SubTitle>
-      <Box sx={{overflow: 'auto', width: '950px'}}>
+      <Box sx={{width: '1068px'}}>
         <CustomDataGrid
           apiRef={gridApiRef}
           ref={gridRef}
