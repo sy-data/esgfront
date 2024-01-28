@@ -33,8 +33,21 @@ const Login = () => {
     }
   });
 
+  const checkPasswordDate = (date) => {
+    const currendtDate = new Date();
+    const passwordDate = new Date(date);
+
+    currendtDate.setMonth(currendtDate.getMonth() + 3);
+
+    if (currendtDate > passwordDate) {
+      navigate("/changePassword");
+    }
+  };
+
   const onLogin = async (e) => {
     e.preventDefault();
+    const date = new Date();
+    console.log(date);
     const loginData = { id, password };
 
     if (id === "" || password === "") {
@@ -46,6 +59,7 @@ const Login = () => {
     const user = await loginDev(loginData);
 
     if (user) {
+      checkPasswordDate(user.password_date);
       setUserState(user);
       saveId(user.email);
       setLoginFailCount(0);
