@@ -75,7 +75,7 @@ const Login = () => {
   };
 
   const onFindIdPassword = () => {
-    navigate("/findIdPassword");
+    navigate("/UserFind");
   };
 
   return (
