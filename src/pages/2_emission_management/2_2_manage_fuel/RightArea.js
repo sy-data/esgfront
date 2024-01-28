@@ -101,7 +101,6 @@ const CombustionManagement = () => {
     const response = await esgFetch(url+query, 'GET');
     if (response.ok) {
       const { data: value } = await response.json();
-      console.log(value);
       const newData = value.map((v, i) => {
         return {
           index: i + 1,
@@ -190,7 +189,6 @@ const CombustionManagement = () => {
 
   // 저장 버튼 눌렀을 때
   const handleSaveButton = () => {
-    console.log(updatedRows);
     let success = true;
     for (let row of updatedRows) {
       // 배출활동 수정
