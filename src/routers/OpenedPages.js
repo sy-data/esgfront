@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PageFooter from "../components/PageFooter";
-import PageNotFound from "../pages/99_error/PageNotFound";
 
 const Index = lazy(() => import("../pages/0_opened/Index"));
 const Esgran = lazy(() => import("../pages/0_opened/Esgran"));
@@ -9,6 +8,7 @@ const Tanso = lazy(() => import("../pages/0_opened/Tanso"));
 const Muni = lazy(() => import("../pages/0_opened/Muni"));
 const Login = lazy(() => import("../pages/0_opened/Login"));
 const LoginFail = lazy(() => import("../pages/0_opened/LoginFail"));
+const PageNotFound = lazy(() => import("../pages/99_error/PageNotFound"));
 
 const OpenedPages = () => {
   return (
