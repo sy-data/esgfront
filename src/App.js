@@ -1,5 +1,6 @@
 import PageHeader from './components/PageHeader';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { getCookie } from './States/storage/Cookie';
 import { MasterLayout } from './components/Styles';
 import OpenedPages from './routers/OpenedPages';
 import FacilityInformation from './routers/FacilityInformation';
@@ -13,19 +14,52 @@ import Monitoring from './routers/Monitoring';
 
 
 function App() {
+  const isAuthenticated = () => {
+    const token = getCookie('token');
+    if (token) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <MasterLayout>
       <PageHeader />
       <Routes>
         <Route path="/*" element={<OpenedPages />} />
-        <Route exact path="/facility/*" element={<FacilityInformation />} />
-        <Route exact path="/source/*" element={<EmissionSource />} />
-        <Route exact path="/activity/*" element={<ActivityData />} />
-        <Route exact path="/emissions/*" element={<EmissionAmount />} />
-        <Route exact path="/usage/*" element={<EnergyUsage />} />
-        <Route exact path="/target_result/*" element={<TargetResult />} />
-        <Route exact path="/statistics/*" element={<Statistics />} />
-        <Route exact path="/monitoring/*" element={<Monitoring />} />
+        <Route exact path="/facility/*" element={
+            isAuthenticated() ? <FacilityInformation /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/source/*" element={
+            isAuthenticated() ? <EmissionSource /> : <Navigate replace to="/unauthorized" />
+          }
+        />
+        <Route exact path="/activity/*" element={
+            isAuthenticated() ? <ActivityData /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/emissions/*" element={
+            isAuthenticated() ? <EmissionAmount /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/usage/*" element={
+            isAuthenticated() ? <EnergyUsage /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/target_result/*" element={
+            isAuthenticated() ? <TargetResult /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/statistics/*" element={
+            isAuthenticated() ? <Statistics /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
+        <Route exact path="/monitoring/*" element={
+            isAuthenticated() ? <Monitoring /> : <Navigate replace to="/unauthorized" />
+          } 
+        />
       </Routes>
     </MasterLayout>
   );

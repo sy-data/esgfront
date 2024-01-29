@@ -33,8 +33,8 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   const token = getCookie("token");
 
   if (requiredAuth && !token) {
-    alert("401 페이지로 이동 필요");
-    window.location.href = "/";
+    // alert("401 페이지로 이동 필요");
+    window.location.href = "/unauthorized";
   }
   return fetch(url, {
     method: method,
