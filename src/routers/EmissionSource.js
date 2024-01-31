@@ -1,5 +1,7 @@
-import { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { userStateAtom } from "../States/auth/auth";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 import PageNotFound from "../pages/99_error/PageNotFound";
@@ -9,6 +11,15 @@ const ManageEmissionFuel = lazy(() => import ('../pages/2_emission_management/2_
 const SamplePage = lazy(() => import('../pages/sample/SamplePage'));
 
 const EmissionSource = () => {
+  const userState = useRecoilValue(userStateAtom);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userState === null) {
+      navigate('/unauthorized');
+    }
+  }, []);
+
   return (
     <MainContent>
       <LeftNavigation />
