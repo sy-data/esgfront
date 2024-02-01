@@ -8,6 +8,7 @@ const Tanso = lazy(() => import("../pages/0_opened/Tanso"));
 const Muni = lazy(() => import("../pages/0_opened/Muni"));
 const Login = lazy(() => import("../pages/0_opened/Login"));
 const LoginFail = lazy(() => import("../pages/0_opened/LoginFail"));
+const Unauthorized = lazy(() => import("../pages/99_error/Unauthorized"));
 const PageNotFound = lazy(() => import("../pages/99_error/PageNotFound"));
 
 const OpenedPages = () => {
@@ -20,6 +21,7 @@ const OpenedPages = () => {
         <Route exact path="/muni" element={<Muni />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/loginFaile" element={<LoginFail />} />
+        <Route exact path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <PageFooter />
