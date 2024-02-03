@@ -19,7 +19,6 @@ const ManageFacility = () => {
     esgFetch('/api/factories?filters[company][id][$eq]=1&populate[]=facilities')
       .then(response => response.json())
       .then(response => {
-        console.log(response);
         setWorkplaceList(response.data.map((v, i) => ({
           index: i + 1,
           id: v.id,
