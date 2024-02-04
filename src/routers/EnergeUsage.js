@@ -1,16 +1,15 @@
 import { Suspense, lazy, useEffect } from "react";
-import { useRecoilValue } from "recoil";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { userStateAtom } from "../States/auth/auth";
+import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 
 const EnergyUsage = () => {
-  const userState = useRecoilValue(userStateAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userState === null) {
+    const token = getCookie('token');
+    if (!token) {
       navigate('/unauthorized');
     }
   }, []);
