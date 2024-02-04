@@ -1,8 +1,10 @@
 import { styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { loginDev } from "./FetchWrapper";
-import { getCookie, removeCookie } from "../States/storage/Cookie";
+import { getCookie, removeCookie, useAuth } from "../States/storage/Cookie";
 import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { userStateAtom } from "../States/auth/auth";
 
 const HeaderContainer = styled("div")(() => ({
   display: "flex",
@@ -17,18 +19,15 @@ const HeaderItem = styled("div")(() => ({
 }));
 
 const PageHeader = () => {
-  const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
+  const isLogin = useAuth(); // useAuth 훅을 호출하여 로그인 상태를 확인합니다.
+  const setUserState = useSetRecoilState(userStateAtom);
+  const userState = useRecoilValue(userStateAtom);
 
-  useEffect(() => {
-    const token = getCookie("token");
-    // 토큰의 존재 여부에 따라 로그인 상태를 설정합니다.
-    setIsLogin(!!token);
-  }, [setIsLogin, isLogin]);
-
+  console.log(userState);
   const onLoginOut = () => {
     removeCookie("token");
-    setIsLogin(false);
+    setUserState(null); // Recoil 상태를 초기화
     navigate("/");
   };
 

@@ -1,4 +1,6 @@
-import { Cookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
+import { useRecoilValue } from "recoil";
+import { userStateAtom } from "../auth/auth";
 
 const cookies = new Cookies();
 
@@ -17,4 +19,13 @@ export const getCookie = (name) => {
 
 export const removeCookie = (name, options) => {
   cookies.remove(name, options);
+};
+
+export const useAuth = () => {
+  const [cookies] = useCookies(["token"]);
+  const userState = useRecoilValue(userStateAtom);
+
+  const isLoggedIn = cookies.token ? true : false || userState ? true : false;
+
+  return isLoggedIn;
 };
