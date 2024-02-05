@@ -3,6 +3,9 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
+import PageNotFound from "../pages/99_error/PageNotFound";
+
+const EmissionsStatus = lazy(() => import ('../pages/7_statistics/7_1_emissions_status/EmissionsStatus'));
 
 const Statistics = () => {
   const navigate = useNavigate();
@@ -19,6 +22,8 @@ const Statistics = () => {
       <LeftNavigation />
       <Suspense fallback={"loading"}>
         <Routes>
+          <Route exact path="emissions-status" element={<EmissionsStatus />} />
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </Suspense>
     </MainContent>

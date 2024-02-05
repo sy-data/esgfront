@@ -9,7 +9,7 @@ import PageNotFound from "../pages/99_error/PageNotFound";
 
 const ManageEmissionProduct = lazy(() => import ('../pages/2_emission_management/2_1_manage_product/EmissionProductManagement'));
 const ManageEmissionFuel = lazy(() => import ('../pages/2_emission_management/2_2_manage_fuel/EmissionFuelManagement'));
-const ManageEmissionParameter = lazy(() => import ('../pages/2_emission_management/2_3_manage_parameter/EmissionParameterManagement'));
+// const ManageEmissionParameter = lazy(() => import ('../pages/2_emission_management/2_3_manage_parameter/EmissionParameterManagement'));
 
 const EmissionSource = () => {
   const userState = useRecoilValue(userStateAtom);
@@ -29,7 +29,7 @@ const EmissionSource = () => {
         <Routes>
           <Route exact path="product" element={<ManageEmissionProduct/>} />
           <Route exact path="fuel" element={<ManageEmissionFuel />} />
-          <Route exact path="parameter" element={<ManageEmissionParameter />} />
+          {/* <Route exact path="parameter" element={<ManageEmissionParameter />} /> */}
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </Suspense>
