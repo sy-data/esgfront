@@ -7,7 +7,7 @@ import { useGridApiRef } from "@mui/x-data-grid";
 const NoRowsOverlay = () => {
   return (
     <div style={{ textAlign: 'center', padding: '5px 0px', backgroundColor: '#808080' }}>
-      <div style={{ fontSize: '16px' }}>조회 된 시설이력현황 정보가 없습니다.</div>
+      <div style={{ fontSize: '16px' }}>조회 된 정보가 없습니다.</div>
     </div>
   )
 }
@@ -37,7 +37,7 @@ const EmissionsStatusTable = props => {
     <ContentBody>
       <SubTitle title={"시설이력현황"} />
       <CustomDataGrid
-        data={props.facilityList}
+        data={props.emissionsStatusList}
         apiRef={apiRef}
         columns={columns}
         editable={false}
