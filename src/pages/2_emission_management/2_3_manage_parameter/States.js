@@ -14,3 +14,8 @@ export const SelectedFactoryId = atom({
     key: 'SelectedFactoryIdState',
     default: null
 });
+
+export const SelectedCombustionId = atom({
+    key: 'SelectedCombustionIdState',
+    default: null
+});

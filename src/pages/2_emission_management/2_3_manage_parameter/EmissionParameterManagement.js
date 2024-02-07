@@ -11,19 +11,18 @@ import DefaultSelect from "../../../components/filters/DefaultSelect.js";
 import CombustionList from "./TopArea";
 import ParameterManagement from "./BottomArea";
 import { esgFetch } from "../../../components/FetchWrapper.js";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { UserCompanyId, SelectedYear, SelectedFactory } from "./States";
+import { useSetRecoilState } from "recoil";
+import { SelectedYear, SelectedFactoryId } from "./States";
 
 const EmissionParameterManagement = () => {
   const [userCompanyId, setUserCompanyId] = useState(null);
   const [factories, setFactories] = useState([]);
   const setSelectedYear = useSetRecoilState(SelectedYear);
+  const setSelectedFactoryId = useSetRecoilState(SelectedFactoryId);
   const baseYearRef = useRef();
+  const factoryRef = useRef();
 
-  // TODO
-  // 유저의 회사 아이디를 설정
-  // 모든 페이지에서 동일하게 사용할 것 같으니 나중에 얘기해서 통합해야 할 듯
-
+  // 사용자의 회사 ID 가져오는 함수
   const fetchUserCompanyId = async () => {
     const url = `/api/users/me?populate[0]=company`
     const response = await esgFetch(url, 'GET');
@@ -35,11 +34,18 @@ const EmissionParameterManagement = () => {
     }
   }
 
+  // 사용자의 회사 ID로 사업장 목록 가져오는 함수
   const fetchFactories = async () => {
-    const url = `/api/factories?filters[company][id]=${userCompanyId}`;
+    if (!userCompanyId) return;
+    const url = `/api/factories?filters[company][id]=${userCompanyId}&`
     const response = await esgFetch(url, 'GET');
     const {data: value} = await response.json();
-    setFactories(value.map(v => v.attributes.name));
+    setFactories(value.map(v => {
+      return {
+        id: v.id,
+        name: v.attributes.name
+      }
+    }));
   }
 
   useEffect(() => {
@@ -47,10 +53,22 @@ const EmissionParameterManagement = () => {
   }, []);
 
   useEffect(() => {
-    fetchFactories();
+    if(userCompanyId) {
+      fetchFactories();
+    }
   }, [userCompanyId]);
 
-  return (
+  // 검색 버튼 눌렀을 때
+  const handleClickedSearch = () => {
+    if(factories[factoryRef.current.selected] === undefined) {
+      alert("사업장을 선택해주세요.");
+      return
+    }
+    setSelectedYear(baseYearRef.current.baseYear);
+    setSelectedFactoryId(factories[factoryRef.current.selected].id);
+  }
+
+  return (  
     <ContentWithTitie style={{ backgroundColor: "#AAAAAA"}}>
       
       <MenuTitle title={"배출원관리 > 배출활동 파라미터 관리"} />
@@ -58,12 +76,16 @@ const EmissionParameterManagement = () => {
       <FilterBlock>
         <FilterLine>
           <BaseYearSelect ref={baseYearRef}/>
-          <DefaultSelect selectLabel="사업장" selectOptions={factories}/>
+          {/* TODO: 기본값 "선택"으로 바꾸기 */}
+          <DefaultSelect ref={factoryRef}
+            selectLabel="사업장" 
+            selectOptions={factories.map(v => v.name)}
+          />
         </FilterLine>
       </FilterBlock>
       
       <SearchButtonContainer>
-        <Button variant="outlined" size="small" color="btnSearch" onClick={() => setSelectedYear(baseYearRef.current.baseYear)}>검색</Button>
+        <Button variant="outlined" size="small" color="btnSearch" onClick={handleClickedSearch}>검색</Button>
       </SearchButtonContainer>
       
       <SplitArea direction='h'>

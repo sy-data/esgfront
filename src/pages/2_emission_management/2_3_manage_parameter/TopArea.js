@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import qs from "qs";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   Button,
   LinearProgress,
@@ -11,9 +11,8 @@ import { useGridApiRef } from "@mui/x-data-grid";
 import ContentBody from "../../../components/ContentBody";
 import SubTitle from "../../../components/SubTitle";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid.js";
-import { SearchButtonContainer } from "../../../components/Styles";
 import { esgFetch } from "../../../components/FetchWrapper.js";
-import { SelectedFactoryId } from "./States";
+import { SelectedYear, SelectedFactoryId, SelectedCombustionId } from "./States";
 
 
 const NoRowsOverlay = () => {
@@ -26,24 +25,18 @@ const NoRowsOverlay = () => {
 
 const ParameterManagement = () => {
   const pageSize = 20;
-
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updatedRows, setUpdatedRows] = useState([]);
-  const [combustionOptions, setCombustionOptions] = useState([]);
-  const [industryTypeOptions, setIndustryTypeOptions] = useState([]);
-  const [formulaOptions, setFormulaOptions] = useState([]);
-  const [fuelOptions, setFuelOptions] = useState([]);
-
   const gridApiRef = useGridApiRef();
   const gridRef = useRef(null);
-
+  const selectedYear = useRecoilValue(SelectedYear);
   const selectedFactoryId = useRecoilValue(SelectedFactoryId);
+  const setSelectedCombustionId = useSetRecoilState(SelectedCombustionId);
 
   // 배출활동 목록 가져오는 함수
   const fetchCombustions = async () => {
     setLoading(true);
-    const url = `/api/combustions?filters[facility][factory][id][$eq]=${selectedFactoryId}&`;
+    const url = `/api/combustions?filters[facility][factory][id][$eq]=${selectedFactoryId}&`
     const query = qs.stringify({
       populate: [
         'facility',
@@ -54,8 +47,16 @@ const ParameterManagement = () => {
         'fuel',
         'combustion_regulation',
         'combustion_practice'
-      ]
-    })
+      ],
+      filters: {
+        facility: {
+          createdAt: {
+            $gte: `${selectedYear}-01-01`,
+            $lte: `${selectedYear}-12-31`
+          }
+        }
+      }
+    });
     const response = await esgFetch(url+query, 'GET');
     if (response.ok) {
       const { data: value } = await response.json();
@@ -89,8 +90,10 @@ const ParameterManagement = () => {
 
   // 선택된 사업장이 바뀌면 사업장별 생산품 목록 조회
   useEffect(() => {
-    fetchCombustions();
-  }, [selectedFactoryId]);
+    if(selectedFactoryId && selectedYear) {
+      fetchCombustions();
+    }
+  }, [selectedFactoryId, selectedYear]);
 
   // 컬럼 속성
   const dummyColumns = useMemo(() => {
@@ -127,6 +130,7 @@ const ParameterManagement = () => {
           setLoading={setLoading}
           disableColumnMenu={true}
           columnHeaderHeight={40}
+          onRowClick={(params) => setSelectedCombustionId(params.row.id)}
           rowHeight={30}
           autoHeight
           pageSize={pageSize}
