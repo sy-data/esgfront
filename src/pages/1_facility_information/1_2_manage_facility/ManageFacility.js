@@ -1,46 +1,51 @@
-import { useState, useEffect, useRef } from "react";
+import React from "react";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+
 import ChevronRight from "@mui/icons-material/ChevronRight";
-import { ContentWithTitie, FilterBlock, FilterLine } from "../../../components/Styles";
+import { Button } from "@mui/material";
+
+import { ContentWithTitie, FilterBlock, FilterLine, SearchButtonContainer } from "../../../components/Styles";
 import SplitArea from "../../../components/SplitArea";
 import MenuTitle from "../../../components/MenuTitle";
 import BaseYearSelect from "../../../components/filters/BaseYearSelect";
-import { esgFetch } from "../../../components/FetchWrapper";
-
+import { SelectedYear, SelectedFactoryId } from "./States";
 import LeftFacility from "./LeftFacility";
 import RightFacility from "./RightFacility";
 
 
 const ManageFacility = () => {
-  const [facilityList, setFacilityList] = useState([]);
-  const [workplaceList, setWorkplaceList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    esgFetch('/api/factories?filters[company][id][$eq]=1&populate[]=facilities')
-      .then(response => response.json())
-      .then(response => {
-        setWorkplaceList(response.data.map((v, i) => ({
-          index: i + 1,
-          id: v.id,
-          name: v.attributes.name,
-          facilities: v.attributes.facilities.data.map((d,i)=>({'id':i+1,...d.attributes}))
-        })));
-        setLoading(false);
-      });
+  const baseYearRef = React.useRef(null);
+
+  const setSelectedYear = useSetRecoilState(SelectedYear);
+  const resetSelectedYear = useResetRecoilState(SelectedYear);
+  const resetSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
+
+  const handleSearchButtonClick = () => setSelectedYear(baseYearRef.current.baseYear);
+
+  React.useEffect(() => {
+    return () => {
+      resetSelectedYear();
+      resetSelectedFacotyId();
+    };
   }, []);
 
   return (
     <ContentWithTitie style={{ backgroundColor: "#AAAAAA" }}>
       <MenuTitle title={<div style={{ display: "flex", alignItems: "center" }}>시설정보관리 <ChevronRight sx={{ fontSize: 40 }} /> 사업장 시설정보 관리</div>} />
+
       <FilterBlock>
         <FilterLine>
-          <BaseYearSelect />
+          <BaseYearSelect ref={baseYearRef} />
         </FilterLine>
       </FilterBlock>
+
+      <SearchButtonContainer>
+        <Button variant="outlined" size="small" color="btnSearch" onClick={handleSearchButtonClick}>검색</Button>
+      </SearchButtonContainer>
       
       <SplitArea>
-        <LeftFacility setFacilityList={setFacilityList} workplaceList={workplaceList} loading={loading} />
-        <RightFacility facilityList={facilityList} />
+        <LeftFacility />
+        <RightFacility />
       </SplitArea>
     </ContentWithTitie>
   )
