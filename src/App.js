@@ -10,6 +10,9 @@ import EnergyUsage from './routers/EnergeUsage';
 import TargetResult from './routers/TargetResult';
 import Statistics from './routers/Statistics';
 import Monitoring from './routers/Monitoring';
+import AdminFuel from './routers/Admin-Fuel';
+import AdminFormula from './routers/Admin-Formula';
+import AdminManagement from './routers/Admin-Management';
 
 
 function App() {
@@ -26,6 +29,9 @@ function App() {
         <Route exact path="/target_result/*" element={<TargetResult />} />
         <Route exact path="/statistics/*" element={<Statistics />} />
         <Route exact path="/monitoring/*" element={<Monitoring />} />
+        <Route exact path="/admin-formula/*" element={<AdminFormula />} />
+        <Route exact path="/admin-fuel/*" element={<AdminFuel />} />
+        <Route exact path="/admin-management/*" element={<AdminManagement />} />
       </Routes>
     </MasterLayout>
   );
