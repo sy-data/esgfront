@@ -60,7 +60,8 @@ const EmissionParameterManagement = () => {
 
   // 검색 버튼 눌렀을 때
   const handleClickedSearch = () => {
-    if(factories[factoryRef.current.selected] === undefined) {
+    if(factories[factoryRef.current.selected] === undefined || 
+        factories[factoryRef.current.selected] === null) {
       alert("사업장을 선택해주세요.");
       return
     }
