@@ -1,6 +1,5 @@
 import { styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { loginDev } from "./FetchWrapper";
 import { getCookie, removeCookie } from "../States/storage/Cookie";
 import { useEffect, useState } from "react";
 
@@ -34,23 +33,21 @@ const PageHeader = () => {
 
   return (
     <HeaderContainer>
-      <HeaderItem style={{ flexGrow: 1 }} onClick={() => navigate("/")}>
-        E-Scope+
+      <HeaderItem style={{ flexGrow: 1 }}>
+        <span style={{ cursor: 'pointer' }} onClick={() => navigate("/")}>E-Scope+</span>
       </HeaderItem>
-      <HeaderItem onClick={() => navigate("/esgran")}>ESG란?</HeaderItem>
-      <HeaderItem onClick={() => navigate("/tanso")}>탄소배출관리</HeaderItem>
-      <HeaderItem onClick={() => navigate("/muni")}>문의하기</HeaderItem>
       {isLogin ? (
         <>
           <HeaderItem>내 정보</HeaderItem>
           <div style={{ width: "10px", textAlign: "center" }}>|</div>
-          <HeaderItem onClick={onLoginOut}>로그아웃</HeaderItem>
+          <HeaderItem style={{ cursor: 'pointer' }} onClick={onLoginOut}>로그아웃</HeaderItem>
         </>
       ) : (
         <>
           <HeaderItem>회원가입</HeaderItem>
           <div style={{ width: "10px", textAlign: "center" }}>|</div>
           <HeaderItem
+            style={{ cursor: 'pointer' }}
             onClick={() => {
               navigate("/login");
             }}

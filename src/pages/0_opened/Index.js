@@ -1,11 +1,14 @@
+import { Navigate } from "react-router-dom";
+import { getCookie } from "../../States/storage/Cookie";
+
 const Index = () => {
+  const checkLogin = () => getCookie('token');
+  
   return (
-    <div>
-      메인페이지 입니다
-      <div style={{height: "1500px"}}>
-        내용이 길어요
-      </div>
-    </div>
+    <Navigate
+      replace
+      to={checkLogin() ? "/facility" : "/login"}
+    />
   )
 }
 
