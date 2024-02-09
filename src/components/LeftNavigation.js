@@ -64,6 +64,24 @@ const LeftNavigation = () => {
         <TreeItem nodeId="8-2" label="사용량 등록 모니터링" onClick={() => navigate("/monitoring/")} icon={<ArrowRight />} />
         <TreeItem nodeId="8-3" label="생산품 시설 모니터링" onClick={() => navigate("/monitoring/")} icon={<ArrowRight />} />
       </TreeItem>
+      <TreeItem nodeId="9" label="관리자(임시)">
+        <TreeItem nodeId="9-1" label="산정식 관리">
+          <TreeItem nodeId="9-1-1" label="산정식 등록" onClick={() => navigate("/admin-formula")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-1-2" label="산정식 변경이력조회" onClick={() => navigate("/admin-formula")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-1-3" label="파라미터 그룹 관리" onClick={() => navigate("/admin-formula")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-1-4" label="파라미터 관리" onClick={() => navigate("/admin-formula")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-1-5" label="산정식 규정등급 관리" onClick={() => navigate("/admin-formula")} icon={<ArrowRight/>} />
+        </TreeItem>
+        <TreeItem nodeId="9-2" label="연료 관리">
+          <TreeItem nodeId="9-2-1" label="배출활동 연료 매핑" onClick={() => navigate("/admin-fuel/mapping")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-2-2" label="배출활동 연료 비용" onClick={() => navigate("/admin-fuel/cost")} icon={<ArrowRight/>} />
+        </TreeItem>
+        <TreeItem nodeId="9-3" label="시스템/사용자 관리">
+          <TreeItem nodeId="9-3-1" label="사용자 정보관리" onClick={() => navigate("/admin-management")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-3-2" label="사용자 접속현황" onClick={() => navigate("/admin-management")} icon={<ArrowRight/>} />
+          <TreeItem nodeId="9-3-3" label="약관관리" onClick={() => navigate("/admin-management")} icon={<ArrowRight/>} />
+        </TreeItem>
+      </TreeItem>
     </TreeView>
   )
 }
