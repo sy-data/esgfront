@@ -45,7 +45,8 @@ const LeftFacility = () => {
   }
 
   const convertWorkplaceData = (list) => {
-    return list.map((item) => ({
+    return list.map((item, index) => ({
+      index: index + 1,
       id: item.id,
       name: item.attributes.name,
       number: item.attributes.brn

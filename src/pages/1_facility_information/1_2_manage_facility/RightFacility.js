@@ -39,6 +39,10 @@ const generateRandomId = (ids, min, max) => {
   return randomId;
 }
 
+// [todo] 피그마 기획안에서 "규모" 필드의 경우 유형이나, 옵션이 따로 정해지지 않음.
+// 추후 관련 내용이 정해졌을 때, 수정 필요.
+const sizeOptions = [ 'small', 'medium', 'big' ];
+
 const RightFacility = () => {
   const apiRef = useGridApiRef();
 
@@ -73,7 +77,10 @@ const RightFacility = () => {
     {
       field: 'size',
       headerName: '규모',
-      flex: 2
+      flex: 2,
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: sizeOptions
     },
     {
       field: 'should_report',
@@ -131,9 +138,9 @@ const RightFacility = () => {
           name: item.name,
           factory: { id: selectedFactoryId },
           type_facility: { id: typeFacilityValue },
-          size: item.size,
+          ...(item.size ? {size: item.size } : {}),
           should_report: item.should_report,
-          expansion_date: item.expansion_date
+          ...(item.expansion_date ? { expansion_date: item.expansion_date } : {})
         }
       };
 
@@ -162,9 +169,9 @@ const RightFacility = () => {
           name: item.name,
           factory: { id: selectedFactoryId },
           type_facility: { id: typeFacilityValue },
-          size: item.size,
+          ...(item.size ? {size: item.size } : {}),
           should_report: item.should_report,
-          expansion_date: item.expansion_date
+          ...(item.expansion_date ? { expansion_date: item.expansion_date } : {})
         }
       };
 
@@ -188,7 +195,7 @@ const RightFacility = () => {
         facility: facilityType,
         size: attributesData.size,
         should_report: attributesData.should_report,
-        expansion_date: new Date(attributesData.expansion_date),
+        expansion_date: attributesData.expansion_date ? new Date(attributesData.expansion_date) : '',
         status: 'default',
       }
     });
@@ -199,9 +206,9 @@ const RightFacility = () => {
       id: generateRandomId(facilityIds,  1, 100000),
       name: '',
       facility: facilityTypes[0].attributes.type,
-      size: 'big', // [todo] 규모 -> 확인 필요
+      size: '', // [todo] 규모 -> 확인 필요
       should_report: false,
-      expansion_date: new Date(),
+      expansion_date: '',
       status: 'new',
     }]);
   };
