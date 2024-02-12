@@ -51,7 +51,7 @@ const LeftNavigation = () => {
         <TreeItem nodeId="6-3" label="성과 현황" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="7" label="통계">
-        <TreeItem nodeId="7-1" label="정부보고 배출량 현황" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="7-1" label="정부보고 배출량 현황" onClick={() => navigate("/statistics/emissions-status")} icon={<ArrowRight />} />
         <TreeItem nodeId="7-2" label="총괄 현황" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
         <TreeItem nodeId="7-3" label="제품 배출량 원단위" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
         <TreeItem nodeId="7-4" label="제품 에너지 원단위" onClick={() => navigate("/statistics")} icon={<ArrowRight />} />

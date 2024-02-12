@@ -27,6 +27,8 @@ const FacilityList = () => {
     const setSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
 
     const fetchFactories = async () => {
+        console.log('userCompanyId', userCompanyId);
+
         setLoading(true);
         const url = `/api/factories?` + 
             `filters[company][id]=${userCompanyId}&` +
