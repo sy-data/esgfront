@@ -18,7 +18,7 @@ const NoRowsOverlay = () => {
     )
 }
 
-const CombustionList = () => {
+const ParameterManagement = () => {
     const apiRef = useGridApiRef();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -174,4 +174,4 @@ const CombustionList = () => {
     )
 }
 
-export default CombustionList;
+export default ParameterManagement;
