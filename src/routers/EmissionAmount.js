@@ -5,6 +5,8 @@ import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 
+const EmissionByCompany = lazy(() => import('../pages/4_emissions/4_2_company/ByCompany'));
+
 const EmissionAmount = () => {
   const navigate = useNavigate();
 
@@ -20,6 +22,7 @@ const EmissionAmount = () => {
       <LeftNavigation />
       <Suspense fallback={"loading"}>
         <Routes>
+          <Route exact path="company" element={<EmissionByCompany />} />
         </Routes>
       </Suspense>
     </MainContent>

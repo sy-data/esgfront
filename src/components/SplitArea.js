@@ -12,17 +12,14 @@ const Section1 = styled('div')(({direction, customWidth}) => ({
     maxWidth: "600px",
     minWidth: "400px",
   }),
-  display: "grid"
 }));
 
 const Section2 = styled('div')(({customWidth}) => ({
   flex: customWidth ? 1 - customWidth : 1,
-  display: "grid"
 }));
 
 const SectionAll = styled('div')(() => ({
   flex: 1,
-  display: "grid"
 }))
 
 const SplitArea = ({ children, direction, customWidth }) => {
