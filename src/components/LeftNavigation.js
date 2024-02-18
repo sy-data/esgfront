@@ -21,7 +21,7 @@ const LeftNavigation = () => {
       <TreeItem nodeId="2" label="배출원 관리">
         <TreeItem nodeId="2-1" label="사업장별 생산품 관리" onClick={() => navigate("/source/product")} icon={<ArrowRight />} />
         <TreeItem nodeId="2-2" label="배출활동 연료 관리" onClick={() => navigate("/source/fuel")} icon={<ArrowRight />} />
-        <TreeItem nodeId="2-3" label="배출활동 파라미터 관리" onClick={() => navigate("/source/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="2-3" label="배출활동 파라미터 관리" onClick={() => navigate("/source/parameter")} icon={<ArrowRight />} />
         <TreeItem nodeId="2-4" label="스팀관리" onClick={() => navigate("/source/")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="3" label="활동자료 관리">
