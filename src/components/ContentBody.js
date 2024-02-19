@@ -10,9 +10,9 @@ const PaperStyle = styled(Paper)(() => ({
   padding: '10px'
 }));
 
-const ContentBody = ({children}) => {
+const ContentBody = ({children, className}) => {
   return (
-    <AreaPadding>
+    <AreaPadding className={className}>
       <PaperStyle elevation={4}>
         {children}
       </PaperStyle>
