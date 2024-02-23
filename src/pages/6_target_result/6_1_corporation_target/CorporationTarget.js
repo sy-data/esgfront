@@ -21,7 +21,6 @@ const TableWrapper = styled.div`
   flex: 1;
 `;
 
-// [todo] 수정, 등록 구현해야 함,
 const CorporationTarget = () => {
     const baseYearRef = React.useRef();
 
@@ -105,8 +104,8 @@ const CorporationTarget = () => {
 
             if (userCompanyData) {
                 setUserCompany(userCompanyData);
-                await getCompanyTarget(baseYearRef.current.baseYear, userCompanyData);
-                await getCompanyPlan(baseYearRef.current.baseYear, userCompanyData);
+                getCompanyTarget(baseYearRef.current.baseYear, userCompanyData);
+                getCompanyPlan(baseYearRef.current.baseYear, userCompanyData);
             }
         })();
     }, []);
