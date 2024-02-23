@@ -54,7 +54,7 @@ const FactoryList = (props) => {
                 columnHeaderHeight={40}
                 rowHeight={30}
                 autoHeight
-                pageSize={5}
+                pageSize={20}
                 onRowClick={handleTableRowClick}
             />
         </ContentBody>

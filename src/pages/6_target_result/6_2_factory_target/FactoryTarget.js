@@ -121,6 +121,9 @@ const FactoryTarget = () => {
 
     const handleSearchButtonClick = async () => {
         if (!baseYearRef.current.baseYear) return;
+        
+        setFactoryTargetData([]);
+        setFactoryPlanData([]);
         await getFactories(userCompanyId, baseYearRef.current.baseYear);
     }
 
