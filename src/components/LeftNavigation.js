@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const LeftNavigation = () => {
   const navigate = useNavigate();
-  
+
   return (
     <TreeView
       defaultCollapseIcon={<ExpandMore />}
@@ -47,8 +47,8 @@ const LeftNavigation = () => {
         <TreeItem nodeId="5-4" label="scope별 비교분석" onClick={() => navigate("/usage/scope")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="6" label="목표 및 성과">
-        <TreeItem nodeId="6-1" label="법인별 목표 등록" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="6-2" label="사업장별 목표 등록" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="6-1" label="법인별 목표 등록" onClick={() => navigate("/target_result/corporation-target")} icon={<ArrowRight />} />
+        <TreeItem nodeId="6-2" label="사업장별 목표 등록" onClick={() => navigate("/target_result/factory-target")} icon={<ArrowRight />} />
         <TreeItem nodeId="6-3" label="성과 현황" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="7" label="통계">
