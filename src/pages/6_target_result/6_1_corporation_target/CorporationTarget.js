@@ -33,50 +33,52 @@ const CorporationTarget = () => {
     const [companyPlanData, setCompanyPlanData] = React.useState([]);
 
     const fetchUserCompany = async () => {
-        const result = await esgFetch('/api/users/me?populate=company', 'GET').then(res => res.json());
+        const result = await esgFetch('/api/users/me?populate=company, company.sub_companies', 'GET').then(res => res.json());
         return result.company;
     }
 
-    const fetchCompanyTarget = async (year, userCompanyId) => {
+    const fetchCompanyTarget = async (year, userCompany) => {
         let fetchUrl = `/api/company-goals?`;
         fetchUrl += `filters[$and][0][date][$gte]=${year}-01-01&`;
         fetchUrl += `filters[$and][1][date][$lte]=${year}-12-31&`;
         fetchUrl += `sort=date:DESC&`;
-        fetchUrl += `filters[$and][2][company][id][$eq]=${userCompanyId}`;
+        fetchUrl += `filters[$and][2][company][id][$eq]=${userCompany.id}&`;
 
-        return await esgFetch(fetchUrl).then(res => res.json());
+        return await esgFetch(fetchUrl).then(res => res.json()).then(res => ({ ...res, company: userCompany }));
     }
 
-    const fetchCompanyPlan = async (year, userCompanyId) => {
+    const fetchCompanyPlan = async (year, userCompany) => {
         let fetchUrl = `/api/company-plans?`;
         fetchUrl += `filters[$and][0][date][$gte]=${year}-01-01&`;
         fetchUrl += `filters[$and][1][date][$lte]=${year}-12-31&`;
         fetchUrl += `sort=date:DESC&`;
-        fetchUrl += `filters[$and][2][company][id][$eq]=${userCompanyId}`;
+        fetchUrl += `filters[$and][2][company][id][$eq]=${userCompany.id}`;
 
-        return await esgFetch(fetchUrl).then(res => res.json());
+        return await esgFetch(fetchUrl).then(res => res.json()).then(res => ({ ...res, company: userCompany }));
     }
 
-    const getCompanyTarget = async (year, userCompany) => {
+    const getCompanyTarget = async (year, userCompanies) => {
         setCompanyTargetLoading(true);
 
-        const companyTarget = await fetchCompanyTarget(year, userCompany.id);
-        setCompanyTargetData(convertData(year, userCompany, companyTarget?.data || []));
+        const promises = userCompanies.map((company) => fetchCompanyTarget(year, company));
+        const companyTargetResult = await Promise.all(promises);
+        setCompanyTargetData(companyTargetResult.map((result) => convertData(year, result.company, result.data)));
 
         setCompanyTargetLoading(false);
     }
 
-    const getCompanyPlan = async (year, userCompany) => {
+    const getCompanyPlan = async (year, userCompanies) => {
         setCompanyPlanLoading(true);
 
-        const companyPlan = await fetchCompanyPlan(year, userCompany.id);
-        setCompanyPlanData(convertData(year, userCompany, companyPlan?.data || [] ));
+        const promises = userCompanies.map((company) => fetchCompanyPlan(year, company));
+        const companyPlanResult = await Promise.all(promises);
+        setCompanyPlanData(companyPlanResult.map((result) => convertData(year, result.company, result.data)));
 
         setCompanyPlanLoading(false);
     }
 
     const convertData = (baseYear, userCompany, data) => {
-        const resultObj = { id: 0, companyName: userCompany, baseYear: baseYear };
+        const resultObj = { id: userCompany.id, companyName: userCompany, baseYear: baseYear };
 
         monthsArray.forEach(([_, value]) => {
             const findData = data.find(item => new Date(item.attributes.date).getMonth() + 1 === value);
@@ -88,7 +90,7 @@ const CorporationTarget = () => {
             };
         })
 
-        return [resultObj];
+        return resultObj;
     }
 
     const handleSearchButtonClick = async () => {
@@ -99,13 +101,16 @@ const CorporationTarget = () => {
     // 유저의 법인 조회
     React.useEffect(() => {
         (async () => {
-            // [todo] 유저와 법인이 1:n 관계로 변경되면 아래 코드 변경 필요
             const userCompanyData = await fetchUserCompany();
+            const companies = [
+                ...(userCompanyData?.sub_companies || []).map(item => ({ id: item.id, name: item.name })),
+                { id: userCompanyData.id, name: userCompanyData.name },
+            ];
 
             if (userCompanyData) {
-                setUserCompany(userCompanyData);
-                getCompanyTarget(baseYearRef.current.baseYear, userCompanyData);
-                getCompanyPlan(baseYearRef.current.baseYear, userCompanyData);
+                setUserCompany(companies);
+                getCompanyTarget(baseYearRef.current.baseYear, companies);
+                getCompanyPlan(baseYearRef.current.baseYear, companies);
             }
         })();
     }, []);

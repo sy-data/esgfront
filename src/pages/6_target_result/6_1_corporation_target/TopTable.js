@@ -75,6 +75,7 @@ const TopTable = (props) => {
 
     const processRowUpdate = (updatedRowData) => {
         props.setCompanyTargetData(prev => prev.map(item => {
+            if (updatedRowData.id !== item.id) return item;
             Object.entries(updatedRowData).forEach(([key, value]) => {
                 if (['companyName', 'baseYear', 'id'].includes(key) || item[key].value === value) return;
                 item[key] = { ...item[key], value, status: item[key].status === 'saved' ? 'edit' : item[key].status }
