@@ -119,12 +119,12 @@ const FactoryTarget = () => {
         return [resultObj];
     }
 
-    const handleSearchButtonClick = async () => {
+    const handleSearchButtonClick = () => {
         if (!baseYearRef.current.baseYear) return;
-        
+
         setFactoryTargetData([]);
         setFactoryPlanData([]);
-        await getFactories(userCompanyId, baseYearRef.current.baseYear);
+        getFactories(userCompanyId, baseYearRef.current.baseYear);
     }
 
     React.useEffect(() => {
@@ -133,16 +133,14 @@ const FactoryTarget = () => {
             if (!userCompanyData) return;
 
             setUserCompanyId(userCompanyData.id);
-            await getFactories(userCompanyData.id, baseYearRef.current.baseYear);
+            getFactories(userCompanyData.id, baseYearRef.current.baseYear);
         })();
     }, []);
 
     React.useEffect(() => {
-        (async () => {
-            if (!selectedFactory) return;
-            getFactoryTarget(baseYearRef.current.baseYear, selectedFactory);
-            getFactoryPlan(baseYearRef.current.baseYear, selectedFactory);
-        })();
+        if (!selectedFactory) return;
+        getFactoryTarget(baseYearRef.current.baseYear, selectedFactory);
+        getFactoryPlan(baseYearRef.current.baseYear, selectedFactory);
     }, [selectedFactory]);
 
     return (

@@ -4,7 +4,7 @@ import {Box, Button, LinearProgress} from "@mui/material";
 import SubTitle from "../../../components/SubTitle";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
 import ContentBody from "../../../components/ContentBody";
-import {months, monthsArray} from "./constants";
+import {monthsArray} from "./constants";
 import styled from '@emotion/styled'
 import {esgFetch} from "../../../components/FetchWrapper";
 
@@ -58,8 +58,6 @@ const BottomTable = (props) => {
                         value: value.value,
                     }
                 }
-
-                console.log(key, value);
 
                 if (value.status === 'new' && value.value) promises.push(esgFetch(`/api/company-plans`, 'POST', requestBody));
                 if (value.status === 'edit' && value.value) promises.push(esgFetch(`/api/company-plans/${value.id}`, 'PUT', requestBody));

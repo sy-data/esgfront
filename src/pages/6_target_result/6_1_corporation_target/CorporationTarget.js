@@ -93,9 +93,9 @@ const CorporationTarget = () => {
         return resultObj;
     }
 
-    const handleSearchButtonClick = async () => {
-        await getCompanyTarget(baseYearRef.current.baseYear, userCompany);
-        await getCompanyPlan(baseYearRef.current.baseYear, userCompany);
+    const handleSearchButtonClick = () => {
+        getCompanyTarget(baseYearRef.current.baseYear, userCompany);
+        getCompanyPlan(baseYearRef.current.baseYear, userCompany);
     }
 
     // 유저의 법인 조회
