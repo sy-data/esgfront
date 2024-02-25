@@ -31,7 +31,7 @@ import MenuItem from "@mui/material/MenuItem";
  * onSelectChanged에 등록한 function은 value가 변경되었을때 실행됩니다.
  */
 const DefaultSelect = ({selectLabel, selectOptions, onSelectChanged}, ref) => {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(selectOptions.length > 0 ? selectOptions[0].value : 0);
   useImperativeHandle(ref, () => ({
     selected,
     changeOption: value => setSelected(value),
@@ -42,6 +42,12 @@ const DefaultSelect = ({selectLabel, selectOptions, onSelectChanged}, ref) => {
       onSelectChanged(selected);
     }
   }, [selected]);
+  
+  useEffect(() => {
+    if(!selectOptions.map(option => "value" in option ? option.value : option).includes(selected)){
+      setSelected(selectOptions.length > 0 ? selectOptions[0].value : 0);
+    }
+  }, [selectOptions]);
   
   const createMenuItem = (data, index) => {
     const item = { key: `defaultSelect_${selectLabel}_${index}` };

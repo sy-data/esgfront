@@ -15,7 +15,7 @@ const Section1 = styled('div')(({direction, customWidth}) => ({
 }));
 
 const Section2 = styled('div')(({customWidth}) => ({
-  flex: customWidth ? 1 - customWidth : 1,
+  flex: customWidth ? customWidth : 1,
 }));
 
 const SectionAll = styled('div')(() => ({
