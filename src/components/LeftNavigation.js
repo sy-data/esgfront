@@ -11,6 +11,7 @@ const LeftNavigation = () => {
     <TreeView
       defaultCollapseIcon={<ExpandMore />}
       defaultExpandIcon={<ChevronRight />}
+      style={{minWidth: '150px'}}
     >
       <TreeItem nodeId="0" label="샘플페이지" onClick={() => navigate("/e_s/sample")} />
       <TreeItem nodeId="1" label="시설정보관리">
@@ -32,18 +33,18 @@ const LeftNavigation = () => {
         <TreeItem nodeId="3-5" label="생산량 활동자료 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="4" label="온실가스 배출량">
-        <TreeItem nodeId="4-1" label="DashBoard" onClick={() => navigate("/emissions/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="4-2" label="법인별 비교분석" onClick={() => navigate("/emissions/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="4-3" label="사업장 연도/월별 비교분석" onClick={() => navigate("/emissions/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="4-4" label="연료별 비교분석" onClick={() => navigate("/emissions/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="4-5" label="scope별 비교분석" onClick={() => navigate("/emissions/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="4-1" label="DashBoard" onClick={() => navigate("/emissions/dashboard")} icon={<ArrowRight />} />
+        <TreeItem nodeId="4-2" label="법인별 비교분석" onClick={() => navigate("/emissions/company")} icon={<ArrowRight />} />
+        <TreeItem nodeId="4-3" label="사업장 연도/월별 비교분석" onClick={() => navigate("/emissions/workplace")} icon={<ArrowRight />} />
+        <TreeItem nodeId="4-4" label="연료별 비교분석" onClick={() => navigate("/emissions/fuel")} icon={<ArrowRight />} />
+        <TreeItem nodeId="4-5" label="scope별 비교분석" onClick={() => navigate("/emissions/scope")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="5" label="에너지 사용량">
-        <TreeItem nodeId="5-1" label="DashBoard" onClick={() => navigate("/usage/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="5-1" label="법인별 비교분석" onClick={() => navigate("/usage/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="5-2" label="사업장 연도/월별 비교분석" onClick={() => navigate("/usage/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="5-3" label="연료별 비교분석" onClick={() => navigate("/usage/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="5-4" label="scope별 비교분석" onClick={() => navigate("/usage/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="5-1" label="DashBoard" onClick={() => navigate("/usage/dashboard")} icon={<ArrowRight />} />
+        <TreeItem nodeId="5-1" label="법인별 비교분석" onClick={() => navigate("/usage/company")} icon={<ArrowRight />} />
+        <TreeItem nodeId="5-2" label="사업장 연도/월별 비교분석" onClick={() => navigate("/usage/workplace")} icon={<ArrowRight />} />
+        <TreeItem nodeId="5-3" label="연료별 비교분석" onClick={() => navigate("/usage/fuel")} icon={<ArrowRight />} />
+        <TreeItem nodeId="5-4" label="scope별 비교분석" onClick={() => navigate("/usage/scope")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="6" label="목표 및 성과">
         <TreeItem nodeId="6-1" label="법인별 목표 등록" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
