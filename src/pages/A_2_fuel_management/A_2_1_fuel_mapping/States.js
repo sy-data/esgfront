@@ -1,21 +1,21 @@
 import { atom } from 'recoil';
 
-export const UserCompanyId = atom({
-    key: 'userCompanyId',
+export const SelectedFormular = atom({
+    key: 'selectedFormular',
     default: null
 });
 
-export const SelectedYear = atom({
-    key: 'selectedYear',
-    default: '2024'
-});
-
-export const SelectedFactoryId = atom({
-    key: 'SelectedFactoryIdState',
+export const SelectedFuels = atom({
+    key: 'selectedFuels',
     default: null
 });
 
-export const SelectedCombustionId = atom({
-    key: 'SelectedCombustionIdState',
+export const SelectedMappingFuels = atom({
+    key: 'selectedMappingFuels',
     default: null
+});
+
+export const MappingFuelChangeFlag = atom({
+    key: 'mappingFuelChangeFlag',
+    default: false
 });

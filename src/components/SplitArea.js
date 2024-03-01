@@ -32,7 +32,7 @@ const SplitIcon = styled('div')((direction) => ({
   alignItems: "center"
 }))
 
-const SplitArea = ({ children, direction, customWidth, splitIcon }) => {
+const SplitArea = ({ children, direction, customWidth, splitComponent }) => {
   const dir = (!direction || !['h', 'v'].includes(direction[0])) ? 'v' : direction[0];
   
   let content1 = '';
@@ -59,7 +59,7 @@ const SplitArea = ({ children, direction, customWidth, splitIcon }) => {
             {content1}
           </Section1>
           <SplitIcon>
-            {splitIcon && splitIcon}
+            {splitComponent && splitComponent}
           </SplitIcon>
           <Section2 customWidth={customWidth}>
             {content2}

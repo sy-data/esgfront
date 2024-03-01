@@ -1,25 +1,27 @@
-import { useState, useEffect, useRef } from "react"
-import { Button, styled } from "@mui/material"
-import { useGridApiRef } from "@mui/x-data-grid"
-import { LinearProgress } from "@mui/material"
-import SubTitle from "../../../components/SubTitle"
-import ContentBody from "../../../components/ContentBody"
+import { useState, useEffect, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useGridApiRef } from "@mui/x-data-grid";
+import { LinearProgress } from "@mui/material";
+import SubTitle from "../../../components/SubTitle";
+import ContentBody from "../../../components/ContentBody";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
-
-const ButtonContainer = styled('div')(() => ({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: '10px',
-}));
+import { SelectedFormular, SelectedMappingFuels, MappingFuelChangeFlag } from "./States";
 
 const FuelManagement = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const gridApiRef = useGridApiRef();
   const gridRef = useRef(null);
 
-  useEffect(() => {
+  const selectedFormular = useRecoilValue(SelectedFormular);
+  const mappingFuelChangeFlag = useRecoilValue(MappingFuelChangeFlag);
+  const setSelectedMappingFuels = useSetRecoilState(SelectedMappingFuels);
+
+  const fetchMappingFuels = () => {
+    gridApiRef.current.setRowSelectionModel([]);
+    // TODO: backend와 연결 필요
+    console.log("fetch mapping fuels");
     const dummyData = [
         { id: 1, code: '연료1', name: '연료1' },
         { id: 2, code: '연료2', name: '연료2' },
@@ -31,13 +33,39 @@ const FuelManagement = () => {
     ]
 
     setData(dummyData);
-  }, []);
+  }
+
+  useEffect(() => {
+    fetchMappingFuels();
+  }, [selectedFormular, mappingFuelChangeFlag]);
+
+  // data를 받아오면 loading을 false로 변경
+  useEffect(() => {
+    if(data) {
+      setLoading(false);
+    }
+  }, [data]);
+  
+  // gridApiRef가 datagrid를 받아오면 rowSelectionChange 이벤트를 구독
+  useEffect(() => {
+    gridApiRef.current && gridApiRef.current.subscribeEvent(
+      'rowSelectionChange',
+      handleSelectedFuelChange,
+    );
+  }, [gridApiRef]);
 
   const dummyColumns = [
     { field: 'id', headerName: '', width: 50 },
     { field: 'code', headerName: '연료코드', flex: 1 },
     { field: 'name', headerName: '연료명', flex: 1},
   ]
+
+  // 선택된 행이 변경되면, 선택된 행을 recoil state에 저장
+  const handleSelectedFuelChange = () => {
+    const selectedRows = [...gridApiRef.current.getSelectedRows().values()];
+    setSelectedMappingFuels(selectedRows);
+  }
+
   return (
     <ContentBody>
       <SubTitle title={"매핑 정보"} />
