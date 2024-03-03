@@ -14,11 +14,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid"; // 데이터 그리드를 사용하기 위해
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
 import { useRecoilState } from "recoil";
-import { baseInformationFileAtom } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
+import { baseInformationFileThreeOneAtom } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 
 const InformationAddModal = ({ isModalOpen, onClose }) => {
   const apiRef = useGridApiRef();
-  const [file, setFile] = useRecoilState(baseInformationFileAtom);
+  const [file, setFile] = useRecoilState(baseInformationFileThreeOneAtom);
   const [selectionModel, setSelectionModel] = useState([]);
 
   const columns = useMemo(

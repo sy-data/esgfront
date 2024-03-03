@@ -13,7 +13,7 @@ export const baseInformationThreeThreeAtom = atom({
 });
 
 // 근거자료에 해당하는 파일 목록
-export const baseInformationFileAtom = atom({
-  key: "baseInformationFile",
+export const baseInformationFileThreeThreeAtom = atom({
+  key: "baseInformationFileThreeThreeAtom",
   default: [],
 });

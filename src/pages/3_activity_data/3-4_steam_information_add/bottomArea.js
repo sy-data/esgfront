@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   baseInformationThreeFourAtom,
-  baseInformationFileAtom,
+  baseInformationFileThreeFourAtom,
 } from "../../../States/3_activtiy_data_states/3-4_steem_activity_atom";
 import ContentBody from "../../../components/ContentBody";
 import InformationAddModal from "../3-1_activtity_data_add/informationAddModal";
@@ -40,7 +40,7 @@ const NoRows2Overlay = () => {
 const BottomArea = (Props) => {
   const apiRef = useGridApiRef();
   const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeFourAtom);
-  const [baseInformationFile, setBaseInformationFile] = useRecoilState(baseInformationFileAtom);
+  const [baseInformationFile, setBaseInformationFile] = useRecoilState(baseInformationFileThreeFourAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const openModal = (file) => {
