@@ -40,7 +40,7 @@ const MainArea = (Props) => {
   const columns = useMemo(
     () => [
       { field: "id", headerName: "No" },
-      { field: "dischargeFacility", headerName: "배출시설" },
+      { field: "season", headerName: "배출시설" },
       { field: "activity", headerName: "배출활동" },
       { field: "fuel", headerName: "연료" },
       { field: "unit", headerName: "단위" },
@@ -85,7 +85,6 @@ const MainArea = (Props) => {
   // 에너지 비용등록 저장하는 부분
   const handleSaveActivityData = () => {
     const storedData = localStorage.getItem("energyCostData");
-    console.log(storedData);
 
     // esgFetch("/api/...")
     //   .then((response) => response.json())

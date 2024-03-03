@@ -3,9 +3,9 @@ import { useGridApiRef } from "@mui/x-data-grid";
 import React, { useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
-  baseInformationAtom,
+  baseInformationThreeFourAtom,
   baseInformationFileAtom,
-} from "../../../States/3_activtiy_data_states/3-3_sewage_wasterwater_atom";
+} from "../../../States/3_activtiy_data_states/3-4_steem_activity_atom";
 import ContentBody from "../../../components/ContentBody";
 import InformationAddModal from "../3-1_activtity_data_add/informationAddModal";
 import SubTitle from "../../../components/SubTitle";
@@ -39,7 +39,7 @@ const NoRows2Overlay = () => {
 
 const BottomArea = (Props) => {
   const apiRef = useGridApiRef();
-  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationAtom);
+  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeFourAtom);
   const [baseInformationFile, setBaseInformationFile] = useRecoilState(baseInformationFileAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import { useRecoilState } from "recoil";
 import {
-  baseInformationAtom,
+  baseInformationThreeOneAtom,
   baseYearActivityInfomationAtom,
 } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 import ContentBody from "../../../components/ContentBody";
@@ -43,7 +43,7 @@ const MainArea = (Props) => {
   const apiRef = useGridApiRef();
   const [baseYearActivityInformation, setBaseYearActivityInformation] = useRecoilState(baseYearActivityInfomationAtom);
   const [editingValues, setEditingValues] = useState({});
-  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationAtom);
+  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeOneAtom);
 
   const columns1 = useMemo(
     () => [

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,9 +13,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid"; // 데이터 그리드를 사용하기 위해
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
+import { useRecoilState } from "recoil";
+import { baseInformationFileAtom } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 
-const InformationAddModal = ({ file, onClose, dataGridRows, dataGridColumns }) => {
+const InformationAddModal = ({ isModalOpen, onClose }) => {
   const apiRef = useGridApiRef();
+  const [file, setFile] = useRecoilState(baseInformationFileAtom);
+  const [selectionModel, setSelectionModel] = useState([]);
 
   const columns = useMemo(
     () => [
@@ -26,8 +30,34 @@ const InformationAddModal = ({ file, onClose, dataGridRows, dataGridColumns }) =
     []
   );
 
+  const handleFileSelect = (event) => {
+    const selectedFiles = event.target.files;
+    if (selectedFiles.length > 0) {
+      // 파일 정보를 상태에 추가
+      const updatedFiles = [...file];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const newFile = {
+          id: file.length + i + 1, // 고유 ID 생성
+          fileName: selectedFiles[i].name,
+          fileSize: `${(selectedFiles[i].size / 1024).toFixed(2)} KB`, // 파일 크기 KB 단위로 변환
+        };
+        updatedFiles.push(newFile);
+      }
+
+      setFile(updatedFiles);
+    }
+  };
+
+  const handleDelete = () => {
+    // 선택된 행을 상태에서 제거
+
+    const newFiles = file.filter((f) => !selectionModel.includes(f.id));
+    setFile(newFiles);
+    setSelectionModel([]); // 선택 초기화
+  };
+
   return (
-    <Dialog open={Boolean(file)} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={Boolean(isModalOpen)} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ textAlign: "center" }}>
         파일 등록
         <IconButton onClick={onClose} sx={{ position: "absolute", right: 8, top: 8 }}>
@@ -36,10 +66,20 @@ const InformationAddModal = ({ file, onClose, dataGridRows, dataGridColumns }) =
       </DialogTitle>
       <DialogContent dividers>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-          <Button variant="outlined" sx={{ mr: 1 }}>
-            추가
-          </Button>
-          <Button variant="outlined" color="error">
+          <input
+            accept="*/*" // 필요에 따라 파일 타입 제한
+            style={{ display: "none" }}
+            id="raised-button-file"
+            multiple
+            type="file"
+            onChange={handleFileSelect}
+          />
+          <label htmlFor="raised-button-file">
+            <Button variant="outlined" component="span" sx={{ mr: 1 }}>
+              추가
+            </Button>
+          </label>
+          <Button variant="outlined" color="error" onClick={handleDelete}>
             삭제
           </Button>
         </Box>
@@ -53,6 +93,10 @@ const InformationAddModal = ({ file, onClose, dataGridRows, dataGridColumns }) =
             disableColumnMenu={true}
             columnHeaderHeight={40}
             pageSize={5}
+            checkboxSelection
+            onSelectionModelChange={(newRowSelectionModel) => {
+              setSelectionModel(newRowSelectionModel);
+            }}
           />
         </div>
         <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>

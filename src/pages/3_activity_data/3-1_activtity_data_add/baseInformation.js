@@ -1,10 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
-import {
-  baseInformationAtom,
-  baseInformationFileAtom,
-  baseYearActivityInfomationAtom,
-} from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
+import { baseInformationThreeOneAtom } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 import ContentBody from "../../../components/ContentBody";
 import { Subtitles } from "@mui/icons-material";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
@@ -42,8 +38,7 @@ const NoRows2Overlay = () => {
 
 const BaseInformationArea = (Props) => {
   const apiRef = useGridApiRef();
-  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationAtom);
-  const [baseInformationFile, setBaseInformationFile] = useRecoilState(baseInformationFileAtom);
+  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeOneAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const openModal = (file) => {
@@ -78,16 +73,11 @@ const BaseInformationArea = (Props) => {
   // 근거자료에 해당하는 파일 목록 호출
   const handleSaveBaseInformation = () => {
     setIsModalOpen((prev) => !prev);
-    // esgFetch("/api/...")
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     setBaseInformationFile(response.data);
-    //   });
   };
-
+  console.log(isModalOpen);
   return (
     <ContentBody>
-      {isModalOpen && <InformationAddModal file={baseInformationFile} onClose={closeModal} />}
+      {isModalOpen ? <InformationAddModal isModalOpen={isModalOpen} onClose={closeModal} /> : null}
       <TableTitleContainer>
         <SubTitle title={"근거자료"} />
         <Button onClick={handleSaveBaseInformation}>등록</Button>

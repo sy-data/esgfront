@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
-  baseInformationAtom,
+  baseInformationThreeThreeAtom,
   sewageWastwaterInfomationAtom,
 } from "../../../States/3_activtiy_data_states/3-3_sewage_wasterwater_atom";
 import { esgFetch } from "../../../components/FetchWrapper";
@@ -13,6 +13,10 @@ import { Button } from "@mui/material";
 import SplitArea from "../../../components/SplitArea";
 import TopArea from "./topArea";
 import BottomArea from "./bottomArea";
+import {
+  baseInformationAtomDummyData,
+  baseYearActivityInfomationAtomDummyData,
+} from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 
 const SewageWastewaterAdd = () => {
   const [workplaceList, setWorkplaceList] = useState([{ value: 0, label: "사업장" }]);
@@ -22,7 +26,7 @@ const SewageWastewaterAdd = () => {
 
   // 리코일 상태 사용
   const [sewageWastwaterInformation, setSewageWastwaterInformation] = useRecoilState(sewageWastwaterInfomationAtom);
-  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationAtom);
+  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeThreeAtom);
 
   useEffect(() => {
     esgFetch("/api/factories?filters[company][id][$eq]=1")
@@ -48,19 +52,22 @@ const SewageWastewaterAdd = () => {
       return;
     }
 
-    // 하/폐수 시설 정보
-    esgFetch("..")
-      .then((response) => response.json())
-      .then((response) => {
-        setSewageWastwaterInformation(response.data);
-      });
+    setSewageWastwaterInformation(baseYearActivityInfomationAtomDummyData);
+    setBaseInformation(baseInformationAtomDummyData);
 
-    // 근거자료
-    esgFetch(``)
-      .then((response) => response.json())
-      .then((response) => {
-        setBaseInformation(response.information);
-      });
+    // // 하/폐수 시설 정보
+    // esgFetch("..")
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setSewageWastwaterInformation(response.data);
+    //   });
+
+    // // 근거자료
+    // esgFetch(``)
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setBaseInformation(response.information);
+    //   });
   }, [baseYear]);
 
   return (

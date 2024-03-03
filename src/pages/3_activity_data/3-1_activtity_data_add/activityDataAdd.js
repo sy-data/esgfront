@@ -7,8 +7,10 @@ import { esgFetch } from "../../../components/FetchWrapper";
 import { Button } from "@mui/material";
 import { useRecoilState } from "recoil";
 import {
-  baseInformationAtom,
+  baseInformationThreeOneAtom,
+  baseInformationAtomDummyData,
   baseYearActivityInfomationAtom,
+  baseYearActivityInfomationAtomDummyData,
 } from "../../../States/3_activtiy_data_states/3-1_activity_data_add_atom";
 import SplitArea from "../../../components/SplitArea";
 import MainArea from "./mainArea";
@@ -22,7 +24,7 @@ const ActivityDataAdd = () => {
 
   // 리코일 상태 사용
   const [baseYearActivityInformation, setBaseYearActivityInformation] = useRecoilState(baseYearActivityInfomationAtom);
-  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationAtom);
+  const [baseInformation, setBaseInformation] = useRecoilState(baseInformationThreeOneAtom);
 
   useEffect(() => {
     esgFetch("/api/factories?filters[company][id][$eq]=1")
@@ -48,20 +50,23 @@ const ActivityDataAdd = () => {
       return;
     }
 
+    setBaseYearActivityInformation(baseYearActivityInfomationAtomDummyData);
+    setBaseInformation(baseInformationAtomDummyData);
+    // 아래는 백앤드 API 개발 시 연결
     // 기준년도 활동자료
     // 기준년도 활동자료 가져오는 함수 (쿼리, 파람 아직 확실 X -> 포스트맨에 없음)
-    esgFetch(`/api/combustion-activites?baseYear=${baseYear}&workplaceId=${selectedWorkplaceValue}`)
-      .then((response) => response.json())
-      .then((response) => {
-        setBaseYearActivityInformation(response.data);
-      });
+    // esgFetch(`/api/combustion-activites?baseYear=${baseYear}&workplaceId=${selectedWorkplaceValue}`)
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setBaseYearActivityInformation(response.data);
+    //   });
 
     // 근거자료
-    esgFetch(``)
-      .then((response) => response.json())
-      .then((response) => {
-        setBaseInformation(response.information);
-      });
+    // esgFetch(``)
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setBaseInformation(response.information);
+    //   });
   }, [baseYear]);
 
   return (

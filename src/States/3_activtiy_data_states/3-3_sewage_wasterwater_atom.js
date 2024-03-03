@@ -7,8 +7,8 @@ export const sewageWastwaterInfomationAtom = atom({
 });
 
 // 근거자료
-export const baseInformationAtom = atom({
-  key: "baseInformation",
+export const baseInformationThreeThreeAtom = atom({
+  key: "baseInformationThreeThreeAtom",
   default: [],
 });
 

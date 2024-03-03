@@ -7,8 +7,8 @@ export const steamInformationAtom = atom({
 });
 
 // 근거자료
-export const baseInformationAtom = atom({
-  key: "baseInformation",
+export const baseInformationThreeFourAtom = atom({
+  key: "baseInformationThreeFourAtom",
   default: [],
 });
 

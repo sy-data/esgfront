@@ -7,12 +7,18 @@ import BaseYearSelect from "../../../components/filters/BaseYearSelect";
 import { Button } from "@mui/material";
 import SplitArea from "../../../components/SplitArea";
 import MainArea from "./mainArea";
+import {
+  energyCostDataAtom,
+  energyCostDataAtomDummyData,
+} from "../../../States/3_activtiy_data_states/3-2_energy_cost_add_atom";
+import { useRecoilState } from "recoil";
 
 const EnergyCostAdd = () => {
   const [workplaceList, setWorkplaceList] = useState([{ value: 0, label: "사업장" }]);
   const workplaceSelect = useRef();
   const [baseYear, setBaseYear] = useState(new Date().getFullYear());
   const [loading, setLoading] = useState(true);
+  const [energyCostData, setEnergyCostData] = useRecoilState(energyCostDataAtom);
 
   useEffect(() => {
     esgFetch("/api/factories?filters[company][id][$eq]=1")
@@ -30,7 +36,16 @@ const EnergyCostAdd = () => {
       });
   }, []);
 
-  const onSearch = useCallback(() => {}, []);
+  const onSearch = useCallback(() => {
+    const selectedWorkplaceValue = workplaceSelect.current ? workplaceSelect.current.selected : null;
+
+    if (!baseYear || !selectedWorkplaceValue) {
+      alert("검색 조건을 선택해 주세요.");
+      return;
+    }
+
+    setEnergyCostData(energyCostDataAtomDummyData);
+  }, []);
 
   return (
     <ContentWithTitie>
