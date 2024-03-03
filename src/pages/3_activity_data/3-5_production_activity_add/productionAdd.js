@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { productionActivityAtom } from "../../../States/3_activtiy_data_states/3-5_production_activity_atom";
+
 import { useRecoilState } from "recoil";
 import { esgFetch } from "../../../components/FetchWrapper";
 import { ContentWithTitie, FilterBlock, FilterLine, SearchButtonContainer } from "../../../components/Styles";
@@ -9,6 +9,7 @@ import DefaultSelect from "../../../components/filters/DefaultSelect";
 import { Button } from "@mui/material";
 import SplitArea from "../../../components/SplitArea";
 import TopArea from "./topArea";
+import { productionActivityAtom } from "../../../States/3_activtiy_data_states/3-5_production_activity_atom";
 
 const ProductionAdd = () => {
   const [workplaceList, setWorkplaceList] = useState([{ value: 0, label: "사업장" }]);
@@ -17,7 +18,7 @@ const ProductionAdd = () => {
   const [loading, setLoading] = useState(true);
 
   // 리코일 상태 사용
-  const [productionActivityAtom, setProductionActivityAtom] = useRecoilState(productionActivityAtom);
+  const [productionActivity, setProductionActivity] = useRecoilState(productionActivityAtom);
 
   useEffect(() => {
     esgFetch("/api/factories?filters[company][id][$eq]=1")
@@ -43,11 +44,11 @@ const ProductionAdd = () => {
       return;
     }
 
-    esgFetch("..")
-      .then((response) => response.json())
-      .then((response) => {
-        setProductionActivityAtom(response.data);
-      });
+    // esgFetch("..")
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setProductionActivity(response.data);
+    //   });
   }, [baseYear]);
 
   return (

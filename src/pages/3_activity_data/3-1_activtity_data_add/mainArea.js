@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import AtivityTable from "../../../components/3_activity/activityTable";
+
 import { useRecoilState } from "recoil";
 import {
   baseInformationAtom,
