@@ -7,6 +7,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { esgFetch } from "../../../components/FetchWrapper";
 
 
 const ButtonContainer = styled('div')(() => ({
@@ -37,6 +38,15 @@ const InputLabel = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center'
 }));
+
+const InputField = props => {
+  return (
+    <InputContainer>
+      <InputLabel>{props.label}</InputLabel>
+      <TextField sx={{ width: 200 }} variant="outlined" size="small" value={props.value} onChange={props.change} />
+    </InputContainer>
+  )
+}
 
 
 const RightArea = forwardRef((props, ref) => {
@@ -95,25 +105,92 @@ const RightArea = forwardRef((props, ref) => {
     }
   }));
   
-  const InputField = props => {
-    return (
-      <InputContainer>
-        <InputLabel>{props.label}</InputLabel>
-        <TextField sx={{ width: 200 }} variant="outlined" size="small" value={props.value} />
-      </InputContainer>
-    )
+  function clearFields(){
+    props.setSelectedWorkplace(null)
+    setWorkplaceName('');
+    setSelectUse('');
+    setRegNumber('');
+    setCompanyName('');
+    setPhoneNumber('');
+    setSelectCategory('');
+    setEmployees('');
+    setThisSales('');
+    setGrossArea('');
+    setNetArea('');
+    setDateSince('');
+    setDateUntil('');
+  }
+  
+  function saveWorkspace(){
+    if(props.selectedWorkplace){
+      const updateData = {
+        updatedAt: new Date(),
+        ...(workplaceName && {name: workplaceName}),
+        // TODO : update with address input
+        ...(false && {address: null}),
+        ...(employees && {number_of_employees: employees}),
+        ...(thisSales && {sales: thisSales}),
+        ...(grossArea && {gross_area: grossArea}),
+        ...(netArea && {net_area: netArea}),
+        ...(dateUntil && {until: dateUntil}),
+        ...(phoneNumber && {phone: phoneNumber})
+      }
+      esgFetch(`/api/factories/${props.selectedWorkplace}`, 'PUT', {
+        data: updateData
+      }).then(() => {
+        // update datagrid values
+        const updateListData = JSON.parse(JSON.stringify(props.workplaceList));
+        const changeIndex = updateListData.find(w => w.id === props.selectedWorkplace).index;
+        
+        for(let k of Object.keys(updateData)){
+          if(k in updateListData[changeIndex-1]){
+            updateListData[changeIndex-1][k] = updateData[k];
+          }
+          if(k in updateListData[changeIndex-1]['attributes']){
+            updateListData[changeIndex-1]['attributes'][k] = updateData[k];
+          }
+        }
+        props.setWorkplaceList(updateListData);
+      });
+    }
+    else{
+      const fetchCompany = Promise.resolve(esgFetch('/api/users/me?populate[0]=company', 'GET').then(res => res.json()).then(r=>r.company.id));
+      
+      fetchCompany.then(companyId => {
+        esgFetch('/api/factories', 'POST', {
+          data: {
+            name: workplaceName,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            // TODO : update with address input
+            address: null,
+            number_of_employees: employees,
+            sales: thisSales ? thisSales : null,
+            gross_area: grossArea,
+            net_area: netArea,
+            since: dateSince ? dateSince : null,
+            until: dateUntil ? dateUntil : null,
+            phone: phoneNumber,
+            brn: regNumber,
+            company: {
+              id: companyId
+            }
+          }
+        })
+      });
+    }
   }
   
   return (
     <ContentBody>
       <SubTitle title={"사업장 상세"} />
       <ButtonContainer>
-        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => props.setSelectedWorkplace({})}>신규</ButtonNewSave>
-        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => console.log(dateUntil)}>저장</ButtonNewSave>
+        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => clearFields()}>신규</ButtonNewSave>
+        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => saveWorkspace()}>저장</ButtonNewSave>
       </ButtonContainer>
       
       <InputBlock>
-        <InputField label="사업장명 *" value={workplaceName} />
+        <InputField label="사업장명 *" value={workplaceName} change={e => setWorkplaceName(e.target.value)} />
         <InputContainer>
           <InputLabel>사업장 사용 *</InputLabel>
           <Select value={selectUse} sx={{ width: 200 }} size="small">
@@ -124,19 +201,19 @@ const RightArea = forwardRef((props, ref) => {
       </InputBlock>
       
       <InputBlock>
-        <InputField label="사업자 등록번호" value={regNumber} />
+        <InputField label="사업자 등록번호" value={regNumber} change={e => {!props.selectedWorkplace && setRegNumber(e.target.value)}} />
         <InputField label="사업자명" value={companyName} />
       </InputBlock>
       
       <InputBlock>
-        <InputField label="전화번호" value={phoneNumber} />
+        <InputField label="전화번호" value={phoneNumber} change={e => setPhoneNumber(e.target.value)} />
         <InputContainer>
           <InputLabel>산업군 *</InputLabel>
-          <Select value={selectCategory} sx={{ width: 200 }} size="small">
+          <Select value={selectCategory} sx={{ width: 200 }} size="small" onChange={e => setSelectCategory(e.target.value)}>
             {/* TODO : category init */}
             <MenuItem value={1}>산업군 1</MenuItem>
             <MenuItem value={2}>산업군 2</MenuItem>
-            <MenuItem value={33}>상업/공공</MenuItem>
+            <MenuItem value={3}>상업/공공</MenuItem>
           </Select>
         </InputContainer>
       </InputBlock>
@@ -158,13 +235,13 @@ const RightArea = forwardRef((props, ref) => {
       </>
       
       <InputBlock>
-        <InputField label="종업원수" value={employees} />
+        <InputField label="종업원수" value={employees} change={e => setEmployees(e.target.value)} />
         <InputField label={<>당해년도 매출<br />(원)</>} value={thisSales} />
       </InputBlock>
       
       <InputBlock>
-        <InputField label="전용면적" value={grossArea} />
-        <InputField label="연면적" value={netArea} />
+        <InputField label="전용면적" value={grossArea} change={e => setGrossArea(e.target.value)} />
+        <InputField label="연면적" value={netArea} change={e => setNetArea(e.target.value)} />
       </InputBlock>
       
       <InputBlock>  
