@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { FormControl, Button, TextField, styled, InputAdornment, Select, MenuItem } from "@mui/material";
 import Search from "@mui/icons-material/Search";
 import SubTitle from "../../../components/SubTitle";
@@ -62,6 +62,7 @@ const RightArea = forwardRef((props, ref) => {
   const [netArea, setNetArea] = useState('');
   const [dateSince, setDateSince] = useState('');
   const [dateUntil, setDateUntil] = useState('');
+  const [industryType, setIndustryType] = useState([]);
   
   
   const datePickerFormat = "YYYY-MM-DD";
@@ -181,6 +182,14 @@ const RightArea = forwardRef((props, ref) => {
     }
   }
   
+  useEffect(() => {
+    esgFetch('/api/type-industries', 'GET')
+      .then(res => res.json())
+      .then(result => {
+        setIndustryType(result.data);
+      })
+  },[]);
+  
   return (
     <ContentBody>
       <SubTitle title={"사업장 상세"} />
@@ -210,10 +219,7 @@ const RightArea = forwardRef((props, ref) => {
         <InputContainer>
           <InputLabel>산업군 *</InputLabel>
           <Select value={selectCategory} sx={{ width: 200 }} size="small" onChange={e => setSelectCategory(e.target.value)}>
-            {/* TODO : category init */}
-            <MenuItem value={1}>산업군 1</MenuItem>
-            <MenuItem value={2}>산업군 2</MenuItem>
-            <MenuItem value={3}>상업/공공</MenuItem>
+            {industryType.map(i => <MenuItem key={`ind-type-${i.id}`} value={i.id}>{i.attributes.type}</MenuItem>)}
           </Select>
         </InputContainer>
       </InputBlock>
