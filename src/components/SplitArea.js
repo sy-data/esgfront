@@ -12,13 +12,15 @@ const Section1 = styled('div')(({direction, customWidth}) => ({
     maxWidth: "600px",
     minWidth: "400px",
   }),
-  display: "grid"
 }));
 
 const Section2 = styled('div')(({customWidth}) => ({
-  flex: customWidth ? 1 - customWidth : 1,
-  display: "grid"
+  flex: customWidth ? customWidth : 1,
 }));
+
+const SectionAll = styled('div')(() => ({
+  flex: 1,
+}))
 
 const SplitArea = ({ children, direction, customWidth }) => {
   const dir = (!direction || !['h', 'v'].includes(direction[0])) ? 'v' : direction[0];
@@ -37,12 +39,20 @@ const SplitArea = ({ children, direction, customWidth }) => {
   
   return (
     <Container direction={dir}>
-      <Section1 direction={dir} customWidth={customWidth}>
-        {content1}
-      </Section1>
-      <Section2 customWidth={customWidth}>
-        {content2}
-      </Section2>
+      {content2 === '' ?
+        <SectionAll>
+          {content1}
+        </SectionAll>
+        :
+        <>
+          <Section1 direction={dir} customWidth={customWidth}>
+            {content1}
+          </Section1>
+          <Section2 customWidth={customWidth}>
+            {content2}
+          </Section2>
+        </>
+      }
     </Container>
   )
 }

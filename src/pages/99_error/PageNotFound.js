@@ -35,14 +35,14 @@ const PageNotFound = () => {
                     입력하신 주소를 다시 한 번 확인해 주세요
                 </Typography>
                 <Typography variant="subtitle2" sx={{fontWeight: 'bold'}}>
-                    {count}초 후 로그인 페이지로 이동합니다.
+                    {count}초 후 홈으로 이동합니다.
                 </Typography>
                 <Button 
                     variant="contained" 
                     href="/" 
                     sx={{width: '80%'}}
                 >
-                    로그인 페이지로 가기
+                    홈으로 가기
                 </Button>
             </Overlay>
         </Background>

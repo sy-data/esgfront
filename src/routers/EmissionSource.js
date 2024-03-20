@@ -1,22 +1,35 @@
-import { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { userStateAtom } from "../States/auth/auth";
 import { MainContent } from "../components/Styles";
+import { getCookie } from "../States/storage/Cookie";
 import LeftNavigation from "../components/LeftNavigation";
 import PageNotFound from "../pages/99_error/PageNotFound";
 
-const ManageWorkplace = lazy(() => import('../pages/1_emission_source/manage_workplace/ManageWorkplace'));
-const ManageProduct = lazy(() => import('../pages/1_emission_source/manage_product/ManageProduct'))
-const SamplePage = lazy(() => import('../pages/sample/SamplePage'));
+const ManageEmissionProduct = lazy(() => import ('../pages/2_emission_management/2_1_manage_product/EmissionProductManagement'));
+const ManageEmissionFuel = lazy(() => import ('../pages/2_emission_management/2_2_manage_fuel/EmissionFuelManagement'));
+const ManageEmissionParameter = lazy(() => import ('../pages/2_emission_management/2_3_manage_parameter/EmissionParameterManagement'));
 
 const EmissionSource = () => {
+  const userState = useRecoilValue(userStateAtom);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getCookie("token");
+    if (!token) {
+      navigate('/unauthorized');
+    }
+  }, []);
+
   return (
     <MainContent>
       <LeftNavigation />
       <Suspense fallback={"loading"}>
         <Routes>
-          <Route exact path="workplace" element={<ManageWorkplace />} />
-          <Route exact path="product" element={<ManageProduct />} />
-          <Route exact path='sample' element={<SamplePage />} />
+          <Route exact path="product" element={<ManageEmissionProduct/>} />
+          <Route exact path="fuel" element={<ManageEmissionFuel />} />
+          <Route exact path="parameter" element={<ManageEmissionParameter />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </Suspense>

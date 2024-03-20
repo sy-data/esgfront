@@ -16,7 +16,8 @@ export const MainContent = styled('div')(() => ({
 export const ContentWithTitie = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
-  flex: 1
+  flex: 1,
+  width: '100%', height: '100%',
 }))
 
 export const FilterBlock = styled('div')(() => ({
@@ -61,5 +62,6 @@ export const FilterSelect = styled(Select)(() => ({
 export const SearchButtonContainer = styled('div')(() => ({
   padding: '0px 10px',
   display: 'flex',
-  justifyContent: 'flex-end'
+  justifyContent: 'flex-end',
+  gap: '10px',
 }));

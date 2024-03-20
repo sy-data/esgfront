@@ -2,7 +2,9 @@ import { Paper, styled } from "@mui/material"
 
 const AreaPadding = styled('div')(() => ({
   display: 'flex',
-  padding: '10px'
+  padding: '10px',
+  width: "calc(100% - 20px)",
+  height: "calc(100% - 20px)",
 }))
 
 const PaperStyle = styled(Paper)(() => ({
@@ -10,9 +12,9 @@ const PaperStyle = styled(Paper)(() => ({
   padding: '10px'
 }));
 
-const ContentBody = ({children}) => {
+const ContentBody = ({children, className}) => {
   return (
-    <AreaPadding>
+    <AreaPadding className={className}>
       <PaperStyle elevation={4}>
         {children}
       </PaperStyle>
