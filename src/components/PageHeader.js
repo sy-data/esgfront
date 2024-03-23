@@ -44,7 +44,7 @@ const PageHeader = () => {
         </>
       ) : (
         <>
-          <HeaderItem onClick={() => navigate("/signup")}>회원가입</HeaderItem>
+          <HeaderItem style={{ cursor: 'pointer' }} onClick={() => navigate("/signup")}>회원가입</HeaderItem>
           <div style={{ width: "10px", textAlign: "center" }}>|</div>
           <HeaderItem
             style={{ cursor: 'pointer' }}
