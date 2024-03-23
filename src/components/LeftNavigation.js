@@ -26,11 +26,11 @@ const LeftNavigation = () => {
         <TreeItem nodeId="2-4" label="스팀관리" onClick={() => navigate("/source/")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="3" label="활동자료 관리">
-        <TreeItem nodeId="3-1" label="배출량 활동자료 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
-        <TreeItem nodeId="3-2" label="에너지 비용 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
-        <TreeItem nodeId="3-3" label="하/폐수 활동자료 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
-        <TreeItem nodeId="3-4" label="스팀 활동자료 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
-        <TreeItem nodeId="3-5" label="생산량 활동자료 등록" onClick={() => navigate("/activity")} icon={<ArrowRight />} />
+        <TreeItem nodeId="3-1" label="배출량 활동자료 등록" onClick={() => navigate("/activity/activityDataAdd")} icon={<ArrowRight />} />
+        <TreeItem nodeId="3-2" label="에너지 비용 등록" onClick={() => navigate("/activity/energyCostAdd")} icon={<ArrowRight />} />
+        <TreeItem nodeId="3-3" label="하/폐수 활동자료 등록" onClick={() => navigate("/activity/sewageWastewaterAdd")} icon={<ArrowRight />} />
+        <TreeItem nodeId="3-4" label="스팀 활동자료 등록" onClick={() => navigate("/activity/steamAdd")} icon={<ArrowRight />} />
+        <TreeItem nodeId="3-5" label="생산량 활동자료 등록" onClick={() => navigate("/activity/productionAdd")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="4" label="온실가스 배출량">
         <TreeItem nodeId="4-1" label="DashBoard" onClick={() => navigate("/emissions/dashboard")} icon={<ArrowRight />} />
