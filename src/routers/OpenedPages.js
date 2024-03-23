@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PageFooter from "../components/PageFooter";
-import PageNotFound from "../pages/99_error/PageNotFound";
 
 const Index = lazy(() => import("../pages/0_opened/Index"));
 const SignUp = lazy(() => import('../pages/0_opened/Signup'))
