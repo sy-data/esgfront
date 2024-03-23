@@ -49,7 +49,9 @@ const LeftNavigation = () => {
       <TreeItem nodeId="6" label="목표 및 성과">
         <TreeItem nodeId="6-1" label="법인별 목표 등록" onClick={() => navigate("/target_result/corporation-target")} icon={<ArrowRight />} />
         <TreeItem nodeId="6-2" label="사업장별 목표 등록" onClick={() => navigate("/target_result/factory-target")} icon={<ArrowRight />} />
-        <TreeItem nodeId="6-3" label="성과 현황" onClick={() => navigate("/target_result/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="6-3" label="연단위 성과현황(법인)" onClick={() => navigate("/target_result/performance-status/company")} icon={<ArrowRight />} />
+        <TreeItem nodeId="6-4" label="연단위 성과현황(사업장)" onClick={() => navigate("/target_result/performance-status/factory")} icon={<ArrowRight />} />
+        <TreeItem nodeId="6-5" label="월단위 성과현황(사업장)" onClick={() => navigate("/target_result/performance-status/factory-monthly")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="7" label="통계">
         <TreeItem nodeId="7-1" label="정부보고 배출량 현황" onClick={() => navigate("/statistics/emissions-status")} icon={<ArrowRight />} />
