@@ -82,7 +82,9 @@ const ProductManagement = () => {
 
   // DataGrid에 데이터가 표시되면 로딩 상태 변경
   useEffect(() => {
-    setLoading(false);
+    if(data) {
+      setLoading(false);
+    }
   }, [data]);
 
   // 선택된 사업장이 바뀌면 사업장별 생산품 목록 조회
@@ -109,7 +111,7 @@ const ProductManagement = () => {
         }
         return value;
       }
-    }, // TODO: 음수로 입력되는 것 방지
+    },
     { field: "description", headerName: "비고", flex: 2, editable: true },
   ]
 
@@ -142,7 +144,6 @@ const ProductManagement = () => {
   // 저장 버튼 눌렀을 때
   const handleSaveButton = async () => {
     const sum = data.reduce((acc, cur) => acc + cur.rate, 0);
-    console.log(sum);
     if (sum > 100) {
       alert("생산품 비율의 총 합은 100을 초과할 수 없습니다.");
       return;
@@ -225,31 +226,31 @@ const ProductManagement = () => {
   }
 
   // 행이 업데이트 되었을 때 addedRow와 updatedRow에 추가
-  const processRowUpdate = (row) => {
-    if (row.name === '' && addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 아무 입력도 없이 포커스를 잃었을 때
-      const newAddedRows = addedRows.filter(addedRow => addedRow.id !== row.id);
+  const processRowUpdate = (updatedRowData) => {
+    if (updatedRowData.name === '' && addedRows.map(row => row.id).includes(updatedRowData.id)) { // 새로운 행이 추가된 후 아무 입력도 없이 포커스를 잃었을 때
+      const newAddedRows = addedRows.filter(addedRow => addedRow.id !== updatedRowData.id);
       setAddedRows(newAddedRows);
-      const newData = data.filter(data => data.id !== row.id);
+      const newData = data.filter(data => data.id !== updatedRowData.id);
       setData(newData);
-      return row;
+      return updatedRowData;
     }
 
-    if (addedRows.map(row => row.id).includes(row.id)) { // 새로운 행이 추가된 후 수정된 경우
+    if (addedRows.map(row => row.id).includes(updatedRowData.id)) { // 새로운 행이 추가된 후 수정된 경우
       const newAddedRows = addedRows.map(addedRow => {
-        if (row.id === addedRow.id) {
-          return row;
+        if (updatedRowData.id === addedRow.id) {
+          return updatedRowData;
         }
         return addedRow;
       });
       setAddedRows(newAddedRows);
     } else { // 기존 행이 수정된 경우
       const updatedRowsId = updatedRows.map(row => row.id);
-      if (!updatedRowsId.includes(row.id)) {
-        setUpdatedRows([...updatedRows, row]);
+      if (!updatedRowsId.includes(updatedRowData.id)) {
+        setUpdatedRows([...updatedRows, updatedRowData]);
       } else {
         const newUpdatedRows = updatedRows.map(row => {
-          if (row.id === row.id) {
-            return row;
+          if (row.id === updatedRowData.id) {
+            return updatedRowData;
           }
           return row;
         });
@@ -257,13 +258,13 @@ const ProductManagement = () => {
       }
     }
     const newData = data.map((data) => {
-      if (row.id === data.id) {
-        return row;
+      if (updatedRowData .id === data.id) {
+        return updatedRowData ;
       }
       return data;
     });
     setData(newData);
-    return row;
+    return updatedRowData ;
   }
 
   return (

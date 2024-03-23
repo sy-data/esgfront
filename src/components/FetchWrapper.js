@@ -1,8 +1,10 @@
 import { getCookie, setCookie } from "../States/storage/Cookie";
 
+const host = process.env.REACT_APP_PROD_API_ENDPOINT ? process.env.REACT_APP_PROD_API_ENDPOINT : "";
+
 export async function loginDev(payload) {
   try {
-    const res = await fetch("/api/auth/local", {
+    const res = await fetch(`${host}/api/auth/local`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,10 +35,10 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   const token = getCookie("token");
 
   if (requiredAuth && !token) {
-    alert("401 페이지로 이동 필요");
-    window.location.href = "/";
+    // alert("401 페이지로 이동 필요");
+    window.location.href = "/unauthorized";
   }
-  return fetch(url, {
+  return fetch(`${host}${url}`, {
     method: method,
     headers: {
       ...((method === "POST" || method == "PUT") && { "Content-Type": "application/json" }),
