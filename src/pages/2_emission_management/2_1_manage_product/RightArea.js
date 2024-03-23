@@ -82,7 +82,9 @@ const ProductManagement = () => {
 
   // DataGrid에 데이터가 표시되면 로딩 상태 변경
   useEffect(() => {
-    setLoading(false);
+    if(data) {
+      setLoading(false);
+    }
   }, [data]);
 
   // 선택된 사업장이 바뀌면 사업장별 생산품 목록 조회
@@ -109,7 +111,7 @@ const ProductManagement = () => {
         }
         return value;
       }
-    }, // TODO: 음수로 입력되는 것 방지
+    },
     { field: "description", headerName: "비고", flex: 2, editable: true },
   ]
 
@@ -142,7 +144,6 @@ const ProductManagement = () => {
   // 저장 버튼 눌렀을 때
   const handleSaveButton = async () => {
     const sum = data.reduce((acc, cur) => acc + cur.rate, 0);
-    console.log(sum);
     if (sum > 100) {
       alert("생산품 비율의 총 합은 100을 초과할 수 없습니다.");
       return;

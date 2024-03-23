@@ -23,7 +23,7 @@ const NoRowsOverlay = () => {
   )
 }
 
-const ParameterManagement = () => {
+const CombustionList = () => {
   const pageSize = 20;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,4 +140,4 @@ const ParameterManagement = () => {
   )
 }
 
-export default ParameterManagement;
+export default CombustionList;

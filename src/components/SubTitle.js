@@ -3,7 +3,6 @@ import { Typography, styled } from "@mui/material";
 const TitleContainer = styled('div')(() => ({
   display: "flex",
   justifyContent: "space-between",
-  width: "100%",
   padding: "10px"
 }));
 

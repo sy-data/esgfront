@@ -22,7 +22,14 @@ const SectionAll = styled('div')(() => ({
   flex: 1,
 }))
 
-const SplitArea = ({ children, direction, customWidth }) => {
+const SplitIcon = styled('div')((direction) => ({
+  display: "flex",
+  flexDirection: direction === 'v' ? 'row' : 'column',
+  justifyContent: "center",
+  alignItems: "center"
+}))
+
+const SplitArea = ({ children, direction, customWidth, splitComponent }) => {
   const dir = (!direction || !['h', 'v'].includes(direction[0])) ? 'v' : direction[0];
   
   let content1 = '';
@@ -48,6 +55,9 @@ const SplitArea = ({ children, direction, customWidth }) => {
           <Section1 direction={dir} customWidth={customWidth}>
             {content1}
           </Section1>
+          <SplitIcon>
+            {splitComponent && splitComponent}
+          </SplitIcon>
           <Section2 customWidth={customWidth}>
             {content2}
           </Section2>
