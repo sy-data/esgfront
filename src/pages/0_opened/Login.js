@@ -33,6 +33,17 @@ const Login = () => {
     }
   });
 
+  const checkPasswordDate = (date) => {
+    const currendtDate = new Date();
+    const passwordDate = new Date(date);
+
+    currendtDate.setMonth(currendtDate.getMonth() + 3);
+
+    if (currendtDate > passwordDate) {
+      navigate("/changePassword");
+    }
+  };
+
   const onLogin = async (e) => {
     e.preventDefault();
     const loginData = { id, password };
@@ -46,10 +57,11 @@ const Login = () => {
     const user = await loginDev(loginData);
 
     if (user) {
+      checkPasswordDate(user.password_date);
       setUserState(user);
       saveId(user.email);
       setLoginFailCount(0);
-      navigate("/");
+      navigate("/emissions");
     } else if (user === undefined) {
       setLoginFailCount(loginFailCount + 1);
       navigate("/loginFaile");
@@ -61,7 +73,7 @@ const Login = () => {
   };
 
   const onFindIdPassword = () => {
-    navigate("/findIdPassword");
+    navigate("/UserFind");
   };
 
   return (
