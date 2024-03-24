@@ -56,10 +56,10 @@ const LeftNavigation = () => {
       <TreeItem nodeId="7" label="통계">
         <TreeItem nodeId="7-1" label="정부보고 배출량 현황" onClick={() => navigate("/statistics/emissions-status")} icon={<ArrowRight />} />
         <TreeItem nodeId="7-2" label="총괄 현황" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="7-3" label="제품 배출량 원단위" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="7-4" label="제품 에너지 원단위" onClick={() => navigate("/statistics")} icon={<ArrowRight />} />
-        <TreeItem nodeId="7-5" label="에너지 사용량 원단위" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
-        <TreeItem nodeId="7-6" label="에너지 비용 원단위" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
+        <TreeItem nodeId="7-3" label="제품 배출량 원단위" onClick={() => navigate("/statistics/production-emiisions")} icon={<ArrowRight />} />
+        <TreeItem nodeId="7-4" label="제품 에너지 원단위" onClick={() => navigate("/statistics/production-energy")} icon={<ArrowRight />} />
+        <TreeItem nodeId="7-5" label="에너지 사용량 원단위" onClick={() => navigate("/statistics/energy-usage")} icon={<ArrowRight />} />
+        <TreeItem nodeId="7-6" label="에너지 비용 원단위" onClick={() => navigate("/statistics/energy-costs")} icon={<ArrowRight />} />
         <TreeItem nodeId="7-7" label="첨부파일 다운로드" onClick={() => navigate("/statistics/")} icon={<ArrowRight />} />
       </TreeItem>
       <TreeItem nodeId="8" label="모니터링">
