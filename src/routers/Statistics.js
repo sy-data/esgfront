@@ -14,12 +14,12 @@ const EnergyCosts = lazy(() => import("../pages/7_statistics/7_6_energy_costs/en
 const Statistics = () => {
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const token = getCookie('token');
-  //   if (!token) {
-  //     navigate('/unauthorized');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = getCookie("token");
+    if (!token) {
+      navigate("/unauthorized");
+    }
+  }, []);
 
   return (
     <MainContent>
