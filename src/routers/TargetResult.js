@@ -7,7 +7,7 @@ import CorporationTarget from "../pages/6_target_result/6_1_corporation_target/C
 import FactoryTarget from "../pages/6_target_result/6_2_factory_target/FactoryTarget";
 import CompanyPerformanceStatus from "../pages/6_target_result/6_3_company_performance_status/CompanyPerformanceStatus";
 import PerformanceStatus from "../pages/6_target_result/6_4_factory_performance_status/PerformanceStatus";
-import MonthlyPerformanceStatus from "../pages/6_target_result/6_4_factory_performance_status/PerformanceStatus";
+import MonthlyPerformanceStatus from "../pages/6_target_result/6_5_factory_monthly_performance_status/PerformanceStatus";
 
 const TargetResult = () => {
   const navigate = useNavigate();
