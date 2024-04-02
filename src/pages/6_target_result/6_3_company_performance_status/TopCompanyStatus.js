@@ -28,9 +28,9 @@ const CompanyPerformanceStatus = () => {
     };
 
     const data = {
-        labels: ['테스트'],
+        labels: ['목표 배출량', '실제 배출량', '배출량 차이'],
         datasets: [{
-            data: [],
+            data: [100, 200, 300],
         }],
     };
 

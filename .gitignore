@@ -26,3 +26,6 @@ yarn-error.log*
 
 # IntelliJ IDEA
 .idea
+
+# asdf
+.tool-versions

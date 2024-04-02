@@ -25,9 +25,9 @@ const UpCompanyUsage = props => {
     maintainAspectRatio: false,
     animation: false
   };
-  
+
   const labels = (props.data && props.data.length > 0) ? props.data.map(m=>m.name) : [];
-  
+
   const data = {
     labels: labels,
     datasets: [{
@@ -35,7 +35,7 @@ const UpCompanyUsage = props => {
       data: props.data?.map(m=>m.id*100)
     }],
   };
-  
+
   return (
     <ContentBody>
       <ChartContainer>
