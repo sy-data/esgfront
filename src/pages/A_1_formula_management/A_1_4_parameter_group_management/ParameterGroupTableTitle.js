@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import MenuTitle from "../../../components/MenuTitle";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, styled} from "@mui/material";
 
@@ -18,6 +18,15 @@ const ParameterGroupTableTitle = (props) => {
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
+    const handleAddRow = () => {
+        setData(prevState => {
+            // 새로 추가되는 행은 현재 가장 큰 No 다음 값으로 설정
+            const newNo = prevState[0].id + 1;
+            const newRow = { no: newNo, id: newNo, groupId: '', groupName: '', description: '' };
+            return [newRow, ...prevState];
+        });
+    };
+
     const handleDeleteButton = () => {
         setOpenDeleteDialog(true);
     }
@@ -31,7 +40,7 @@ const ParameterGroupTableTitle = (props) => {
             <TitleButtonContainer>
                 <MenuTitle title={"파라미터 그룹 목록"}/>
                 <ButtonContainer>
-                    <Button>그룹 추가</Button>
+                    <Button onClick={handleAddRow}>그룹 추가</Button>
                     <Button onClick={handleDeleteButton} disabled={selectedRow.length === 0}>삭제</Button>
                 </ButtonContainer>
             </TitleButtonContainer>

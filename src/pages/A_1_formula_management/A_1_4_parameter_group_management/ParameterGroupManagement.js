@@ -21,7 +21,7 @@ const ParameterGroupManagement = () => {
     return (
         <ContentWithTitie>
             <ParameterGroupTableTitle setData={setData} selectedRow={selectedRow} />
-            <ParameterGroupList gridApiRef={gridApiRef} data={data} setSelectedRow={setSelectedRow} />
+            <ParameterGroupList gridApiRef={gridApiRef} data={data} setData={setData} setSelectedRow={setSelectedRow} />
         </ContentWithTitie>
     )
 }
