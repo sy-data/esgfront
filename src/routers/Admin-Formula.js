@@ -4,6 +4,8 @@ import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import LeftNavigation from "../components/LeftNavigation";
 
+const ParameterGroupManagement = lazy(() => import ('../pages/A_1_formula_management/A_1_4_parameter_group_management/ParameterGroupManagement'));
+
 
 const AdminFormula = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const AdminFormula = () => {
       <LeftNavigation />
       <Suspense fallback={"loading"}>
         <Routes>
+            <Route exact path='groupManagement' element={<ParameterGroupManagement />} />
         </Routes>
       </Suspense>
     </MainContent>
