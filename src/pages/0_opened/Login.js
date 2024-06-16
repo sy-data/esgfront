@@ -45,16 +45,21 @@ const Login = () => {
   };
 
   const onLogin = async (e) => {
-    e.preventDefault();
-    const loginData = { id, password };
-
-    if (id === "" || password === "") {
-      if (id === "") alert("아이디를 입력해주세요");
-      if (password === "") alert("비밀번호를 입력해주세요");
-      return;
+    localStorage.setItem("token", "tempToken");
+    setCookie("token", "tempToken");
+    const user = {
+      email: "test@test.test",
     }
+    // e.preventDefault();
+    // const loginData = { id, password };
 
-    const user = await loginDev(loginData);
+    // if (id === "" || password === "") {
+    //   if (id === "") alert("아이디를 입력해주세요");
+    //   if (password === "") alert("비밀번호를 입력해주세요");
+    //   return;
+    // }
+
+    // const user = await loginDev(loginData);
 
     if (user) {
       checkPasswordDate(user.password_date);
@@ -67,6 +72,9 @@ const Login = () => {
       navigate("/loginFaile");
     }
   };
+  useEffect(() => {
+    onLogin();
+  }, []);
 
   const onJoin = () => {
     navigate("/signup");
