@@ -1,17 +1,19 @@
-import { styled } from "@mui/material";
+import { Avatar, Box, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getCookie, removeCookie, useAuth } from "../States/storage/Cookie";
-import { useEffect, useState } from "react";
+import { removeCookie, useAuth } from "../States/storage/Cookie";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userStateAtom } from "../States/auth/auth";
+import { headerTitleAtom } from "../States/header/Title";
+import title from "../assets/images/title.svg"
+import user_icon from "../assets/images/user_icon.svg"
 
 
 const HeaderContainer = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
-  height: "40px",
-  padding: "0px 20px",
-  backgroundColor: "lightgreen",
+  height: "80px",
+  padding: 0, margin: 0,
+  backgroundColor: "#FFFFFF",
 }));
 
 const HeaderItem = styled("div")(() => ({
@@ -23,6 +25,7 @@ const PageHeader = () => {
   const isLogin = useAuth(); // useAuth 훅을 호출하여 로그인 상태를 확인합니다.
   const setUserState = useSetRecoilState(userStateAtom);
   const userState = useRecoilValue(userStateAtom);
+  const headerTitle = useRecoilValue(headerTitleAtom);
 
   console.log(userState);
   const onLoginOut = () => {
@@ -33,14 +36,15 @@ const PageHeader = () => {
 
   return (
     <HeaderContainer>
-      <HeaderItem style={{ flexGrow: 1 }}>
-        <span style={{ cursor: 'pointer' }} onClick={() => navigate("/")}>E-Scope+</span>
-      </HeaderItem>
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '236px', height: '80px' }}>
+        <img src={title} alt="E-Scope" style={{width: '116px', height: '18px'}} />
+      </Box>
+      <Box style={{flexGrow: 1, padding: '22px', fontWeight: 700, fontSize: '24px', color: '#111111'}}>
+        {headerTitle}
+      </Box>
       {isLogin ? (
         <>
-          <HeaderItem>내 정보</HeaderItem>
-          <div style={{ width: "10px", textAlign: "center" }}>|</div>
-          <HeaderItem style={{ cursor: 'pointer' }} onClick={onLoginOut}>로그아웃</HeaderItem>
+          <Avatar alt="info" src={user_icon} style={{width: '36px', height: '36px',cursor: 'pointer', marginRight: '24px'}} />
         </>
       ) : (
         <>
