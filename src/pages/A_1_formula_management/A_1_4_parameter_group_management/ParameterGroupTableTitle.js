@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import MenuTitle from "../../../components/MenuTitle";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, styled} from "@mui/material";
+import {parameterGroupListDummy} from "./ParameterGroupList";
 
 
 const TitleButtonContainer = styled('div')({
@@ -14,17 +15,22 @@ const ButtonContainer = styled('div')({
 
 
 const ParameterGroupTableTitle = (props) => {
-    const { setData, selectedRow } = props;
+    const { setData, selectedRow, editRowId, setEditRowId } = props;
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
     const handleAddRow = () => {
+        // data 에 새로운 행 추가
         setData(prevState => {
             // 새로 추가되는 행은 현재 가장 큰 No 다음 값으로 설정
             const newNo = prevState[0].id + 1;
-            const newRow = { no: newNo, id: newNo, groupId: '', groupName: '', description: '' };
+            // 그룹의 첫번째값을 기본값으로 설정
+            const defaultGroup = parameterGroupListDummy[0];
+            const newRow = { no: newNo, id: newNo, groupId: defaultGroup.groupId, groupName: defaultGroup.groupName, description: '' };
             return [newRow, ...prevState];
         });
+        // 그룹 추가모드 설정
+        setEditRowId(-1);
     };
 
     const handleDeleteButton = () => {
@@ -40,7 +46,7 @@ const ParameterGroupTableTitle = (props) => {
             <TitleButtonContainer>
                 <MenuTitle title={"파라미터 그룹 목록"}/>
                 <ButtonContainer>
-                    <Button onClick={handleAddRow}>그룹 추가</Button>
+                    <Button onClick={handleAddRow} disabled={editRowId !== null}>그룹 추가</Button>
                     <Button onClick={handleDeleteButton} disabled={selectedRow.length === 0}>삭제</Button>
                 </ButtonContainer>
             </TitleButtonContainer>

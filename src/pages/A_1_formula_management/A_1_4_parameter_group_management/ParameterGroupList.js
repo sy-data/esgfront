@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
 import {Select, MenuItem} from "@mui/material";
+import TextField from "@mui/material/TextField";
 
-const groupList = [
+export const parameterGroupListDummy = [
     { groupId: '0001', groupName: '산정식그룹' },
     { groupId: '0002', groupName: '활동량' },
     { groupId: '0003', groupName: '배출량' },
@@ -18,40 +19,98 @@ const groupList = [
 ];
 
 const ParameterGroupList = (props) => {
-    const { gridApiRef, data, setData, setSelectedRow } = props;
+    const { gridApiRef, data, setData, selectedRow, setSelectedRow, editRowId, setEditRowId } = props;
 
+    const [descriptionText, setDescriptionText] = useState('');
+
+    // 그룹명 선택
     const handleSelectGroupName = (id, value) => {
         setData(prevState => prevState.map((row) => {
             if (row.id === id) {
-                const selectedGroup = groupList.find(({groupId}) => groupId === value);
+                const selectedGroup = parameterGroupListDummy.find(({groupName}) => groupName === value);
                 return { ...row, groupId: selectedGroup.groupId, groupName: selectedGroup.groupName };
             }
             return row;
         }));
     };
 
+    // 비고 입력
+    const handleChangeText = (id, value) => {
+        setDescriptionText(value);
+        setData(prevState => prevState.map((row) => {
+            if (row.id === id) {
+                return { ...row, description: value };
+            }
+            return row;
+        }));
+    }
+
+    // row 클릭
+    const handleRowSelectionModelChange = (rowIds) => {
+        const isEditRow = rowIds[0] === editRowId;
+        // 현재 수정중이 아닌 행을 선택했을때만 체크박스 선택
+        if (!isEditRow) {
+            setSelectedRow(rowIds)
+        }
+    }
+
+    // row 더블 클릭
+    const handleRowDoubleClick = (params) => {
+        setEditRowId(params.row.id)
+        setDescriptionText(params.row.description);
+    }
+
     const columns = [
-        { field: 'no', headerName: 'No', flex: 1 },
-        { field: 'groupId', headerName: '그룹ID', flex: 2 },
+        { field: 'no', headerName: 'No', flex: 1, sortable: false },
+        { field: 'groupId', headerName: '그룹ID', flex: 2, sortable: false },
         {
             field: 'groupName',
             headerName: '그룹명',
             flex: 10,
-            renderCell: (params) => (
-                params.value ? params.value : (
-                    <Select
-                        value={params.value}
-                        onChange={(event) => handleSelectGroupName(params.id, event.target.value)}
-                    >
-                        {groupList.map(({groupId, groupName}) => <MenuItem key={groupId} value={groupId}>{groupName}</MenuItem>)}
-                    </Select>
-                )
-            ),
+            renderCell: (params) => {
+                const isEditRow = params.row.id === editRowId;
+                const isAddRow  = editRowId === -1 && params.row.id === data[0].id;
+                if (isEditRow || isAddRow) {
+                    return (
+                        <Select
+                            value={params.value}
+                            onChange={(event) => handleSelectGroupName(params.id, event.target.value)}
+                        >
+                            {parameterGroupListDummy.map(({groupId, groupName}) => <MenuItem key={groupId} value={groupName}>{groupName}</MenuItem>)}
+                        </Select>
+                    );
+                } else {
+                    return params.value;
+                }
+            },
+            sortable: false
         },
-        { field: 'description', headerName: '비고', flex: 3 },
+        {
+            field: 'description',
+            headerName: '비고',
+            flex: 3,
+            renderCell: (params) => {
+                const isEditRow = params.row.id === editRowId;
+                const isAddRow  = editRowId === -1 && params.row.id === data[0].id;
+                if (isEditRow || isAddRow) {
+                    if (isAddRow) {
+                        setDescriptionText('');
+                    }
+                    return (
+                        <TextField
+                            type={'text'}
+                            value={descriptionText}
+                            onChange={(event) => handleChangeText(params.id, event.target.value)}
+                            placeholder={'비고내용'}
+                        />
+                    );
+                } else {
+                    return params.value;
+                }
+            },
+            sortable: false
+        },
     ];
-
-
 
     return (
         <CustomDataGrid
@@ -60,7 +119,9 @@ const ParameterGroupList = (props) => {
             columns={columns}
             checkboxSelection
             pageSize={15}
-            onRowSelectionModelChange={setSelectedRow}
+            rowSelectionModel={selectedRow}
+            onRowSelectionModelChange={handleRowSelectionModelChange}
+            onRowDoubleClick={handleRowDoubleClick}
         />
     )
 }
