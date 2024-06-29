@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 
 const EmissionByCompany = lazy(() => import('../pages/4_emissions/4_2_company/ByCompany'));
 const EmissionByWorkplace = lazy(() => import('../pages/4_emissions/4_3_workplace/ByWorkplace'));
@@ -22,7 +22,7 @@ const EmissionAmount = () => {
 
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="company" element={<EmissionByCompany />} />

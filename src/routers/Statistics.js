@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 import PageNotFound from "../pages/99_error/PageNotFound";
 
 const EmissionsStatus = lazy(() => import("../pages/7_statistics/7_1_emissions_status/EmissionsStatus"));
@@ -23,7 +23,7 @@ const Statistics = () => {
 
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="emissions-status" element={<EmissionsStatus />} />

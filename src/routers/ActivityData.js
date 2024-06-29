@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 import ActivityDataAdd from "../pages/3_activity_data/3-1_activtity_data_add/activityDataAdd";
 import EnergyCostAdd from "../pages/3_activity_data/3-2_energy_cost_add/energyCostAdd";
 import SewageWastewaterAdd from "../pages/3_activity_data/3-3_sewage_wastewater_activity_add/sewageWastewaterAdd";
@@ -22,7 +22,7 @@ const ActivityData = () => {
 
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="activityDataAdd" element={<ActivityDataAdd />} />
