@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 
 const ParameterGroupManagement = lazy(() => import ('../pages/A_1_formula_management/A_1_4_parameter_group_management/ParameterGroupManagement'));
 
@@ -19,7 +19,7 @@ const AdminFormula = () => {
   
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
             <Route exact path='groupManagement' element={<ParameterGroupManagement />} />

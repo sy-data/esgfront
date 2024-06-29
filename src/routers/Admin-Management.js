@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 
 
 const AdminManagement = () => {
@@ -17,7 +17,7 @@ const AdminManagement = () => {
   
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
         </Routes>

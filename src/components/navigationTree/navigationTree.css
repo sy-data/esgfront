@@ -1,0 +1,55 @@
+.node {
+  width: 208px;
+  height: 56px;
+}
+
+.treeItem {
+  display: flex;
+  align-items: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.opened-l1 {
+  border-radius: 8px;
+  background: #F2F9F8;
+  color: var(--Primary-04, #00B096);
+  font-family: "Pretendard Variable";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  /* 27px */
+}
+.closed-l1 {
+  color: var(--Gray-111, #111);
+  font-family: "Pretendard Variable";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  /* 27px */
+}
+.opened-l2 {
+  color: var(--Gray-111, #111);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  padding: 13px 20px;
+  /* 24px */
+}
+.closed-l2 {
+  color: var(--Gray-757575, #757575);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  padding: 13px 21px;
+  /* 24px */
+}

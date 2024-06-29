@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { userStateAtom } from "../States/auth/auth";
 import { MainContent } from "../components/Styles";
 import { getCookie } from "../States/storage/Cookie";
-import LeftNavigation from "../components/LeftNavigation";
+import NavigationTree from "../components/navigationTree/NavigationTree";
 import PageNotFound from "../pages/99_error/PageNotFound";
 
 const ManageEmissionProduct = lazy(() =>
@@ -26,7 +26,7 @@ const EmissionSource = () => {
 
   return (
     <MainContent>
-      <LeftNavigation />
+      <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="product" element={<ManageEmissionProduct />} />
