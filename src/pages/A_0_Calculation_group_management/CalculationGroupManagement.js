@@ -33,8 +33,8 @@ const CalculationGroupManagement = () => {
 
   const handleAddGroup = () => {
     setNewGroups([
-      ...newGroups,
       { id: newGroups.length + groups.length + 1, name: "", remark: "" },
+      ...newGroups,
     ]);
   };
 
@@ -107,12 +107,12 @@ const CalculationGroupManagement = () => {
           <TableHeader>
             <StyledCheckbox onChange={handleSelectAll} />
             <HeaderItem>
-              <HeaderTitle variant="body2">No</HeaderTitle>
+              <HeaderTitle>No</HeaderTitle>
             </HeaderItem>
             <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
-              <HeaderTitle variant="body2">산정식그룹 ID</HeaderTitle>
-              <HeaderTitle variant="body2">산정식그룹명</HeaderTitle>
-              <HeaderTitle variant="body2">비고</HeaderTitle>
+              <HeaderTitle>산정식그룹 ID</HeaderTitle>
+              <HeaderTitle>산정식그룹명</HeaderTitle>
+              <HeaderTitle>비고</HeaderTitle>
             </Box>
           </TableHeader>
           {newGroups.map((newGroup, index) => (
@@ -128,32 +128,21 @@ const CalculationGroupManagement = () => {
             >
               <StyledCheckbox disabled />
               <HeaderItem>
-                <HeaderTitle variant="body2">
-                  {groups.length + index + 1}
-                </HeaderTitle>
+                <HeaderTitle>{groups.length + index + 1}</HeaderTitle>
               </HeaderItem>
               <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
                 <TextField
                   variant="outlined"
                   size="small"
                   value={newGroup.name}
+                  placeholder="산정식그룹명"
                   onChange={(e) => handleChange(e, "name", index)}
                   onKeyPress={(e) => handleSaveGroup(e, index)}
                   fullWidth
                   sx={{
-                    marginLeft: "270px",
                     maxWidth: "200px",
-                    marginBottom: "250px",
-                    maxHeight: "100px",
-                    borderRadius: "8px",
-                    border: "1px solid var(--Gray-eee, #EEE)",
-                    background: "var(--Gray-fff, #FFF)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    flex: "1 0 0",
-                    "& .MuiInputBase-input": {
-                      padding: "0",
+                    "& .MuiInputBase-root": {
+                      height: "30px",
                     },
                   }}
                 />
@@ -161,23 +150,14 @@ const CalculationGroupManagement = () => {
                   variant="outlined"
                   size="small"
                   value={newGroup.remark}
+                  placeholder="비고내용"
                   onChange={(e) => handleChange(e, "remark", index)}
                   onKeyPress={(e) => handleSaveGroup(e, index)}
                   fullWidth
                   sx={{
-                    maxHeight: "100px",
-                    marginLeft: "180px",
                     maxWidth: "350px",
-                    marginBottom: "250px",
-                    borderRadius: "8px",
-                    border: "1px solid var(--Gray-eee, #EEE)",
-                    background: "var(--Gray-fff, #FFF)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    flex: "1 0 0",
-                    "& .MuiInputBase-input": {
-                      padding: "0",
+                    "& .MuiInputBase-root": {
+                      height: "30px",
                     },
                   }}
                 />
@@ -196,7 +176,7 @@ const CalculationGroupManagement = () => {
               <Box
                 key={group.id}
                 sx={{
-                  maxWidth: "100%",
+                  maxHeight: "100%",
                   borderRadius: "8px",
                   border: "1px solid var(--Gray-eee, #EEE)",
                   background: "var(--Gray-fff, #FFF)",
@@ -212,16 +192,37 @@ const CalculationGroupManagement = () => {
                 <StyledCheckbox
                   checked={group.isSelected || false}
                   onChange={() => handleSelectGroup(group.id)}
+                  sx={{
+                    marginLeft: "15px",
+                  }}
                 />
                 <HeaderItem>
-                  <HeaderTitle variant="body2">
+                  <HeaderTitle>
                     {(currentPage - 1) * itemsPerPage + index + 1}
                   </HeaderTitle>
                 </HeaderItem>
                 <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
-                  <HeaderTitle variant="body2">{group.id}</HeaderTitle>
-                  <HeaderTitle variant="body2">{group.name}</HeaderTitle>
-                  <HeaderTitle variant="body2">{group.remark}</HeaderTitle>
+                  <HeaderTitle
+                    sx={{
+                      marginLeft: "30px",
+                    }}
+                  >
+                    {group.id}
+                  </HeaderTitle>
+                  <HeaderTitle
+                    sx={{
+                      marginLeft: "45px",
+                    }}
+                  >
+                    {group.name}
+                  </HeaderTitle>
+                  <HeaderTitle
+                    sx={{
+                      marginLeft: "60px",
+                    }}
+                  >
+                    {group.remark}
+                  </HeaderTitle>
                 </Box>
               </Box>
             ))
