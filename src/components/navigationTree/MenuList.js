@@ -1,4 +1,3 @@
-
 const MenuList = [
   {
     id: "S",
@@ -8,7 +7,7 @@ const MenuList = [
       {
         id: "S-1",
         name: "산정식그룹관리",
-        link: "/admin-formula",
+        link: "/admin-formula/CalculationGroupManagement",
       },
       {
         id: "S-2",
@@ -35,7 +34,7 @@ const MenuList = [
         name: "산정식규정등급관리",
         link: "/admin-formula",
       },
-    ]
+    ],
   },
   {
     id: "F",
@@ -45,14 +44,14 @@ const MenuList = [
       {
         id: "F-1",
         name: "배출활동연료매핑",
-        link: "/admin-fuel"
+        link: "/admin-fuel",
       },
       {
         id: "F-2",
         name: "연료비용",
-        link: "/admin-fuel"
-      }
-    ]
+        link: "/admin-fuel",
+      },
+    ],
   },
   {
     id: "U",
@@ -62,20 +61,20 @@ const MenuList = [
       {
         id: "U-1",
         name: "사용자정보관리",
-        link: "/admin-user"
+        link: "/admin-user",
       },
       {
         id: "U-2",
         name: "사용자접속현황",
-        link: "/admin-user"
+        link: "/admin-user",
       },
       {
         id: "U-3",
         name: "약관관리",
-        link: "/admin-user"
-      }
-    ]
-  }
+        link: "/admin-user",
+      },
+    ],
+  },
 ];
 
 export default MenuList;
