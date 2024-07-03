@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import CustomDataGrid from "../../../components/datagrid/CalculationGroupCustomDataGrid";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import { styled } from "@mui/material/styles";
 
 // 더미 데이터 정의
 export const parameterGroupListDummy = [
@@ -235,6 +236,20 @@ const ParameterGroupList = (props) => {
       sortable: false,
     },
   ];
+
+  // Checkbox 스타일 정의
+  const CustomCheckbox = styled(Checkbox)(({ theme }) => ({
+    width: 20,
+    height: 20,
+    "& svg": {
+      width: 20,
+      height: 20,
+      "& rect": {
+        fill: "white",
+        stroke: "#E5E5E5",
+      },
+    },
+  }));
   return (
     <CustomDataGrid
       apiRef={gridApiRef}
@@ -245,6 +260,9 @@ const ParameterGroupList = (props) => {
       rowSelectionModel={selectedRow}
       onRowSelectionModelChange={handleRowSelectionModelChange}
       onRowDoubleClick={handleRowDoubleClick}
+      components={{
+        BaseCheckbox: CustomCheckbox,
+      }}
     />
   );
 };
