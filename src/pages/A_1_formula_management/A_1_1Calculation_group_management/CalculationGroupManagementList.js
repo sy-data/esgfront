@@ -3,6 +3,7 @@ import CustomDataGrid from "../../../components/datagrid/CalculationGroupCustomD
 import { Select, MenuItem } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
+// 더미 데이터 정의
 export const parameterGroupListDummy = [
   { groupId: "0001", groupName: "산정식그룹" },
   { groupId: "0002", groupName: "활동량" },
@@ -19,6 +20,7 @@ export const parameterGroupListDummy = [
 ];
 
 const ParameterGroupList = (props) => {
+  // props로 전달된 값들 추출
   const {
     gridApiRef,
     data,
@@ -29,8 +31,10 @@ const ParameterGroupList = (props) => {
     setEditRowId,
   } = props;
 
+  // 비고(description) 필드의 상태 관리
   const [activeDescription, setActiveDescription] = useState({});
 
+  // 그룹명을 선택하는 함수
   const handleSelectGroupName = (id, value) => {
     setData((prevState) =>
       prevState.map((row) => {
@@ -49,6 +53,7 @@ const ParameterGroupList = (props) => {
     );
   };
 
+  // 비고(description) 필드를 변경하는 함수
   const handleDescriptionChange = (id, value) => {
     setActiveDescription((prevState) => ({
       ...prevState,
@@ -56,6 +61,7 @@ const ParameterGroupList = (props) => {
     }));
   };
 
+  // 비고(description) 필드의 변경을 블러 이벤트 시 반영하는 함수
   const handleDescriptionBlur = (id) => {
     setData((prevState) =>
       prevState.map((row) => {
@@ -75,6 +81,7 @@ const ParameterGroupList = (props) => {
     });
   };
 
+  // 엔터 키를 누를 때 비고(description) 필드를 저장하고 블러 이벤트 발생
   const handleDescriptionKeyPress = (id, event) => {
     if (event.key === "Enter") {
       handleDescriptionBlur(id);
@@ -82,6 +89,7 @@ const ParameterGroupList = (props) => {
     }
   };
 
+  // 행 선택 모델이 변경되었을 때의 처리 함수
   const handleRowSelectionModelChange = (rowIds) => {
     const isEditRow = rowIds[0] === editRowId;
 
@@ -90,10 +98,12 @@ const ParameterGroupList = (props) => {
     }
   };
 
+  // 행을 더블 클릭했을 때 편집 모드로 변경하는 함수
   const handleRowDoubleClick = (params) => {
     setEditRowId(params.row.id);
   };
 
+  // 데이터 그리드의 컬럼 정의
   const columns = [
     {
       field: "no",

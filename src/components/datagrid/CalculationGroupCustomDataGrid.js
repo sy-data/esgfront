@@ -9,12 +9,14 @@ import { styled } from "@mui/material";
 import Pagination from "./CalculationGroupPagination";
 import { DataGrid } from "@mui/x-data-grid";
 
+// 페이지네이션이 없는 DataGrid 스타일 정의
 const NoPaginationDataGrid = styled(DataGrid)({
   "& .MuiDataGrid-footerContainer": {
     display: "none",
   },
 });
 
+// 테이블 컨테이너 스타일 정의
 const TableContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
@@ -22,26 +24,30 @@ const TableContainer = styled("div")({
 });
 
 const CustomDataGrid = (props, ref) => {
-  const { data, pageSize, ...otherProps } = props;
-  const [rows, setRows] = useState([]);
-  const [focusRow, setFocusRow] = useState(null);
-  const paginationRef = useRef(null);
+  const { data, pageSize, ...otherProps } = props; // props에서 data와 pageSize를 추출
+  const [rows, setRows] = useState([]); // 현재 페이지에 표시될 행 상태
+  const [focusRow, setFocusRow] = useState(null); // 포커스가 설정될 행 상태
+  const paginationRef = useRef(null); // 페이지네이션 참조 생성
 
+  // 부모 컴포넌트에서 호출할 수 있는 함수들 정의
   useImperativeHandle(ref, () => ({
     focusRow: (row) => {
+      // 만약 현재 페이지에 포커스할 행이 존재하면 포커스 설정
       if (rows.map((v) => v.id).includes(row.id)) {
         props.apiRef.current.startRowEditMode({ id: row.id });
         props.apiRef.current.setCellFocus(row.id, "name");
       } else {
+        // 포커스를 설정하기 위해 페이지를 변경해야 하는 경우
         paginationRef.current.changePage(Math.ceil(row.index / pageSize));
         setFocusRow(row);
       }
     },
     changeToFirstPage: () => {
-      paginationRef.current.changePage(1);
+      paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
     },
   }));
 
+  // 포커스 행이 변경된 후 포커스를 설정하는 효과
   useEffect(() => {
     if (focusRow) {
       props.apiRef.current.startRowEditMode({ id: focusRow.id });
