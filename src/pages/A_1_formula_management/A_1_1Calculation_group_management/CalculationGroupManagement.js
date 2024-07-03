@@ -1,243 +1,66 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Typography,
-  Pagination,
-  TextField,
-} from "@mui/material";
-import {
-  Container,
-  ContentContainer,
-  HeaderContainer,
-  StyledTypography,
-  ButtonGroup,
-  AddButton,
-  DeleteButton,
-  TableContainer,
-  TableHeader,
-  StyledCheckbox,
-  HeaderItem,
-  HeaderTitle,
-  TableContent,
-  ContentMessage,
-} from "./StyledComponents";
-import Icon from "./Icon";
+import React, { useEffect, useState } from "react";
+import { ContentWithTitie } from "../../../components/Styles";
+import CalculationGroupManagementList, {
+  parameterGroupListDummy,
+} from "./CalculationGroupManagementList";
+import CalculationGroupManagementTableTitle from "./CalculationGroupManagementTableTitle";
+import { useGridApiRef } from "@mui/x-data-grid";
 
-const CalculationGroupManagement = () => {
-  const [groups, setGroups] = useState([]);
-  const [newGroups, setNewGroups] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
-
-  const handleAddGroup = () => {
-    setNewGroups([
-      { id: newGroups.length + groups.length + 1, name: "", remark: "" },
-      ...newGroups,
-    ]);
+const dummyData = Array.from({ length: 50 }, (_, index) => {
+  const randomGroup = parameterGroupListDummy[Math.floor(Math.random() * 12)];
+  return {
+    no: index + 1,
+    id: index + 1,
+    groupId: randomGroup.groupId,
+    groupName: randomGroup.groupName,
+    description: "1번 그룹",
   };
+}).reverse();
 
-  const handleSaveGroup = (event, index) => {
-    if (event.key === "Enter") {
-      const newGroup = newGroups[index];
-      // 백엔드 API를 호출하여 새 그룹을 저장합니다.
-      // API 호출이 성공했다고 가정하고 로컬 상태를 업데이트합니다.
-      setGroups([...groups, newGroup]);
-      setNewGroups(newGroups.filter((_, i) => i !== index));
+/**
+ * A_1_4. 파라미터 그룹 관리
+ */
+const ParameterGroupManagement = () => {
+  const gridApiRef = useGridApiRef();
+
+  const [data, setData] = useState(dummyData);
+  const [selectedRow, setSelectedRow] = useState([]);
+  // id 가 -1 이면 신규 행 추가
+  const [editRowId, setEditRowId] = useState(null);
+
+  // 수정할 행이 선택되면 기존에 체크되어있던 체크박스 해제
+  useEffect(() => {
+    if (editRowId !== null) {
+      setSelectedRow([]);
     }
-  };
+  }, [editRowId]);
 
-  const handleChange = (event, field, index) => {
-    const updatedGroups = [...newGroups];
-    updatedGroups[index] = {
-      ...updatedGroups[index],
-      [field]: event.target.value,
-    };
-    setNewGroups(updatedGroups);
-  };
-
-  const handleSelectAll = (event) => {
-    const isChecked = event.target.checked;
-    setGroups((prevGroups) =>
-      prevGroups.map((group) => ({ ...group, isSelected: isChecked }))
-    );
-  };
-
-  const handleSelectGroup = (id) => {
-    setGroups((prevGroups) =>
-      prevGroups.map((group) =>
-        group.id === id ? { ...group, isSelected: !group.isSelected } : group
-      )
-    );
-  };
-
-  const handleDeleteGroups = () => {
-    setGroups(groups.filter((group) => !group.isSelected));
-  };
-
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
-
-  const paginatedGroups = groups.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // 체크박스가 선택되면 수정하던 행 저장하고 수정모드 해제
+  useEffect(() => {
+    if (selectedRow.length > 0) {
+      setEditRowId(null);
+    }
+  }, [selectedRow]);
 
   return (
-    <Container>
-      <ContentContainer>
-        <HeaderContainer>
-          <StyledTypography>산정식그룹 기본정보</StyledTypography>
-          <ButtonGroup>
-            <AddButton variant="contained" onClick={handleAddGroup}>
-              그룹 추가
-            </AddButton>
-            <DeleteButton
-              variant="contained"
-              disabled={!groups.some((group) => group.isSelected)}
-              onClick={handleDeleteGroups}
-            >
-              삭제
-            </DeleteButton>
-          </ButtonGroup>
-        </HeaderContainer>
-        <TableContainer>
-          <TableHeader>
-            <StyledCheckbox onChange={handleSelectAll} />
-            <HeaderItem>
-              <HeaderTitle>No</HeaderTitle>
-            </HeaderItem>
-            <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
-              <HeaderTitle>산정식그룹 ID</HeaderTitle>
-              <HeaderTitle>산정식그룹명</HeaderTitle>
-              <HeaderTitle>비고</HeaderTitle>
-            </Box>
-          </TableHeader>
-          {newGroups.map((newGroup, index) => (
-            <Box
-              key={`new-${index}`}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                borderBottom: "1px solid #eaeaea",
-                height: "42px",
-                padding: 16,
-              }}
-            >
-              <StyledCheckbox disabled />
-              <HeaderItem>
-                <HeaderTitle>{groups.length + index + 1}</HeaderTitle>
-              </HeaderItem>
-              <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  value={newGroup.name}
-                  placeholder="산정식그룹명"
-                  onChange={(e) => handleChange(e, "name", index)}
-                  onKeyPress={(e) => handleSaveGroup(e, index)}
-                  fullWidth
-                  sx={{
-                    maxWidth: "200px",
-                    "& .MuiInputBase-root": {
-                      height: "30px",
-                    },
-                  }}
-                />
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  value={newGroup.remark}
-                  placeholder="비고내용"
-                  onChange={(e) => handleChange(e, "remark", index)}
-                  onKeyPress={(e) => handleSaveGroup(e, index)}
-                  fullWidth
-                  sx={{
-                    maxWidth: "350px",
-                    "& .MuiInputBase-root": {
-                      height: "30px",
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
-          ))}
-          {paginatedGroups.length === 0 && newGroups.length === 0 ? (
-            <TableContent>
-              <Icon />
-              <ContentMessage variant="body2">
-                조회된 정보가 없습니다
-              </ContentMessage>
-            </TableContent>
-          ) : (
-            paginatedGroups.map((group, index) => (
-              <Box
-                key={group.id}
-                sx={{
-                  maxHeight: "100%",
-                  borderRadius: "8px",
-                  border: "1px solid var(--Gray-eee, #EEE)",
-                  background: "var(--Gray-fff, #FFF)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  flex: "1 0 0",
-                  "& .MuiInputBase-input": {
-                    padding: "0",
-                  },
-                }}
-              >
-                <StyledCheckbox
-                  checked={group.isSelected || false}
-                  onChange={() => handleSelectGroup(group.id)}
-                  sx={{
-                    marginLeft: "15px",
-                  }}
-                />
-                <HeaderItem>
-                  <HeaderTitle>
-                    {(currentPage - 1) * itemsPerPage + index + 1}
-                  </HeaderTitle>
-                </HeaderItem>
-                <Box sx={{ flex: 1, display: "flex", gap: 8 }}>
-                  <HeaderTitle
-                    sx={{
-                      marginLeft: "30px",
-                    }}
-                  >
-                    {group.id}
-                  </HeaderTitle>
-                  <HeaderTitle
-                    sx={{
-                      marginLeft: "45px",
-                    }}
-                  >
-                    {group.name}
-                  </HeaderTitle>
-                  <HeaderTitle
-                    sx={{
-                      marginLeft: "60px",
-                    }}
-                  >
-                    {group.remark}
-                  </HeaderTitle>
-                </Box>
-              </Box>
-            ))
-          )}
-        </TableContainer>
-      </ContentContainer>
-      <Pagination
-        count={Math.ceil(groups.length / itemsPerPage)}
-        page={currentPage}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="primary"
+    <ContentWithTitie>
+      <CalculationGroupManagementTableTitle
+        setData={setData}
+        selectedRow={selectedRow}
+        editRowId={editRowId}
+        setEditRowId={setEditRowId}
       />
-    </Container>
+      <CalculationGroupManagementList
+        gridApiRef={gridApiRef}
+        data={data}
+        setData={setData}
+        selectedRow={selectedRow}
+        setSelectedRow={setSelectedRow}
+        editRowId={editRowId}
+        setEditRowId={setEditRowId}
+      />
+    </ContentWithTitie>
   );
 };
 
-export default CalculationGroupManagement;
+export default ParameterGroupManagement;
