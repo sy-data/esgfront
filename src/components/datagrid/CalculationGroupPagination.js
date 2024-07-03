@@ -26,6 +26,7 @@ const NonStyledButton = styled("button")({
   background: "none",
   border: "none",
   cursor: "pointer",
+  marginBottom: "20px",
   "&:disabled": {
     color: "#808080",
     cursor: "default",
