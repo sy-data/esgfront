@@ -1,14 +1,12 @@
-import {
+import React, {
   useState,
   useEffect,
   useRef,
   useImperativeHandle,
   forwardRef,
 } from "react";
-
-import Pagination from "./Pagination.js";
-
 import { styled } from "@mui/material";
+import Pagination from "./CalculationGroupPagination";
 import { DataGrid } from "@mui/x-data-grid";
 
 const NoPaginationDataGrid = styled(DataGrid)({
@@ -35,21 +33,22 @@ const CustomDataGrid = (props, ref) => {
         props.apiRef.current.startRowEditMode({ id: row.id });
         props.apiRef.current.setCellFocus(row.id, "name");
       } else {
-        // 포커스를 맞추기 위해 페이지를 변경해야 하는 경우
         paginationRef.current.changePage(Math.ceil(row.index / pageSize));
         setFocusRow(row);
       }
     },
+    changeToFirstPage: () => {
+      paginationRef.current.changePage(1);
+    },
   }));
 
-  // 페이지 변경 후 포커스 설정
   useEffect(() => {
     if (focusRow) {
       props.apiRef.current.startRowEditMode({ id: focusRow.id });
       props.apiRef.current.setCellFocus(focusRow.id, "name");
       setFocusRow(null);
     }
-  }, [rows]);
+  }, [focusRow, rows]);
 
   return (
     <TableContainer>

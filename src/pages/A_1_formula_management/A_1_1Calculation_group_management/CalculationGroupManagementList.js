@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
+import CustomDataGrid from "../../../components/datagrid/CalculationGroupCustomDataGrid";
 import { Select, MenuItem } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
@@ -29,9 +29,8 @@ const ParameterGroupList = (props) => {
     setEditRowId,
   } = props;
 
-  const [descriptionText, setDescriptionText] = useState("");
+  const [activeDescription, setActiveDescription] = useState({});
 
-  // 그룹명 선택
   const handleSelectGroupName = (id, value) => {
     setData((prevState) =>
       prevState.map((row) => {
@@ -50,41 +49,113 @@ const ParameterGroupList = (props) => {
     );
   };
 
-  // 비고 입력
-  const handleChangeText = (id, value) => {
-    setDescriptionText(value);
+  const handleDescriptionChange = (id, value) => {
+    setActiveDescription((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  const handleDescriptionBlur = (id) => {
     setData((prevState) =>
       prevState.map((row) => {
         if (row.id === id) {
-          return { ...row, description: value };
+          return {
+            ...row,
+            description: activeDescription[id] || row.description,
+          };
         }
         return row;
       })
     );
+    setActiveDescription((prevState) => {
+      const newState = { ...prevState };
+      delete newState[id];
+      return newState;
+    });
   };
 
-  // row 클릭
+  const handleDescriptionKeyPress = (id, event) => {
+    if (event.key === "Enter") {
+      handleDescriptionBlur(id);
+      event.target.blur();
+    }
+  };
+
   const handleRowSelectionModelChange = (rowIds) => {
     const isEditRow = rowIds[0] === editRowId;
-    // 현재 수정중이 아닌 행을 선택했을때만 체크박스 선택
+
     if (!isEditRow) {
       setSelectedRow(rowIds);
     }
   };
 
-  // row 더블 클릭
   const handleRowDoubleClick = (params) => {
     setEditRowId(params.row.id);
-    setDescriptionText(params.row.description);
   };
 
   const columns = [
-    { field: "no", headerName: "No", flex: 1, sortable: false },
-    { field: "groupId", headerName: "그룹ID", flex: 2, sortable: false },
+    {
+      field: "no",
+      headerName: "No",
+      flex: 1,
+      sortable: false,
+      renderHeader: () => (
+        <span
+          style={{
+            color: "var(--Gray-757575, #757575)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "13px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%" /* 19.5px */,
+            letterSpacing: "-0.26px",
+          }}
+        >
+          No
+        </span>
+      ),
+    },
+    {
+      field: "groupId",
+      headerName: "산정식ID",
+      flex: 3,
+      sortable: false,
+      renderHeader: () => (
+        <span
+          style={{
+            color: "var(--Gray-757575, #757575)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "13px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%" /* 19.5px */,
+            letterSpacing: "-0.26px",
+          }}
+        >
+          산정식 ID
+        </span>
+      ),
+    },
     {
       field: "groupName",
-      headerName: "그룹명",
-      flex: 10,
+      headerName: "산정식그룹명",
+      flex: 4,
+      renderHeader: () => (
+        <span
+          style={{
+            color: "var(--Gray-757575, #757575)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "13px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%" /* 19.5px */,
+            letterSpacing: "-0.26px",
+          }}
+        >
+          산정식그룹명
+        </span>
+      ),
       renderCell: (params) => {
         const isEditRow = params.row.id === editRowId;
         const isAddRow = editRowId === -1 && params.row.id === data[0].id;
@@ -113,21 +184,38 @@ const ParameterGroupList = (props) => {
       field: "description",
       headerName: "비고",
       flex: 3,
+      renderHeader: () => (
+        <span
+          style={{
+            color: "var(--Gray-757575, #757575)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "13px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%" /* 19.5px */,
+            letterSpacing: "-0.26px",
+          }}
+        >
+          비고
+        </span>
+      ),
       renderCell: (params) => {
         const isEditRow = params.row.id === editRowId;
         const isAddRow = editRowId === -1 && params.row.id === data[0].id;
         if (isEditRow || isAddRow) {
-          if (isAddRow) {
-            setDescriptionText("");
-          }
           return (
             <TextField
               type={"text"}
-              value={descriptionText}
+              value={activeDescription[params.id] || params.row.description}
               onChange={(event) =>
-                handleChangeText(params.id, event.target.value)
+                handleDescriptionChange(params.id, event.target.value)
               }
               placeholder={"비고내용"}
+              onKeyPress={(event) =>
+                handleDescriptionKeyPress(params.id, event)
+              }
+              onBlur={() => handleDescriptionBlur(params.id)}
+              onClick={(event) => event.stopPropagation()}
             />
           );
         } else {
@@ -137,7 +225,6 @@ const ParameterGroupList = (props) => {
       sortable: false,
     },
   ];
-
   return (
     <CustomDataGrid
       apiRef={gridApiRef}
