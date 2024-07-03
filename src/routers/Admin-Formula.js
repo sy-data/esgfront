@@ -5,7 +5,9 @@ import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
 
 const CalculationGroupManagement = lazy(() =>
-  import("../pages/A_0_Calculation_group_management/CalculationGroupManagement")
+  import(
+    "../pages/A_1_formula_management/A_1_1Calculation_group_management/CalculationGroupManagement"
+  )
 );
 
 const ParameterGroupManagement = lazy(() =>
