@@ -54,7 +54,7 @@ const CustomDataGrid = (props, ref) => {
       props.apiRef.current.setCellFocus(focusRow.id, "name");
       setFocusRow(null);
     }
-  }, [focusRow, rows]);
+  }, [focusRow, props.apiRef, rows]);
 
   return (
     <TableContainer>
