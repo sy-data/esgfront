@@ -107,7 +107,7 @@ const ParameterGroupTableTitle = (props) => {
 
     setEditRowId(-1); // 편집 모드 설정
     if (customDataGridRef.current) {
-      console.log("Changing to first page from handleAddRow");
+      console.log("HandleAddRow에서 첫 번째 페이지로 변경");
       customDataGridRef.current.changeToFirstPage(); // 첫 번째 페이지로 변경
     }
   };
