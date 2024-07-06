@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomDataGrid from "./CalculationGroupCustomDataGrid";
 import { Select, MenuItem, Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -21,7 +21,6 @@ export const parameterGroupListDummy = [
 ];
 
 const ParameterGroupList = (props) => {
-  // props로 전달된 값들 추출
   const {
     gridApiRef,
     data,
@@ -32,8 +31,8 @@ const ParameterGroupList = (props) => {
     setEditRowId,
   } = props;
 
-  // 비고(description) 필드의 상태 관리
-  const [activeDescription, setActiveDescription] = useState({});
+  // 각 행의 편집 상태 관리
+  const [editingDescriptions, setEditingDescriptions] = useState({});
 
   // 그룹명을 선택하는 함수
   const handleSelectGroupName = (id, value) => {
@@ -56,7 +55,7 @@ const ParameterGroupList = (props) => {
 
   // 비고(description) 필드를 변경하는 함수
   const handleDescriptionChange = (id, value) => {
-    setActiveDescription((prevState) => ({
+    setEditingDescriptions((prevState) => ({
       ...prevState,
       [id]: value,
     }));
@@ -69,13 +68,13 @@ const ParameterGroupList = (props) => {
         if (row.id === id) {
           return {
             ...row,
-            description: activeDescription[id] || row.description,
+            description: editingDescriptions[id] || row.description,
           };
         }
         return row;
       })
     );
-    setActiveDescription((prevState) => {
+    setEditingDescriptions((prevState) => {
       const newState = { ...prevState };
       delete newState[id];
       return newState;
@@ -85,8 +84,9 @@ const ParameterGroupList = (props) => {
   // 엔터 키를 누를 때 비고(description) 필드를 저장하고 블러 이벤트 발생
   const handleDescriptionKeyPress = (id, event) => {
     if (event.key === "Enter") {
+      event.preventDefault(); // 엔터 키 기본 동작 방지
       handleDescriptionBlur(id);
-      event.target.blur();
+      setEditRowId(null); // 엔터를 누르면 편집 모드 해제
     }
   };
 
@@ -102,7 +102,22 @@ const ParameterGroupList = (props) => {
   // 행을 더블 클릭했을 때 편집 모드로 변경하는 함수
   const handleRowDoubleClick = (params) => {
     setEditRowId(params.row.id);
+    setEditingDescriptions((prevState) => ({
+      ...prevState,
+      [params.row.id]: params.row.description || "",
+    }));
   };
+
+  useEffect(() => {
+    if (editRowId !== null) {
+      const description =
+        data.find((row) => row.id === editRowId)?.description || "";
+      setEditingDescriptions((prevState) => ({
+        ...prevState,
+        [editRowId]: description,
+      }));
+    }
+  }, [editRowId, data]);
 
   // 데이터 그리드의 컬럼 정의
   const columns = [
@@ -217,7 +232,11 @@ const ParameterGroupList = (props) => {
           return (
             <TextField
               type={"text"}
-              value={activeDescription[params.id] || params.row.description}
+              value={
+                editingDescriptions[params.id] !== undefined
+                  ? editingDescriptions[params.id]
+                  : params.value || ""
+              }
               onChange={(event) =>
                 handleDescriptionChange(params.id, event.target.value)
               }
@@ -248,6 +267,7 @@ const ParameterGroupList = (props) => {
       },
     },
   }));
+
   return (
     <CustomDataGrid
       apiRef={gridApiRef}
