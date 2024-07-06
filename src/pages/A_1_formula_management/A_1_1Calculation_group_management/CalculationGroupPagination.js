@@ -42,21 +42,19 @@ const SelectedButton = styled(NonStyledButton)({
 
 // Pagination 컴포넌트 정의
 const Pagination = (props, ref) => {
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 정의
+  const { data = [], pageSize, setRows } = props; // data의 기본값을 빈 배열로 설정
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 정의
 
   useEffect(() => {
     setCurrentPage(1); // 컴포넌트가 마운트될 때 현재 페이지를 1로 설정
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     // 현재 페이지가 변경될 때마다 해당 페이지에 해당하는 데이터를 설정
-    props.setRows(
-      props.data.slice(
-        (currentPage - 1) * props.pageSize,
-        currentPage * props.pageSize
-      )
-    );
-  }, [currentPage, props, props.data]);
+    if (typeof setRows === "function") {
+      setRows(data.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+    }
+  }, [currentPage, data, pageSize, setRows]);
 
   // 부모 컴포넌트에서 접근할 수 있는 함수들 정의
   useImperativeHandle(ref, () => ({
@@ -66,11 +64,11 @@ const Pagination = (props, ref) => {
 
   // 총 페이지 수 계산
   const totalPageNum = useMemo(() => {
-    return Math.ceil(props.data.length / props.pageSize);
-  }, [props.data.length, props.pageSize]);
+    return Math.ceil(data.length / pageSize);
+  }, [data.length, pageSize]);
 
   return (
-    props.data.length > props.pageSize && ( // 데이터가 페이지 크기보다 클 경우 페이지네이션을 렌더링
+    data.length > pageSize && ( // 데이터가 페이지 크기보다 클 경우 페이지네이션을 렌더링
       <PaginationContainer>
         <NonStyledButton
           onClick={() => setCurrentPage(currentPage - 1)} // 이전 페이지로 이동

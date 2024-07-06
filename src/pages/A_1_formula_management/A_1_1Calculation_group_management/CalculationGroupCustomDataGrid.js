@@ -6,7 +6,7 @@ import React, {
   forwardRef,
 } from "react";
 import { styled } from "@mui/material";
-import Pagination from "./CalculationGroupPagenation";
+import Pagination from "./CalculationGroupPagination";
 import { DataGrid } from "@mui/x-data-grid";
 
 // 페이지네이션이 없는 DataGrid 스타일 정의
@@ -24,7 +24,7 @@ const TableContainer = styled("div")({
 });
 
 const CustomDataGrid = (props, ref) => {
-  const { data, pageSize, ...otherProps } = props; // props에서 data와 pageSize를 추출
+  const { data = [], pageSize, ...otherProps } = props; // props에서 data와 pageSize를 추출하며, data의 기본값을 빈 배열로 설정
   const [rows, setRows] = useState([]); // 현재 페이지에 표시될 행 상태
   const [focusRow, setFocusRow] = useState(null); // 포커스가 설정될 행 상태
   const paginationRef = useRef(null); // 페이지네이션 참조 생성
@@ -43,7 +43,10 @@ const CustomDataGrid = (props, ref) => {
       }
     },
     changeToFirstPage: () => {
-      paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
+      if (paginationRef.current) {
+        console.log("Changing to first page");
+        paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
+      }
     },
   }));
 
@@ -54,7 +57,12 @@ const CustomDataGrid = (props, ref) => {
       props.apiRef.current.setCellFocus(focusRow.id, "name");
       setFocusRow(null);
     }
-  }, [focusRow, props.apiRef, rows]);
+  }, [focusRow, props.apiRef]);
+
+  // 데이터가 변경될 때마다 rows를 설정하는 useEffect 훅
+  useEffect(() => {
+    setRows(data.slice(0, pageSize));
+  }, [data, pageSize]);
 
   return (
     <TableContainer>

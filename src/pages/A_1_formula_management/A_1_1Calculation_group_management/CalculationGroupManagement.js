@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ContentWithTitie } from "../../../components/Styles";
 import CalculationGroupManagementList, {
   parameterGroupListDummy,
 } from "./CalculationGroupManagementList";
 import CalculationGroupManagementTableTitle from "./CalculationGroupManagementTableTitle";
 import { useGridApiRef } from "@mui/x-data-grid";
+import CustomDataGrid from "./CalculationGroupCustomDataGrid";
 
 // 더미 데이터 생성
 const dummyData = Array.from({ length: 50 }, (_, index) => {
@@ -23,6 +24,7 @@ const ParameterGroupManagement = () => {
   const [data, setData] = useState(dummyData); // 데이터 상태 관리
   const [selectedRow, setSelectedRow] = useState([]); // 선택된 행 상태 관리
   const [editRowId, setEditRowId] = useState(null); // 편집 중인 행 ID 상태 관리
+  const customDataGridRef = useRef(null);
 
   // 편집 모드가 설정되면 선택된 행을 초기화하는 효과
   useEffect(() => {
@@ -45,6 +47,7 @@ const ParameterGroupManagement = () => {
         selectedRow={selectedRow}
         editRowId={editRowId}
         setEditRowId={setEditRowId}
+        customDataGridRef={customDataGridRef}
       />
       <CalculationGroupManagementList
         gridApiRef={gridApiRef}

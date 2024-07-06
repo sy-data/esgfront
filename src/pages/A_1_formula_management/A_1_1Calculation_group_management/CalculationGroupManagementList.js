@@ -222,9 +222,7 @@ const ParameterGroupList = (props) => {
                 handleDescriptionChange(params.id, event.target.value)
               }
               placeholder={"비고내용"}
-              onKeyPress={(event) =>
-                handleDescriptionKeyPress(params.id, event)
-              }
+              onKeyDown={(event) => handleDescriptionKeyPress(params.id, event)}
               onBlur={() => handleDescriptionBlur(params.id)}
               onClick={(event) => event.stopPropagation()}
             />
