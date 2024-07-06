@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Button,
   Dialog,
@@ -9,6 +9,7 @@ import {
   styled,
 } from "@mui/material";
 import { parameterGroupListDummy } from "./CalculationGroupManagementList";
+import Pagination from "./CalculationGroupPagination";
 
 // 스타일이 적용된 AddButton 컴포넌트 정의
 const AddButton = styled(Button)({
@@ -82,7 +83,8 @@ const ButtonContainer = styled("div")({
 
 const ParameterGroupTableTitle = (props) => {
   // props로 전달된 값들 추출
-  const { setData, selectedRow, editRowId, setEditRowId } = props;
+  const { setData, selectedRow, editRowId, setEditRowId, customDataGridRef } =
+    props;
 
   // 삭제 다이얼로그의 열림 상태 관리
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -90,7 +92,7 @@ const ParameterGroupTableTitle = (props) => {
   // 행 추가 함수
   const handleAddRow = () => {
     setData((prevState) => {
-      const newNo = prevState[0].id + 1; // 새로운 행의 번호 계산
+      const newNo = prevState.length ? prevState[0].id + 1 : 1; // 새로운 행의 번호 계산
 
       const defaultGroup = parameterGroupListDummy[0]; // 기본 그룹 설정
       const newRow = {
@@ -104,6 +106,10 @@ const ParameterGroupTableTitle = (props) => {
     });
 
     setEditRowId(-1); // 편집 모드 설정
+    if (customDataGridRef.current) {
+      console.log("Changing to first page from handleAddRow");
+      customDataGridRef.current.changeToFirstPage(); // 첫 번째 페이지로 변경
+    }
   };
 
   // 삭제 버튼 클릭 처리 함수
@@ -139,6 +145,8 @@ const ParameterGroupTableTitle = (props) => {
         selectedRow={selectedRow}
         setData={setData}
       />
+
+      <Pagination {...props} />
     </>
   );
 };
@@ -151,9 +159,9 @@ const DeleteDialog = (props) => {
 
   // 삭제 확인 버튼 클릭 처리 함수
   const handleDeleteConfirmButtonClick = () => {
-    setData(
-      (prevState) => prevState.filter((v) => !selectedRow.includes(v.id)) // 선택된 행 삭제
-    );
+    setData((prevState) =>
+      prevState.filter((v) => !selectedRow.includes(v.id))
+    ); // 선택된 행 삭제
     handleCloseDialog(); // 다이얼로그 닫기
   };
 
