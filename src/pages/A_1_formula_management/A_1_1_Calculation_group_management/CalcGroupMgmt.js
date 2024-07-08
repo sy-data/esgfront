@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { ContentWithTitie } from "../../../components/Styles";
 import CalculationGroupManagementList, {
   parameterGroupListDummy,
-} from "./CalculationGroupManagementList";
-import CalculationGroupManagementTableTitle from "./CalculationGroupManagementTableTitle";
+} from "./CalcGroupList";
+import CalculationGroupManagementTableTitle from "./CalcGroupTableTitle";
 import { useGridApiRef } from "@mui/x-data-grid";
-import CustomDataGrid from "./CalculationGroupCustomDataGrid";
+import CustomDataGrid from "./CalcGroupCustomDataGrid";
 
 // 더미 데이터 생성
 const dummyData = Array.from({ length: 50 }, (_, index) => {

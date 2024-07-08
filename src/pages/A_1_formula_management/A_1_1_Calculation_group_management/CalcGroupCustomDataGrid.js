@@ -6,7 +6,7 @@ import React, {
   forwardRef,
 } from "react";
 import { styled } from "@mui/material";
-import Pagination from "./CalculationGroupPagination";
+import Pagination from "./CalcGroupPagination";
 import { DataGrid } from "@mui/x-data-grid";
 
 // 페이지네이션이 없는 DataGrid 스타일 정의
