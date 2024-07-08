@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from "react";
-import CustomDataGrid from "./CalculationGroupCustomDataGrid";
+import CustomDataGrid from "./CalcGroupCustomDataGrid";
 import { Select, MenuItem, Checkbox, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 

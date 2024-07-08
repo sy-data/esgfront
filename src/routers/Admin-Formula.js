@@ -6,7 +6,13 @@ import NavigationTree from "../components/navigationTree/NavigationTree";
 
 const CalculationGroupManagement = lazy(() =>
   import(
-    "../pages/A_1_formula_management/A_1_1Calculation_group_management/CalculationGroupManagement"
+    "../pages/A_1_formula_management/A_1_1_Calculation_group_management/CalcGroupMgmt"
+  )
+);
+
+const RegistrationCalculationFormulaManagement = lazy(() =>
+  import(
+    "../pages/A_1_formula_management/A_1_2_RegistrationCalculationFormula/RegCalcFormulaMgmt"
   )
 );
 
@@ -35,6 +41,11 @@ const AdminFormula = () => {
             exact
             path="CalculationGroupManagement"
             element={<CalculationGroupManagement />}
+          />
+          <Route
+            exact
+            path="RegistrationCalculationFormulaManagement"
+            element={<RegistrationCalculationFormulaManagement />}
           />
           <Route
             exact

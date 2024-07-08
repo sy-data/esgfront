@@ -8,8 +8,8 @@ import {
   DialogTitle,
   styled,
 } from "@mui/material";
-import { parameterGroupListDummy } from "./CalculationGroupManagementList";
-import Pagination from "./CalculationGroupPagination";
+import { parameterGroupListDummy } from "./CalcGroupList";
+import Pagination from "./CalcGroupPagination";
 
 // 스타일이 적용된 AddButton 컴포넌트 정의
 const AddButton = styled(Button)({
