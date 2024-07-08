@@ -8,7 +8,7 @@ import {
   DialogTitle,
   styled,
 } from "@mui/material";
-import { parameterGroupListDummy } from "./CalcGroupList";
+import { parameterGroupListDummy } from "./constants";
 import Pagination from "./CalcGroupPagination";
 
 // 스타일이 적용된 AddButton 컴포넌트 정의
