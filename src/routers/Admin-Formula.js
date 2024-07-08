@@ -4,13 +4,13 @@ import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
 
-const CalculationGroupManagement = lazy(() =>
+const CalcGroupMgmt = lazy(() =>
   import(
     "../pages/A_1_formula_management/A_1_1_Calculation_group_management/CalcGroupMgmt"
   )
 );
 
-const RegistrationCalculationFormulaManagement = lazy(() =>
+const RegCalcFormulaMgmt = lazy(() =>
   import(
     "../pages/A_1_formula_management/A_1_2_RegistrationCalculationFormula/RegCalcFormulaMgmt"
   )
@@ -37,15 +37,11 @@ const AdminFormula = () => {
       <NavigationTree />
       <Suspense fallback={"loading"}>
         <Routes>
+          <Route exact path="CalcGroupMgmt" element={<CalcGroupMgmt />} />
           <Route
             exact
-            path="CalculationGroupManagement"
-            element={<CalculationGroupManagement />}
-          />
-          <Route
-            exact
-            path="RegistrationCalculationFormulaManagement"
-            element={<RegistrationCalculationFormulaManagement />}
+            path="RegCalcFormulaMgmt"
+            element={<RegCalcFormulaMgmt />}
           />
           <Route
             exact
