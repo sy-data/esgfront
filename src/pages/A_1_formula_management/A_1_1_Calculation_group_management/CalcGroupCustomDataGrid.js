@@ -12,14 +12,14 @@ import { DataGrid } from "@mui/x-data-grid";
 // 페이지네이션이 없는 DataGrid 스타일 정의
 const NoPaginationDataGrid = styled(DataGrid)({
   "& .MuiDataGrid-footerContainer": {
-    display: "none",
+    display: "none", // DataGrid의 footerContainer를 숨김
   },
 });
 
 // 테이블 컨테이너 스타일 정의
 const TableContainer = styled("div")({
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "column", // 세로 방향으로 정렬
   gap: "7px",
 });
 
@@ -34,17 +34,17 @@ const CustomDataGrid = (props, ref) => {
     focusRow: (row) => {
       // 만약 현재 페이지에 포커스할 행이 존재하면 포커스 설정
       if (rows.map((v) => v.id).includes(row.id)) {
-        props.apiRef.current.startRowEditMode({ id: row.id });
-        props.apiRef.current.setCellFocus(row.id, "name");
+        props.apiRef.current.startRowEditMode({ id: row.id }); // 행 편집 모드 시작
+        props.apiRef.current.setCellFocus(row.id, "name"); // 특정 셀에 포커스 설정
       } else {
         // 포커스를 설정하기 위해 페이지를 변경해야 하는 경우
-        paginationRef.current.changePage(Math.ceil(row.index / pageSize));
-        setFocusRow(row);
+        paginationRef.current.changePage(Math.ceil(row.index / pageSize)); // 페이지 변경
+        setFocusRow(row); // 포커스 행 설정
       }
     },
     changeToFirstPage: () => {
       if (paginationRef.current) {
-        console.log("Changing to first page");
+        console.log("첫 페이지로 변경"); // 디버그용 메시지 출력
         paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
       }
     },
@@ -53,25 +53,26 @@ const CustomDataGrid = (props, ref) => {
   // 포커스 행이 변경된 후 포커스를 설정하는 효과
   useEffect(() => {
     if (focusRow) {
-      props.apiRef.current.startRowEditMode({ id: focusRow.id });
-      props.apiRef.current.setCellFocus(focusRow.id, "name");
-      setFocusRow(null);
+      props.apiRef.current.startRowEditMode({ id: focusRow.id }); // 행 편집 모드 시작
+      props.apiRef.current.setCellFocus(focusRow.id, "name"); // 특정 셀에 포커스 설정
+      setFocusRow(null); // 포커스 행 초기화
     }
   }, [focusRow, props.apiRef]);
 
   // 데이터가 변경될 때마다 rows를 설정하는 useEffect 훅
   useEffect(() => {
-    setRows(data.slice(0, pageSize));
+    setRows(data.slice(0, pageSize)); // 현재 페이지에 맞는 데이터 설정
   }, [data, pageSize]);
 
   return (
     <TableContainer>
+      {/* 페이지네이션 없는 DataGrid 렌더링 */}
       <NoPaginationDataGrid rows={rows} {...otherProps} />
       <Pagination
-        ref={paginationRef}
-        data={data}
-        pageSize={pageSize}
-        setRows={setRows}
+        ref={paginationRef} // 페이지네이션 참조 설정
+        data={data} // 전체 데이터 전달
+        pageSize={pageSize} // 페이지 크기 전달
+        setRows={setRows} // rows 설정 함수 전달
       />
     </TableContainer>
   );
