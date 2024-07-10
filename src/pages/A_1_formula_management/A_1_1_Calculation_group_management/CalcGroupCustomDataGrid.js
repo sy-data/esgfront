@@ -5,9 +5,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-
 import Pagination from "./CalcGroupPagination";
-
 import { NoPaginationDataGrid, TableContainer } from "./styles";
 
 const CustomDataGrid = (props, ref) => {
