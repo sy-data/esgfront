@@ -5,40 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { styled } from "@mui/material";
-
-// 페이지네이션 컨테이너 스타일 정의
-const PaginationContainer = styled("div")({
-  alignSelf: "center",
-  display: "flex",
-  alignItems: "self-end",
-});
-
-// 스타일이 적용되지 않은 버튼 스타일 정의
-const NonStyledButton = styled("button")({
-  color: "#000",
-  textAlign: "center",
-  fontFamily: "Pretendard Variable",
-  fontSize: "16px",
-  fontStyle: "normal",
-  fontWeight: 700,
-  lineHeight: "140%" /* 22.4px */,
-  width: "20px",
-  margin: "0 5px",
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-  marginBottom: "20px",
-  "&:disabled": {
-    color: "#808080",
-    cursor: "default",
-  },
-});
-
-// 선택된 버튼 스타일 정의
-const SelectedButton = styled(NonStyledButton)({
-  color: "var(--Primary-Primary, var(--Primary, #00CD9B))",
-});
+import { PaginationContainer, NonStyledButton, SelectedButton } from "./styles";
 
 // Pagination 컴포넌트 정의
 const Pagination = (props, ref) => {
