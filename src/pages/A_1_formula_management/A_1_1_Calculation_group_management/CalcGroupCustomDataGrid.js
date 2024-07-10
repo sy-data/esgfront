@@ -5,23 +5,10 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { styled } from "@mui/material";
+
 import Pagination from "./CalcGroupPagination";
-import { DataGrid } from "@mui/x-data-grid";
 
-// 페이지네이션이 없는 DataGrid 스타일 정의
-const NoPaginationDataGrid = styled(DataGrid)({
-  "& .MuiDataGrid-footerContainer": {
-    display: "none", // DataGrid의 footerContainer를 숨김
-  },
-});
-
-// 테이블 컨테이너 스타일 정의
-const TableContainer = styled("div")({
-  display: "flex",
-  flexDirection: "column", // 세로 방향으로 정렬
-  gap: "7px",
-});
+import { NoPaginationDataGrid, TableContainer } from "./styles";
 
 const CustomDataGrid = (props, ref) => {
   const { data = [], pageSize, ...otherProps } = props; // props에서 data와 pageSize를 추출하며, data의 기본값을 빈 배열로 설정

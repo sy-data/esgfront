@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -10,6 +10,11 @@ import {
 } from "@mui/material";
 import { parameterGroupListDummy } from "./constants";
 import Pagination from "./CalcGroupPagination";
+import {
+  StyledMenuTitleContainer,
+  TitleButtonContainer,
+  ButtonContainer,
+} from "./styles";
 
 // 스타일이 적용된 AddButton 컴포넌트 정의
 const AddButton = styled(Button)({
@@ -58,27 +63,6 @@ const DeleteButton = styled(Button)({
   letterSpacing: "-0.28px",
   whiteSpace: "nowrap",
   marginRight: "10px",
-});
-
-// 스타일이 적용된 메뉴 제목 컨테이너 정의
-const StyledMenuTitleContainer = styled("div")({
-  color: "#000",
-  fontFamily: "Pretendard Variable",
-  fontSize: "18px",
-  fontStyle: "normal",
-  fontWeight: 700,
-  lineHeight: "150%",
-  letterSpacing: "-0.36px",
-});
-
-// 버튼 컨테이너 스타일 정의
-const TitleButtonContainer = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-});
-
-const ButtonContainer = styled("div")({
-  display: "flex",
 });
 
 const ParameterGroupTableTitle = (props) => {
