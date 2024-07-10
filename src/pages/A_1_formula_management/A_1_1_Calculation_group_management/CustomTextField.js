@@ -28,7 +28,7 @@ const CustomTextFieldStyled = styled(TextField)(({ theme }) => ({
       borderColor: "orange", // 호버 상태 테두리 색상
     },
     "&.Mui-focused fieldset": {
-      marginTop: "5px",
+      marginTop: "7px",
       height: "35px",
       width: "100%",
       display: "flex",
