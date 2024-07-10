@@ -40,6 +40,12 @@ const CustomDataGrid = (props, ref) => {
         setFocusRow(row);
       }
     },
+    changeToFirstPage: () => {
+      if (paginationRef.current) {
+        console.log("첫 페이지로 변경"); // 디버그용 메시지 출력
+        paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
+      }
+    },
   }));
 
   // 페이지 변경 후 포커스 설정
@@ -49,7 +55,11 @@ const CustomDataGrid = (props, ref) => {
       props.apiRef.current.setCellFocus(focusRow.id, "name");
       setFocusRow(null);
     }
-  }, [rows]);
+  }, [focusRow, props.apiRef]);
+
+  useEffect(() => {
+    setRows(data.slice(0, pageSize));
+  }, [data, pageSize]);
 
   return (
     <TableContainer>
