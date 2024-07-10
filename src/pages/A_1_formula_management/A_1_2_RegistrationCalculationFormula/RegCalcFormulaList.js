@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import CustomDataGrid from "./CalcGroupCustomDataGrid";
+import CustomDataGrid from "./RegCalcFormulaDataGrid";
 import CustomTextField from "./CustomTextField";
 import { Select, MenuItem } from "@mui/material";
 import { parameterGroupListDummy } from "./constants";
