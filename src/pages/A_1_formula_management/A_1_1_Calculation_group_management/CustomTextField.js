@@ -1,5 +1,47 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import { TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+// 커스텀 스타일이 적용된 TextField 정의
+const CustomTextFieldStyled = styled(TextField)(({ theme }) => ({
+  // display: "flex",
+  // padding: "6px 10px",
+  // alignItems: "center",
+  // gap: "10px",
+  // flex: "1 0 0",
+  // borderRadius: "8px",
+  // border: "1px solid var(--Gray-eee, #EEE)",
+  // background: "var(--Gray-fff, #FFF)",
+
+  "& .MuiInputBase-root": {
+    // color: "bla",
+    fontSize: "17px",
+  },
+  "& .MuiInputLabel-root": {
+    color: "green", // 레이블 색상
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "purple", // 기본 상태 테두리 색상
+    },
+    "&:hover fieldset": {
+      borderColor: "orange", // 호버 상태 테두리 색상
+    },
+    "&.Mui-focused fieldset": {
+      marginTop: "5px",
+      height: "35px",
+      width: "100%",
+      display: "flex",
+      padding: "6px 80px",
+      alignItems: "center",
+      gap: "10px",
+      flex: "1 0 0",
+      borderRadius: "20px",
+      border: "1.5px solid var(--Gray-eee, #AAA)",
+    },
+    "&.Mui-focused": {},
+  },
+}));
 
 // memo를 사용하여 불필요한 리렌더링을 방지
 const CustomTextField = memo(({ id, value, onChange, onKeyDown, onBlur }) => {
@@ -35,7 +77,7 @@ const CustomTextField = memo(({ id, value, onChange, onKeyDown, onBlur }) => {
   };
 
   return (
-    <TextField
+    <CustomTextFieldStyled
       inputRef={inputRef} // input element에 ref를 설정
       type={"text"} // input 타입을 텍스트로 설정합니다.
       value={localValue} // 로컬 상태를 value로 사용합니다.
