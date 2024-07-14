@@ -3,6 +3,7 @@ const MenuList = [
     id: "S",
     type: "menu-parent",
     name: "산정식 관리",
+    action: () => console.log("action"),
     children: [
       {
         id: "S-1",
@@ -51,13 +52,13 @@ const MenuList = [
         id: "F-1",
         type: "menu-child",
         name: "배출활동연료매핑",
-        link: "/admin-fuel",
+        link: "/admin-fuel/mapping",
       },
       {
         id: "F-2",
         type: "menu-child",
         name: "연료비용",
-        link: "/admin-fuel",
+        link: "/admin-fuel/cost",
       },
     ],
   },

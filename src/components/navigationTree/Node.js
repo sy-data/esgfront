@@ -11,9 +11,9 @@ const Node = props => {
         return <MenuParent {...item} opened={props.opened[item.id]} toggle={props.toggle} />;
       case "menu-child":
         return <MenuChild {...item} opened={props.opened[item.id]} toggle={props.toggle} />;
-      case "item-bold":
+      case "treeItem-bold":
         return <ItemBold {...item} opened={props.opened[item.id]} toggle={props.toggle} />;
-      case "item-plain":
+      case "treeItem-plain":
         return <ItemPlain {...item} opened={props.opened[item.id]} toggle={props.toggle} />;
       default:
         return <div>unknown node type</div>
@@ -24,8 +24,13 @@ const Node = props => {
     <>
       {nodeComponent(item)}
       {props.opened[item.id] && item.children &&
-        <Box sx={{display: 'flex', flexDirection: 'column', padding: '10px 0'}}>
-          <Node menu={item.children} opened={props.opened} toggle={props.toggle} />
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          ...(item.type.startsWith('menu-') && {padding: '10px 0'}),
+          ...(item.type.startsWith('treeItem-') && {paddingLeft: '28px'})
+        }}>
+          <Node {...props} menu={item.children} opened={props.opened} toggle={props.toggle} />
         </Box>
       }
     </>
