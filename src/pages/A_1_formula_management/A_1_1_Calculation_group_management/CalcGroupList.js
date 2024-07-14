@@ -1,23 +1,9 @@
-import React, { useCallback, useState } from "react";
-import CustomDataGrid from "../../../components/datagrid/CustomDataGrid";
-import { Select, MenuItem } from "@mui/material";
-// import TextField from "@mui/material/TextField";
+import React, { useState, useCallback } from "react";
+import CustomDataGrid from "./CalcGroupCustomDataGrid";
 import CustomTextField from "./CustomTextField";
-
-export const parameterGroupListDummy = [
-  { groupId: "0001", groupName: "산정식그룹" },
-  { groupId: "0002", groupName: "활동량" },
-  { groupId: "0003", groupName: "배출량" },
-  { groupId: "0004", groupName: "에너지사용량" },
-  { groupId: "0005", groupName: "산화계수" },
-  { groupId: "0006", groupName: "발열량계" },
-  { groupId: "0007", groupName: "배출계수" },
-  { groupId: "0008", groupName: "기타계수" },
-  { groupId: "0009", groupName: "원단위" },
-  { groupId: "0010", groupName: "입주율" },
-  { groupId: "0011", groupName: "단위변환" },
-  { groupId: "0012", groupName: "기타그룹" },
-];
+import { Select, MenuItem } from "@mui/material";
+import { parameterGroupListDummy } from "./constants";
+import { CustomCheckbox, headerStyle } from "./styles";
 
 const ParameterGroupList = (props) => {
   const {
@@ -30,38 +16,26 @@ const ParameterGroupList = (props) => {
     setEditRowId,
   } = props;
 
-  //   const [descriptionText, setDescriptionText] = useState("");
   const [editingDescriptions, setEditingDescriptions] = useState({}); // 편집 중인 비고 내용을 상태로 관리
 
-  // 그룹명 선택
+  // 그룹 이름 선택 핸들러
   const handleSelectGroupName = (id, value) => {
     setData((prevState) =>
       prevState.map((row) => {
         if (row.id === id) {
           const selectedGroup = parameterGroupListDummy.find(
             ({ groupName }) => groupName === value
-          );
+          ); // 선택된 그룹을 찾음
           return {
             ...row,
             groupId: selectedGroup.groupId,
             groupName: selectedGroup.groupName,
-          };
+          }; // 선택된 그룹의 ID와 이름을 업데이트
         }
-        return row;
+        return row; // 선택된 행이 아니면 그대로 반환
       })
     );
   };
-
-  // 비고 입력
-  // const handleChangeText = (id, value) => {
-  //     setDescriptionText(value);
-  //     setData(prevState => prevState.map((row) => {
-  //         if (row.id === id) {
-  //             return { ...row, description: value };
-  //         }
-  //         return row;
-  //     }));
-  // }
 
   // 비고 내용 변경 핸들러
   const handleDescriptionChange = useCallback((id, value) => {
@@ -108,13 +82,13 @@ const ParameterGroupList = (props) => {
     [handleDescriptionBlur, setEditRowId]
   );
 
-  // row 클릭
+  // 행 선택 모델 변경 핸들러
   const handleRowSelectionModelChange = useCallback(
     (rowIds) => {
       const isEditRow = rowIds[0] === editRowId;
-      // 현재 수정중이 아닌 행을 선택했을때만 체크박스 선택
+
       if (!isEditRow) {
-        setSelectedRow(rowIds);
+        setSelectedRow(rowIds); // 선택된 행을 업데이트합니다.
       }
     },
     [editRowId, setSelectedRow]
@@ -132,33 +106,47 @@ const ParameterGroupList = (props) => {
     [setEditRowId]
   );
 
+  // 그리드 컬럼 정의
   const columns = [
-    { field: "no", headerName: "No", flex: 1, sortable: false },
-    { field: "groupId", headerName: "그룹ID", flex: 2, sortable: false },
+    {
+      field: "no",
+      headerName: "No",
+      flex: 1,
+      sortable: false,
+      renderHeader: () => <span style={headerStyle}>No</span>, // 헤더 스타일 적용
+    },
+    {
+      field: "groupId",
+      headerName: "산정식ID",
+      flex: 3,
+      sortable: false,
+      renderHeader: () => <span style={headerStyle}>산정식 ID</span>, // 헤더 스타일 적용
+    },
     {
       field: "groupName",
-      headerName: "그룹명",
-      flex: 10,
+      headerName: "산정식그룹명",
+      flex: 4,
+      renderHeader: () => <span style={headerStyle}>산정식그룹명</span>, // 헤더 스타일 적용
       renderCell: (params) => {
-        const isEditRow = params.row.id === editRowId;
-        const isAddRow = editRowId === -1 && params.row.id === data[0].id;
+        const isEditRow = params.row.id === editRowId; // 현재 행이 편집 모드인지 확인
+        const isAddRow = editRowId === -1 && params.row.id === data[0].id; // 새로운 행인지 확인
         if (isEditRow || isAddRow) {
           return (
             <Select
               value={params.value}
               onChange={(event) =>
                 handleSelectGroupName(params.id, event.target.value)
-              }
+              } // 그룹 이름을 선택할 때의 핸들러
             >
               {parameterGroupListDummy.map(({ groupId, groupName }) => (
                 <MenuItem key={groupId} value={groupName}>
                   {groupName}
-                </MenuItem>
+                </MenuItem> // 드롭다운 메뉴 아이템을 렌더링
               ))}
             </Select>
           );
         } else {
-          return params.value;
+          return params.value; // 편집 모드가 아니면 그룹 이름을 그대로 보여줌
         }
       },
       sortable: false,
@@ -167,14 +155,14 @@ const ParameterGroupList = (props) => {
       field: "description",
       headerName: "비고",
       flex: 3,
+      renderHeader: () => <span style={headerStyle}>비고</span>, // 헤더 스타일 적용
       renderCell: (params) => {
-        const isEditRow = params.row.id === editRowId;
-        const isAddRow = editRowId === -1 && params.row.id === data[0].id;
+        const isEditRow = params.row.id === editRowId; // 현재 행이 편집 모드인지 확인
+        const isAddRow = editRowId === -1 && params.row.id === data[0].id; // 새로운 행인지 확인
         if (isEditRow || isAddRow) {
           return (
             <CustomTextField
               id={params.id}
-              type={"text"}
               value={
                 editingDescriptions[params.id] !== undefined
                   ? editingDescriptions[params.id]
@@ -183,11 +171,10 @@ const ParameterGroupList = (props) => {
               onChange={(value) => handleDescriptionChange(params.id, value)} // 비고 내용 변경 핸들러
               onKeyDown={(event) => handleDescriptionKeyPress(params.id, event)} // 키 프레스 핸들러
               onBlur={() => handleDescriptionBlur(params.id)} // 블러 핸들러
-              placeholder={"비고내용"}
             />
           );
         } else {
-          return params.value;
+          return params.value; // 편집 모드가 아니면 비고 내용을 그대로 보여줌
         }
       },
       sortable: false,
@@ -202,8 +189,11 @@ const ParameterGroupList = (props) => {
       checkboxSelection
       pageSize={15}
       rowSelectionModel={selectedRow}
-      onRowSelectionModelChange={handleRowSelectionModelChange}
-      onRowDoubleClick={handleRowDoubleClick}
+      onRowSelectionModelChange={handleRowSelectionModelChange} // 행 선택 모델 변경 핸들러
+      onRowDoubleClick={handleRowDoubleClick} // 행 더블 클릭 핸들러
+      components={{
+        BaseCheckbox: CustomCheckbox, // 커스텀 체크박스 컴포넌트
+      }}
     />
   );
 };

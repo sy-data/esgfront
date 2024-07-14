@@ -9,13 +9,13 @@ const MenuList = [
         id: "S-1",
         type: "menu-child",
         name: "산정식그룹관리",
-        link: "/admin-formula/CalculationGroupManagement",
+        link: "/admin-formula/CalcGroupMgmt",
       },
       {
         id: "S-2",
         type: "menu-child",
         name: "산정식등록",
-        link: "/admin-formula",
+        link: "/admin-formula/RegCalcFormulaMgmt",
       },
       {
         id: "S-3",
