@@ -4,7 +4,7 @@ import {
   treeStateAtom,
   treeOpenedLeaf,
 } from "../../../States/leftNavigation/tree";
-import NavigationTree from "../../../components/navigationTree/NavigationTree";
+import NavigationTree from "./NavigationTree";
 import MenuList from "../../../MenuItems";
 
 const Frame = () => {
