@@ -86,7 +86,7 @@ const MenuList = [
         link: "/admin-user",
       },
     ],
-  }
+  },
 ];
 
 export default MenuList;
