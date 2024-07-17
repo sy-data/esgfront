@@ -27,7 +27,20 @@ const Frame = () => {
           borderRight: "1px solid #e0e0e0",
         }}
       >
-        <Typography variant="h6">산정식 목록</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "var(--Gray-111, #111)",
+            fontFamily: "'Pretendard Variable'",
+            fontSize: "18px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%", // 27px
+            letterSpacing: "-0.36px",
+          }}
+        >
+          산정식 목록
+        </Typography>
 
         <NavigationTree
           items={MenuList}

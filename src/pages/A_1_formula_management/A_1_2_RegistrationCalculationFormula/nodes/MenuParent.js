@@ -1,32 +1,34 @@
-import { Box } from "@mui/material"
+import { Box } from "@mui/material";
 import chevron_lv1 from "../images/chevron_lv1.svg";
-import chevron_lv1_selected from "../images/chevron_lv1_selected.svg"
+import chevron_lv1_selected from "../images/chevron_lv1_selected.svg";
 
-const MenuParent = props => {
+const MenuParent = (props) => {
   const toggleMenu = () => {
-    props.toggle(props)
-  }
-  
+    props.toggle(props);
+  };
+
   return (
     <Box
       key={`${props.id}${props.index}`}
       tid={props.id}
       sx={{
-        height: "56px", width: '100%',
-        padding: '14px 10px',
-        fontSize: "18px",
-        lineHeight: "27px",
-        display: 'flex', gap: '12px',
-        alignItems: 'center',
-        boxSizing: 'border-box'
+        display: "flex",
+        padding: "11px 16px",
+        alignItems: "center",
+        gap: "6px",
+        alignSelf: "stretch",
+        borderRadius: "8px",
+        background: "#F2F9F8",
       }}
       className={`treeItem menu-parent ${props.opened ? "opened" : ""}`}
       onClick={toggleMenu}
     >
-      <img alt='' src={props.opened?chevron_lv1_selected:chevron_lv1} />
-      <Box sx={{flex: 1}} tid={props.id}>{props.name}</Box>
+      <img alt="" src={props.opened ? chevron_lv1_selected : chevron_lv1} />
+      <Box sx={{ flex: 1 }} tid={props.id}>
+        {props.name}
+      </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default MenuParent;
