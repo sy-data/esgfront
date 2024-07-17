@@ -11,7 +11,12 @@ const Frame = () => {
   return (
     <Box
       className="frame"
-      sx={{ width: "100%", bgcolor: "#f5f5f5", padding: 2 }}
+      sx={{
+        width: "100%",
+        bgcolor: "#f5f5f5",
+        padding: 2,
+        // position: "relative",
+      }}
     >
       <Typography variant="h6">산정식 목록</Typography>
       <NavigationTree
