@@ -162,7 +162,6 @@ const ParameterGroupList = (props) => {
         if (isEditRow || isAddRow) {
           return (
             <CustomTextField
-              id={params.id}
               value={
                 editingDescriptions[params.id] !== undefined
                   ? editingDescriptions[params.id]

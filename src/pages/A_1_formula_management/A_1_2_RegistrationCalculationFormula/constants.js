@@ -1,14 +1,35 @@
-export const parameterGroupListDummy = [
-  { id: 1, groupId: "0001", groupName: "산정식그룹" },
-  { id: 2, groupId: "0002", groupName: "활동량" },
-  { id: 3, groupId: "0003", groupName: "배출량" },
-  { id: 4, groupId: "0004", groupName: "에너지사용량" },
-  { id: 5, groupId: "0005", groupName: "산화계수" },
-  { id: 6, groupId: "0006", groupName: "발열량계" },
-  { id: 7, groupId: "0007", groupName: "배출계수" },
-  { id: 8, groupId: "0008", groupName: "기타계수" },
-  { id: 9, groupId: "0009", groupName: "원단위" },
-  { id: 10, groupId: "0010", groupName: "입주율" },
-  { id: 11, groupId: "0011", groupName: "단위변환" },
-  { id: 12, groupId: "0012", groupName: "기타그룹" },
-];
+
+
+const testData = Array.from({ length: 50 }, (_, index) => {
+  return {
+    no: index + 4, // 순번
+    id: index + 4, formulaId: '00002', formulaName: 'Scope1', description: ''
+  };
+})
+
+
+export const regCalcFormulaDummy = {
+  depth1: [
+    {no: 1, id: 1, formulaId: '00002', formulaName: 'Scope1', description: ''},
+    {no: 2, id: 2, formulaId: '00066', formulaName: 'Scope2', description: ''},
+    {no: 3, id: 3, formulaId: '00072', formulaName: 'Scope3', description: ''},
+    ...testData
+  ],
+  depth2: [
+    {no: 1, id: 1, formulaId: '00002', formulaName: '고정연소', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 2, id: 2, formulaId: '00066', formulaName: '기체연료연소', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 3, id: 3, formulaId: '00072', formulaName: '액체연료연소', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+  ],
+  depth3: [
+    {no: 1, id: 1, formulaId: '00002', formulaName: '고상', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 2, id: 2, formulaId: '00066', formulaName: '액상', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 3, id: 3, formulaId: '00072', formulaName: '기상', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+  ],
+  depth4: [
+    {no: 1, id: 1, formulaId: '00002', formulaName: '생활폐기물', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 2, id: 2, formulaId: '00066', formulaName: '사업장폐기물', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+    {no: 3, id: 3, formulaId: '00072', formulaName: '하수슬러지', isActive: true, formulaVersion: 1, updateDate: '2024-07-01'},
+  ],
+}
+
+

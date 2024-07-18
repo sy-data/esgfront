@@ -173,7 +173,6 @@ const ParameterGroupList = (props) => {
         if (isEditRow || isAddRow) {
           return (
             <CustomTextField
-              id={params.id}
               type={"text"}
               value={
                 editingDescriptions[params.id] !== undefined
@@ -184,6 +183,7 @@ const ParameterGroupList = (props) => {
               onKeyDown={(event) => handleDescriptionKeyPress(params.id, event)} // 키 프레스 핸들러
               onBlur={() => handleDescriptionBlur(params.id)} // 블러 핸들러
               placeholder={"비고내용"}
+              autoFocus={true}
             />
           );
         } else {

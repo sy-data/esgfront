@@ -12,11 +12,6 @@ const Pagination = (props, ref) => {
   const { data = [], pageSize, setRows } = props; // props로부터 값을 추출하고, data의 기본값을 빈 배열로 설정
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태를 1로 초기화
 
-  // 데이터가 변경될 때마다 현재 페이지를 1로 설정
-  useEffect(() => {
-    setCurrentPage(1); // 컴포넌트가 마운트되거나 data가 변경될 때 현재 페이지를 1로 설정
-  }, [data]);
-
   // 현재 페이지 또는 데이터가 변경될 때마다 페이지에 해당하는 데이터를 설정
   useEffect(() => {
     if (typeof setRows === "function") {
@@ -28,6 +23,7 @@ const Pagination = (props, ref) => {
   useImperativeHandle(ref, () => ({
     currentPageNum: currentPage, // 현재 페이지 번호를 반환하는 함수
     changePage: (page) => setCurrentPage(page), // 페이지 변경 함수
+    changeLastPage: () => setCurrentPage(totalPageNum), // 마지막 페이지로 이동
   }));
 
   // 총 페이지 수 계산
