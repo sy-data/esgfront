@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ContentWithTitie } from "../../../components/Styles";
+import React, {useEffect, useRef, useState} from "react";
+import {ContentWithTitie} from "../../../components/Styles";
 import RegCalcFormulaList from "./RegCalcFormulaList";
 import RegCalcFormulaTableTitle from "./RegCalcFormulaTableTitle";
-import { useGridApiRef } from "@mui/x-data-grid"; // 그리드 API 참조 훅을 불러옴
-import { parameterGroupListDummy } from "./constants";
-import { styled } from "@mui/material";
+import {useGridApiRef} from "@mui/x-data-grid"; // 그리드 API 참조 훅을 불러옴
+import {regCalcFormulaDummy} from "./constants";
+import {styled} from "@mui/material";
 
-const NoDataMessage = styled("div")(({ theme }) => ({
+const NoDataMessage = styled("div")(({theme}) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -24,24 +24,23 @@ const NoDataMessage = styled("div")(({ theme }) => ({
   },
 }));
 
-// 더미 데이터 생성
-const dummyData = Array.from({ length: 50 }, (_, index) => {
-  const randomGroup = parameterGroupListDummy[Math.floor(Math.random() * 12)]; // 랜덤으로 그룹을 선택
-  return {
-    no: index + 1, // 순번
-    id: index + 1,
-    groupId: randomGroup.groupId, // 그룹 ID
-    groupName: randomGroup.groupName, // 그룹 이름
-    description: "1번 그룹",
-  };
-}).reverse(); // 역순으로 정렬
 
-const ParameterGroupManagement = () => {
+/**
+ * A_1_2. 산정식 등록 > 산정식 기본정보
+ */
+const RegCalcFormulaMgmts = (props) => {
+  const {currentDepth} = props;
   const gridApiRef = useGridApiRef(); // 그리드 API 참조 생성
-  const [data, setData] = useState(dummyData); // 데이터 상태 관리
+  const [data, setData] = useState([]); // 데이터 상태 관리
   const [selectedRow, setSelectedRow] = useState([]); // 선택된 행 상태 관리
   const [editRowId, setEditRowId] = useState(null); // 편집 중인 행 ID 상태 관리
-  const customDataGridRef = useRef(null); // 커스텀 데이터 그리드 참조 생성
+  const customDataGridRef = useRef(null);
+
+  useEffect(() => {
+    setData(regCalcFormulaDummy[`depth${currentDepth}`] || []);
+    setSelectedRow([]);
+    setEditRowId(null);
+  }, [currentDepth]);
 
   // 편집 모드가 설정되면 선택된 행을 초기화하는 효과
   useEffect(() => {
@@ -64,7 +63,8 @@ const ParameterGroupManagement = () => {
         selectedRow={selectedRow} // 선택된 행
         editRowId={editRowId} // 편집 중인 행 ID
         setEditRowId={setEditRowId} // 편집 중인 행 ID 설정 함수
-        customDataGridRef={customDataGridRef} // 커스텀 데이터 그리드 참조
+        currentDepth={currentDepth} // 현재 depth
+        customDataGridRef={customDataGridRef}
       />
       {data.length === 0 ? (
         <NoDataMessage>
@@ -91,10 +91,12 @@ const ParameterGroupManagement = () => {
           setSelectedRow={setSelectedRow} // 선택된 행 설정 함수
           editRowId={editRowId} // 편집 중인 행 ID
           setEditRowId={setEditRowId} // 편집 중인 행 ID 설정 함수
+          currentDepth={currentDepth} // 현재 depth
+          customDataGridRef={customDataGridRef}
         />
       )}
     </ContentWithTitie>
   );
 };
 
-export default ParameterGroupManagement;
+export default RegCalcFormulaMgmts;

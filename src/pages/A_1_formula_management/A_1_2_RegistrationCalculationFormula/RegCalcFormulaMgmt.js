@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, {useState} from "react";
+import {Box, Button, Typography} from "@mui/material";
 import {
   treeStateAtom,
   treeOpenedLeaf,
@@ -8,7 +8,23 @@ import NavigationTree from "./NavigationTree";
 import MenuList from "../../../MenuItems";
 import RegCalcFormulaMgmts from "./RegCalcFormulaMgmts";
 
+/**
+ * A_1_2. 산정식 등록
+ */
 const Frame = () => {
+  const [currentDepth, setCurrentDepth] = useState(1);
+
+  const handleClickPlus = () => {
+    if (currentDepth === 4) return;
+    setCurrentDepth(prevState => prevState + 1);
+  }
+
+  const handleClickMinus = () => {
+    if (currentDepth === 1) return;
+    setCurrentDepth(prevState => prevState - 1);
+  }
+
+
   return (
     <Box
       className="frame"
@@ -41,7 +57,12 @@ const Frame = () => {
           paddingLeft: 2,
         }}
       >
-        <RegCalcFormulaMgmts />
+        {/* TODO 메뉴바 추가되면 제거하기 */}
+        <Button onClick={handleClickPlus}>Depth +</Button>
+        <Button onClick={handleClickMinus}>Depth -</Button>
+        <span>현재 depth: {currentDepth}</span>
+        {/* TODO 5depth 산정식 상세정보 return 하기 */}
+        {currentDepth < 5 ? <RegCalcFormulaMgmts currentDepth={currentDepth} /> : null}
       </Box>
     </Box>
   );
