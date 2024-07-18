@@ -18,7 +18,7 @@ const MenuParent = (props) => {
         gap: "6px",
         alignSelf: "stretch",
         borderRadius: "8px",
-        background: "#F2F9F8",
+        background: props.opened ? "#F2F9F8" : "#fff", // 클릭 여부에 따라 배경색 변경
       }}
       className={`treeItem menu-parent ${props.opened ? "opened" : ""}`}
       onClick={toggleMenu}

@@ -15,8 +15,9 @@ const Frame = () => {
       sx={{
         display: "flex",
         width: "100%",
-        bgcolor: "#f5f5f5",
+        backgroundColor: "#fff",
         padding: 2,
+        border: "1px solid var(--Gray-eee, #EEE)",
         // position: "relative",
       }}
     >
@@ -24,12 +25,15 @@ const Frame = () => {
         sx={{
           width: "20%",
           paddingRight: 2,
-          borderRight: "1px solid #e0e0e0",
+          borderRight: "1px solid var(--Gray-eee, #EEE)",
+          backgroundColor: "#FFF",
+          marginTop: "-15px",
         }}
       >
         <Typography
           variant="h6"
           sx={{
+            backgroundColor: "#FFF",
             color: "var(--Gray-111, #111)",
             fontFamily: "'Pretendard Variable'",
             fontSize: "18px",
@@ -37,6 +41,8 @@ const Frame = () => {
             fontWeight: 700,
             lineHeight: "150%", // 27px
             letterSpacing: "-0.36px",
+            marginBottom: "25px",
+            marginTop: "10px",
           }}
         >
           산정식 목록
@@ -50,8 +56,13 @@ const Frame = () => {
       </Box>
       <Box
         sx={{
+          marginTop: "-15px",
+          marginRight: "-15px",
+          marginBottom: "-15px",
+          paddingTop: "15px",
           flex: "1",
           paddingLeft: 2,
+          backgroundColor: "#F7F8F8",
         }}
       >
         <RegCalcFormulaMgmts />

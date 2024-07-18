@@ -191,6 +191,9 @@ const ParameterGroupList = (props) => {
       rowSelectionModel={selectedRow}
       onRowSelectionModelChange={handleRowSelectionModelChange} // 행 선택 모델 변경 핸들러
       onRowDoubleClick={handleRowDoubleClick} // 행 더블 클릭 핸들러
+      sx={{
+        backgroundColor: "#fff",
+      }}
       components={{
         BaseCheckbox: CustomCheckbox, // 커스텀 체크박스 컴포넌트
       }}
