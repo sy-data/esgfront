@@ -16,6 +16,11 @@ const RegCalcFormulaMgmt = lazy(() =>
     "../pages/A_1_formula_management/A_1_2_RegistrationCalculationFormula/RegCalcFormulaMgmt"
   )
 );
+const CalcFCHistoryInquiry = lazy(() =>
+  import(
+    "../pages/A_1_formula_management/A_1_3_CalculationFormulaChangeHistoryInquiry/CalcFCHistoryInquiry"
+  )
+);
 
 const ParameterGroupManagement = lazy(() =>
   import(
@@ -23,7 +28,7 @@ const ParameterGroupManagement = lazy(() =>
   )
 );
 
-const AdminFormula = props => {
+const AdminFormula = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,20 +40,34 @@ const AdminFormula = props => {
 
   return (
     <MainContent>
-      <Box sx={{
-        width: '236px',
-        padding: '0 14px', boxSizing: 'border-box',
-        display: 'flex', flexDirection: 'column', overflow: 'auto'
-      }}>
-        <NavigationTree items={props.items} stateAtom={props.stateAtom} leafAtom={props.leafAtom} />
+      <Box
+        sx={{
+          width: "236px",
+          padding: "0 14px",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "auto",
+        }}
+      >
+        <NavigationTree
+          items={props.items}
+          stateAtom={props.stateAtom}
+          leafAtom={props.leafAtom}
+        />
       </Box>
       <Suspense fallback={"loading"}>
         <Routes>
-          <Route exact path="CalcGroupMgmt" element={<CalcGroupMgmt />} />
+          <Route exact path="calcGroupMgmt" element={<CalcGroupMgmt />} />
           <Route
             exact
-            path="RegCalcFormulaMgmt"
+            path="regCalcFormulaMgmt"
             element={<RegCalcFormulaMgmt />}
+          />
+          <Route
+            exact
+            path="calcFCHistoryInquiry"
+            element={<CalcFCHistoryInquiry />}
           />
           <Route
             exact

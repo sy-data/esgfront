@@ -9,19 +9,19 @@ const MenuList = [
         id: "S-1",
         type: "menu-child",
         name: "산정식그룹관리",
-        link: "/admin-formula/CalcGroupMgmt",
+        link: "/admin-formula/calcGroupMgmt",
       },
       {
         id: "S-2",
         type: "menu-child",
         name: "산정식등록",
-        link: "/admin-formula/RegCalcFormulaMgmt",
+        link: "/admin-formula/regCalcFormulaMgmt",
       },
       {
         id: "S-3",
         type: "menu-child",
         name: "산정식변경이력조회",
-        link: "/admin-formula",
+        link: "/admin-formula/calcFCHistoryInquiry",
       },
       {
         id: "S-4",

@@ -1,0 +1,110 @@
+.node {
+  width: 208px;
+  height: 56px;
+}
+
+.treeItem {
+  display: flex;
+  align-items: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.menu-parent.opened {
+  border-radius: 8px;
+  background: #f2f9f8;
+  color: var(--Primary-04, #00b096);
+  font-family: "Pretendard Variable";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+.menu-parent {
+  color: var(--Gray-111, #111);
+  font-family: "Pretendard Variable";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+.menu-child.opened {
+  color: var(--Gray-111, #111);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  padding: 13px 20px;
+}
+.menu-child {
+  color: var(--Gray-757575, #757575);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  padding: 13px 21px;
+  /* 24px */
+}
+
+.treeItem-bold.opened {
+  color: var(--Gray-111, #111);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+}
+.treeItem-bold {
+  height: 46px;
+  width: 100%;
+  padding: 11px 16px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  box-sizing: border-box;
+
+  color: var(--Gray-757575, #757575);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+}
+.treeItem-plain.opened {
+  border-radius: 8px;
+  border: 0px solid var(--Gray-eaeaea, #eaeaea);
+  background: #f2f9f8;
+  color: var(--Primary-04, #00b096);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+}
+.treeItem-plain {
+  height: 46px;
+  width: 100%;
+  padding: 11px 16px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  box-sizing: border-box;
+
+  border-radius: 8px;
+  border: 0px solid var(--Gray-eaeaea, #eaeaea);
+  color: var(--Gray-757575, #757575);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+}
