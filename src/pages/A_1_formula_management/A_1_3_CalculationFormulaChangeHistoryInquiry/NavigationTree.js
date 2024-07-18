@@ -34,7 +34,8 @@ const NavigationTree = (props) => {
         // item에 링크가 없거나 openedLeaf가 현재 item.id와 다른 경우 현재 item의 열림 상태를 반전시킴
         [item.id]: !opened[item.id],
       }),
-      ...(item.link && openedLeaf !== item.id && { [openedLeaf]: false }), // item에 링크가 있고 openedLeaf가 현재 item.id와 다른 경우, 이전 openedLeaf 상태를 false로 설정
+      ...(item.link && openedLeaf !== item.id && { [openedLeaf]: false }),
+      // item에 링크가 있고 openedLeaf가 현재 item.id와 다른 경우, 이전 openedLeaf 상태를 false로 설정
     });
     if (item.link && openedLeaf !== item.id) {
       // item에 링크가 있고 openedLeaf가 현재 item.id와 다른 경우 해당 링크로 네비게이션
@@ -43,6 +44,9 @@ const NavigationTree = (props) => {
     } else if (item.action) {
       // item에 action이 정의된 경우 action 함수 실행
       item.action();
+    }
+    if (props.onCategoryClick) {
+      props.onCategoryClick(item.id); // 카테고리 ID를 상위 컴포넌트로 전달
     }
   };
 

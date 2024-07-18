@@ -86,4 +86,4 @@ const Node = (props) => {
   );
 };
 
-export default Node; // Node 컴포넌트를 내보냄
+export default Node;
