@@ -17,7 +17,6 @@ const Frame = () => {
 
   useEffect(() => {
     if (selectedCategory) {
-      // 예제 데이터 설정
       const fetchChangeHistory = async () => {
         try {
           const res = await esgFetch(`/api/change-history/${selectedCategory}`);
@@ -28,20 +27,34 @@ const Frame = () => {
           // 예제 데이터 설정
           const exampleChangeHistory = [
             {
-              calculationId: "00010",
-              calculationName: "이동연소(도로)",
-              version: 1,
-              type: "산정식등록",
-              changeDate: "2023-05-31 06:09:36",
-              changer: "이현정",
+              id: 1, // No와 연결됨
+              create_at: "2023-05-31 06:09:36", // 변경일과 연결됨
+              action_type: "산정식등록", // 변경 유형
+              admin_id: "이현정", // changer와 연결됨
+              table_name: "calculation", // 테이블 이름
+              old_data: {}, // 변경 전 값
+              new_data: {
+                calculationId: "00010",
+                calculationName: "이동연소(도로)",
+                version: 1,
+              }, // 변경 후 값
             },
             {
-              calculationId: "00011",
-              calculationName: "이동연소(도로)",
-              version: 2,
-              type: "산정식/파라미터수정",
-              changeDate: "2023-06-01 10:11:33",
-              changer: "이현정",
+              id: 2, // No와 연결됨
+              create_at: "2023-06-01 10:11:33", // 변경일과 연결됨
+              action_type: "산정식/파라미터수정", // 변경 유형
+              admin_id: "이현정", // changer와 연결됨
+              table_name: "calculation", // 테이블 이름
+              old_data: {
+                calculationId: "00010",
+                calculationName: "이동연소(도로)",
+                version: 1,
+              }, // 변경 전 값
+              new_data: {
+                calculationId: "00011",
+                calculationName: "이동연소(도로)",
+                version: 2,
+              }, // 변경 후 값
             },
           ];
           setChangeHistory(exampleChangeHistory);
@@ -63,13 +76,13 @@ const Frame = () => {
               tier: "Tier 2",
               calculation: `CO2배출량 =활동량 *순발열량계수 / 1000000 * CO2배출계수`,
               version: 1,
-              changeDate: "2023-05-31 06:09:36",
+              change_date: "2023-05-31 06:09:36",
             },
             {
               tier: "Tier 1",
               calculation: `CO2배출량 =활동량 *순발열량계수 / 1000000 * CO2배출계수`,
               version: 2,
-              changeDate: "2023-06-01 10:11:33",
+              change_date: "2023-06-01 10:11:33",
             },
           ];
           setCalculationHistory(exampleCalculationHistory);

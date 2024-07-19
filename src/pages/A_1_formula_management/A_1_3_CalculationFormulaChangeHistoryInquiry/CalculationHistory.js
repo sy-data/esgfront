@@ -1,5 +1,3 @@
-// CalculationHistory.js
-
 import React from "react";
 import {
   Box,
@@ -24,7 +22,7 @@ const CalculationHistory = ({ data }) => {
       }}
     >
       <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-        산정식이력
+        산정식 이력
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -73,7 +71,7 @@ const CalculationHistory = ({ data }) => {
                   <TableCell>{row.tier}</TableCell>
                   <TableCell>{row.calculation}</TableCell>
                   <TableCell>{row.version}</TableCell>
-                  <TableCell>{row.changeDate}</TableCell>
+                  <TableCell>{row.change_date}</TableCell>
                 </TableRow>
               ))
             )}
