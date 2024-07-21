@@ -28,6 +28,12 @@ const ParameterGroupManagement = lazy(() =>
   )
 );
 
+const ParameterManagement = lazy(() =>
+  import(
+    "../pages/A_1_formula_management/A_1_5_ParameterManagement/ParameterManagement"
+  )
+);
+
 const AdminFormula = (props) => {
   const navigate = useNavigate();
 
@@ -73,6 +79,11 @@ const AdminFormula = (props) => {
             exact
             path="groupManagement"
             element={<ParameterGroupManagement />}
+          />
+          <Route
+            exact
+            path="parameterManagement"
+            element={<ParameterManagement />}
           />
         </Routes>
       </Suspense>

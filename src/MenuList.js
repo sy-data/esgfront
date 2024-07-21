@@ -33,7 +33,7 @@ const MenuList = [
         id: "S-5",
         type: "menu-child",
         name: "파라미터관리",
-        link: "/admin-formula",
+        link: "/admin-formula/parameterManagement",
       },
       {
         id: "S-6",
