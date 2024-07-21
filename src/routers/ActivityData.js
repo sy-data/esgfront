@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
+import Box from "@mui/material/Box";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
@@ -10,7 +10,7 @@ import SewageWastewaterAdd from "../pages/3_activity_data/3-3_sewage_wastewater_
 import SteamAdd from "../pages/3_activity_data/3-4_steam_information_add/steamAdd";
 import ProductionAdd from "../pages/3_activity_data/3-5_production_activity_add/productionAdd";
 
-const ActivityData = () => {
+const ActivityData = props => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +22,13 @@ const ActivityData = () => {
 
   return (
     <MainContent>
-      <NavigationTree />
+      <Box sx={{
+        width: '236px',
+        padding: '0 14px', boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column', overflow: 'auto'
+      }}>
+        <NavigationTree items={props.items} stateAtom={props.stateAtom} leafAtom={props.leafAtom} />
+      </Box>
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="activityDataAdd" element={<ActivityDataAdd />} />

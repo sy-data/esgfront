@@ -3,7 +3,7 @@ import {Box, Button, Typography} from "@mui/material";
 import {
   treeStateAtom,
   treeOpenedLeaf,
-} from "../../../States/leftNavigation/tree";
+} from "../../../States/leftNavigation/adminTree";
 import NavigationTree from "./NavigationTree";
 import MenuList from "../../../MenuItems";
 import RegCalcFormulaMgmts from "./RegCalcFormulaMgmts";

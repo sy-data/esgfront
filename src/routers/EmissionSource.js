@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
 import { userStateAtom } from "../States/auth/auth";
 import { MainContent } from "../components/Styles";
 import { getCookie } from "../States/storage/Cookie";
@@ -13,7 +14,7 @@ const ManageEmissionProduct = lazy(() =>
 const ManageEmissionFuel = lazy(() => import("../pages/2_emission_management/2_2_manage_fuel/EmissionFuelManagement"));
 // const ManageEmissionParameter = lazy(() => import ('../pages/2_emission_management/2_3_manage_parameter/EmissionParameterManagement'));
 
-const EmissionSource = () => {
+const EmissionSource = props => {
   const userState = useRecoilValue(userStateAtom);
   const navigate = useNavigate();
 
@@ -26,7 +27,13 @@ const EmissionSource = () => {
 
   return (
     <MainContent>
-      <NavigationTree />
+      <Box sx={{
+        width: '236px',
+        padding: '0 14px', boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column', overflow: 'auto'
+      }}>
+        <NavigationTree items={props.items} stateAtom={props.stateAtom} leafAtom={props.leafAtom} />
+      </Box>
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="product" element={<ManageEmissionProduct />} />
