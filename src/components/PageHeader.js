@@ -1,5 +1,5 @@
 import { Avatar, Box, styled } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { removeCookie, useAuth } from "../States/storage/Cookie";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userStateAtom } from "../States/auth/auth";
@@ -27,7 +27,7 @@ const PageHeader = () => {
   const userState = useRecoilValue(userStateAtom);
   const headerTitle = useRecoilValue(headerTitleAtom);
 
-  console.log(userState);
+  const loc = useLocation();
   const onLoginOut = () => {
     removeCookie("token");
     setUserState(null); // Recoil 상태를 초기화
@@ -42,6 +42,10 @@ const PageHeader = () => {
       <Box style={{flexGrow: 1, padding: '22px', fontWeight: 700, fontSize: '24px', color: '#111111'}}>
         {headerTitle}
       </Box>
+      {loc.pathname.startsWith("/admin-") ? 
+        <Box style={{margin: '0 20px', cursor: 'pointer'}} onClick={()=>navigate("/facility/workplace")}>메뉴로 돌아가기</Box> : 
+        <Box style={{margin: '0 20px', cursor: 'pointer'}} onClick={()=>navigate("/admin-formula/groupManagement")}>어드민 페이지로</Box> 
+      }
       {isLogin ? (
         <>
           <Avatar alt="info" src={user_icon} style={{width: '36px', height: '36px',cursor: 'pointer', marginRight: '24px'}} />

@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
+import Box from "@mui/material/Box";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
@@ -10,7 +10,7 @@ const EmissionByWorkplace = lazy(() => import('../pages/4_emissions/4_3_workplac
 const EmissionByFuel = lazy(() => import('../pages/4_emissions/4_4_fuel/ByFuel'));
 const EmissionByScope = lazy(() => import('../pages/4_emissions/4_5_scope/ByScope'));
 
-const EmissionAmount = () => {
+const EmissionAmount = props => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +22,13 @@ const EmissionAmount = () => {
 
   return (
     <MainContent>
-      <NavigationTree />
+      <Box sx={{
+        width: '236px',
+        padding: '0 14px', boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column', overflow: 'auto'
+      }}>
+        <NavigationTree items={props.items} stateAtom={props.stateAtom} leafAtom={props.leafAtom} />
+      </Box>
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="company" element={<EmissionByCompany />} />

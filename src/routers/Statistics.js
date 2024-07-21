@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
 import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
@@ -11,7 +12,7 @@ const ProductionEnergy = lazy(() => import("../pages/7_statistics/7_4_product_en
 const EnergyUsage = lazy(() => import("../pages/7_statistics/7_5_energy_usage/energyUsage"));
 const EnergyCosts = lazy(() => import("../pages/7_statistics/7_6_energy_costs/energyCosts"));
 
-const Statistics = () => {
+const Statistics = props => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +24,13 @@ const Statistics = () => {
 
   return (
     <MainContent>
-      <NavigationTree />
+      <Box sx={{
+        width: '236px',
+        padding: '0 14px', boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column', overflow: 'auto'
+      }}>
+        <NavigationTree items={props.items} stateAtom={props.stateAtom} leafAtom={props.leafAtom} />
+      </Box>
       <Suspense fallback={"loading"}>
         <Routes>
           <Route exact path="emissions-status" element={<EmissionsStatus />} />

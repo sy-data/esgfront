@@ -14,8 +14,10 @@ import AdminFuel from './routers/Admin-Fuel';
 import AdminFormula from './routers/Admin-Formula';
 import AdminManagement from './routers/Admin-Management';
 
+import AdminMenuList from './AdminMenuList';
+import { treeStateAtom, treeOpenedLeaf } from './States/leftNavigation/adminTree';
 import MenuList from './MenuList';
-import { treeStateAtom, treeOpenedLeaf } from './States/leftNavigation/tree';
+import { menuStateAtom, menuOpenedLeaf } from './States/leftNavigation/menuTree';
 
 function App() {
   return (
@@ -23,17 +25,17 @@ function App() {
       <PageHeader />
       <Routes>
         <Route path="/*" element={<OpenedPages />} />
-        <Route exact path="/facility/*" element={<FacilityInformation />} />
-        <Route exact path="/source/*" element={<EmissionSource />} />
-        <Route exact path="/activity/*" element={<ActivityData />} />
-        <Route exact path="/emissions/*" element={<EmissionAmount />} />
-        <Route exact path="/usage/*" element={<EnergyUsage />} />
-        <Route exact path="/target_result/*" element={<TargetResult />} />
-        <Route exact path="/statistics/*" element={<Statistics />} />
-        <Route exact path="/monitoring/*" element={<Monitoring />} />
-        <Route exact path="/admin-formula/*" element={<AdminFormula items={MenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
-        <Route exact path="/admin-fuel/*" element={<AdminFuel items={MenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
-        <Route exact path="/admin-management/*" element={<AdminManagement items={MenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
+        <Route exact path="/facility/*" element={<FacilityInformation items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/source/*" element={<EmissionSource items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/activity/*" element={<ActivityData items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/emissions/*" element={<EmissionAmount items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/usage/*" element={<EnergyUsage items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/target_result/*" element={<TargetResult items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/statistics/*" element={<Statistics items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/monitoring/*" element={<Monitoring items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/admin-formula/*" element={<AdminFormula items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
+        <Route exact path="/admin-fuel/*" element={<AdminFuel items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
+        <Route exact path="/admin-management/*" element={<AdminManagement items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
       </Routes>
     </MasterLayout>
   );
