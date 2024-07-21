@@ -19,7 +19,6 @@ const MenuList = [
       {
         id: "1-3",
         type: "menu-child",
-<<<<<<< HEAD
         name: "산정식변경이력조회",
         link: "/admin-formula/calcFCHistoryInquiry",
       },
@@ -41,11 +40,6 @@ const MenuList = [
         name: "산정식규정등급관리",
         link: "/admin-formula",
       },
-=======
-        name: "시설 이력 조회",
-        link: "/facility/history",
-      }
->>>>>>> d24b57c7b5e90083fcdb440cc4a67a42c61e867e
     ],
   },
   {
@@ -76,7 +70,7 @@ const MenuList = [
         type: "menu-child",
         name: "스팀관리",
         link: "/facility/history",
-      }
+      },
     ],
   },
   {
@@ -113,7 +107,7 @@ const MenuList = [
         type: "menu-child",
         name: "생산량 활동자료 등록",
         link: "/activity/productionAdd",
-      }
+      },
     ],
   },
   {
@@ -150,7 +144,7 @@ const MenuList = [
         type: "menu-child",
         name: "scope별 비교분석",
         link: "/emissions/scope",
-      }
+      },
     ],
   },
   {
@@ -187,7 +181,7 @@ const MenuList = [
         type: "menu-child",
         name: "scope별 비교분석",
         link: "/usage/scope",
-      }
+      },
     ],
   },
   {
@@ -224,7 +218,7 @@ const MenuList = [
         type: "menu-child",
         name: "월단위 성과현황(사업장)",
         link: "/target_result/performance-status/factory-monthly",
-      }
+      },
     ],
   },
   {
@@ -273,7 +267,7 @@ const MenuList = [
         type: "menu-child",
         name: "첨부파일 다운로드",
         link: "/statistics",
-      }
+      },
     ],
   },
 ];
