@@ -11,15 +11,22 @@ import {
   TableHead,
   TableRow,
   IconButton,
+  Collapse,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import MenuList from "./MenuList"; // Adjust the path as necessary
-import { fetchParameterGroupDetails } from "./api"; // Adjust the path as necessary
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import MenuList from "./MenuList"; // 필요한 경우 경로를 조정하세요
+import { fetchParameterGroupDetails } from "./api"; // 필요한 경우 경로를 조정하세요
 
 const ParameterManagement = ({ userId }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groupDetails, setGroupDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState({});
 
   useEffect(() => {
     if (selectedGroup) {
@@ -35,9 +42,43 @@ const ParameterManagement = ({ userId }) => {
     setSearchTerm(event.target.value);
   };
 
+  const handleToggle = (id) => {
+    setOpen((prevState) => ({ ...prevState, [id]: !prevState[id] }));
+  };
+
   const filteredGroups = MenuList.filter((group) =>
     group.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const renderTree = (nodes) =>
+    nodes.map((node) => (
+      <React.Fragment key={node.id}>
+        <ListItem
+          button
+          onClick={() => {
+            handleToggle(node.id);
+            setSelectedGroup(node.id);
+          }}
+          selected={selectedGroup === node.id}
+        >
+          <ListItemText primary={node.name} />
+          {node.children ? (
+            open[node.id] ? (
+              <ExpandLess />
+            ) : (
+              <ExpandMore />
+            )
+          ) : null}
+        </ListItem>
+        {node.children && (
+          <Collapse in={open[node.id]} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding sx={{ pl: 4 }}>
+              {renderTree(node.children)}
+            </List>
+          </Collapse>
+        )}
+      </React.Fragment>
+    ));
 
   return (
     <Box
@@ -65,8 +106,9 @@ const ParameterManagement = ({ userId }) => {
             color: "var(--Gray-111, #111)",
             fontFamily: "'Pretendard Variable'",
             fontSize: "18px",
+            fontStyle: "normal",
             fontWeight: 700,
-            lineHeight: "150%",
+            lineHeight: "150%", // 27px
             letterSpacing: "-0.36px",
             marginBottom: "25px",
             marginTop: "10px",
@@ -94,60 +136,15 @@ const ParameterManagement = ({ userId }) => {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Box>
-          {filteredGroups.map((group) => (
-            <Box
-              key={group.id}
-              sx={{
-                padding: "10px",
-                cursor: "pointer",
-                backgroundColor:
-                  selectedGroup === group.id ? "#F2F9F8" : "#FFF",
-              }}
-              onClick={() => setSelectedGroup(group.id)}
-            >
-              {group.name}
-              {group.children && (
-                <Box sx={{ paddingLeft: 2 }}>
-                  {group.children.map((child) => (
-                    <Box
-                      key={child.id}
-                      sx={{
-                        padding: "5px",
-                        cursor: "pointer",
-                        backgroundColor:
-                          selectedGroup === child.id ? "#E6F7FF" : "#FFF",
-                      }}
-                      onClick={() => setSelectedGroup(child.id)}
-                    >
-                      {child.name}
-                      {child.children && (
-                        <Box sx={{ paddingLeft: 2 }}>
-                          {child.children.map((subChild) => (
-                            <Box
-                              key={subChild.id}
-                              sx={{
-                                padding: "5px",
-                                cursor: "pointer",
-                                backgroundColor:
-                                  selectedGroup === subChild.id
-                                    ? "#E6F7FF"
-                                    : "#FFF",
-                              }}
-                              onClick={() => setSelectedGroup(subChild.id)}
-                            >
-                              {subChild.name}
-                            </Box>
-                          ))}
-                        </Box>
-                      )}
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
-          ))}
-        </Box>
+        <List>
+          {filteredGroups.length > 0 ? (
+            renderTree(filteredGroups)
+          ) : (
+            <Typography sx={{ paddingLeft: 2 }}>
+              조회된 정보가 없습니다.
+            </Typography>
+          )}
+        </List>
       </Box>
       <Box
         sx={{
