@@ -15,12 +15,56 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import MenuList from "./MenuList"; // 필요한 경우 경로를 조정하세요
-import { fetchParameterGroupDetails } from "./api"; // 필요한 경우 경로를 조정하세요
+import MenuList from "./MenuList";
+import { fetchParameterGroupDetails } from "./api";
+
+const ExpandLess = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M12 16.5002L4.5 9.00019L5.55 7.9502L12 14.4002L18.45 7.9502L19.5 9.00019L12 16.5002Z"
+      fill="#111111"
+    />
+  </svg>
+);
+
+const ExpandMore = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
+      fill="#757575"
+    />
+  </svg>
+);
+
+const ArrowRight = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
+      fill="#757575"
+    />
+  </svg>
+);
 
 const ParameterManagement = ({ userId }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -50,35 +94,101 @@ const ParameterManagement = ({ userId }) => {
     group.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const ExpandLess = ({ isSelected }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M12 16.5002L4.5 9.00019L5.55 7.9502L12 14.4002L18.45 7.9502L19.5 9.00019L12 16.5002Z"
+        fill={isSelected ? "#00B096" : "#111111"}
+      />
+    </svg>
+  );
+
+  const ExpandMore = ({ isSelected }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
+        fill={isSelected ? "#00B096" : "#757575"}
+      />
+    </svg>
+  );
+
+  const ArrowRight = ({ isSelected }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
+        fill={isSelected ? "#00B096" : "#757575"}
+      />
+    </svg>
+  );
+
   const renderTree = (nodes) =>
-    nodes.map((node) => (
-      <React.Fragment key={node.id}>
-        <ListItem
-          button
-          onClick={() => {
-            handleToggle(node.id);
-            setSelectedGroup(node.id);
-          }}
-          selected={selectedGroup === node.id}
-        >
-          <ListItemText primary={node.name} />
-          {node.children ? (
-            open[node.id] ? (
-              <ExpandLess />
-            ) : (
-              <ExpandMore />
-            )
-          ) : null}
-        </ListItem>
-        {node.children && (
-          <Collapse in={open[node.id]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding sx={{ pl: 4 }}>
-              {renderTree(node.children)}
-            </List>
-          </Collapse>
-        )}
-      </React.Fragment>
-    ));
+    nodes.map((node) => {
+      const isSelected = selectedGroup === node.id;
+      return (
+        <React.Fragment key={node.id}>
+          <ListItem
+            button
+            onClick={() => {
+              handleToggle(node.id);
+              setSelectedGroup(node.id);
+            }}
+            selected={isSelected}
+            sx={{
+              color: isSelected ? "var(--Primary-04, #00B096)" : "inherit",
+              fontFamily: isSelected ? "'Pretendard Variable'" : "inherit",
+              fontSize: isSelected ? "16px" : "inherit",
+              fontStyle: isSelected ? "normal" : "inherit",
+              fontWeight: isSelected ? 700 : "inherit",
+              lineHeight: isSelected ? "150%" : "inherit", // 24px
+              letterSpacing: isSelected ? "-0.32px" : "inherit",
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                color: isSelected ? "var(--Primary-04, #00B096)" : "inherit",
+                marginRight: "-20px",
+              }}
+            >
+              {node.children ? (
+                open[node.id] ? (
+                  <ExpandLess isSelected={isSelected} />
+                ) : (
+                  <ExpandMore isSelected={isSelected} />
+                )
+              ) : (
+                <ArrowRight isSelected={isSelected} />
+              )}
+            </ListItemIcon>
+            <ListItemText primary={node.name} />
+          </ListItem>
+          {node.children && (
+            <Collapse in={open[node.id]} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding sx={{ pl: 4 }}>
+                {renderTree(node.children)}
+              </List>
+            </Collapse>
+          )}
+        </React.Fragment>
+      );
+    });
 
   return (
     <Box
@@ -102,7 +212,6 @@ const ParameterManagement = ({ userId }) => {
         <Typography
           variant="h6"
           sx={{
-            backgroundColor: "#FFF",
             color: "var(--Gray-111, #111)",
             fontFamily: "'Pretendard Variable'",
             fontSize: "18px",
@@ -118,10 +227,16 @@ const ParameterManagement = ({ userId }) => {
         </Typography>
         <Paper
           sx={{
-            padding: "2px 4px",
             display: "flex",
+            height: "40px",
+            padding: "6px 16px",
+            justifyContent: "space-between",
             alignItems: "center",
-            width: "90%",
+            flexShrink: 0,
+            alignSelf: "stretch",
+            borderRadius: "8px",
+            border: "1px solid var(--Gray-eaeaea, #EAEAEA)",
+            background: "var(--Gray-fff, #FFF)",
             marginBottom: 2,
           }}
         >
@@ -133,7 +248,27 @@ const ParameterManagement = ({ userId }) => {
             onChange={handleSearchChange}
           />
           <IconButton sx={{ p: "10px" }} aria-label="search">
-            <SearchIcon />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M8.63633 2.5C7.42268 2.5 6.23628 2.85989 5.22717 3.53416C4.21806 4.20843 3.43155 5.16679 2.9671 6.28806C2.50266 7.40932 2.38114 8.64314 2.61791 9.83347C2.85468 11.0238 3.43911 12.1172 4.29729 12.9754C5.15547 13.8335 6.24886 14.418 7.43919 14.6547C8.62952 14.8915 9.86334 14.77 10.9846 14.3056C12.1059 13.8411 13.0642 13.0546 13.7385 12.0455C14.4128 11.0364 14.7727 9.84998 14.7727 8.63633C14.7726 7.0089 14.126 5.44817 12.9753 4.2974C11.8245 3.14664 10.2638 2.5001 8.63633 2.5Z"
+                stroke="#111111"
+                stroke-width="1.25"
+                stroke-miterlimit="10"
+              />
+              <path
+                d="M13.2144 13.2144L17.4999 17.4999"
+                stroke="#111111"
+                stroke-width="1.25"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+            </svg>
           </IconButton>
         </Paper>
         <List>
@@ -146,12 +281,13 @@ const ParameterManagement = ({ userId }) => {
           )}
         </List>
       </Box>
-      <Box
+      <Box // 파라미터 그룹정보
         sx={{
           flex: "1",
           paddingLeft: 2,
           backgroundColor: "#F7F8F8",
           padding: "15px",
+          margin: "-15px -15px -15px 0",
         }}
       >
         {selectedGroup ? (

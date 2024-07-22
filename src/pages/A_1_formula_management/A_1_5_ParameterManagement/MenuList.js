@@ -105,4 +105,13 @@ const MenuList = [
   },
 ];
 
-export default MenuList;
+const newMenuList = [
+  {
+    id: "calculationGroup",
+    type: "menu-parent",
+    name: "산정식그룹",
+    children: MenuList,
+  },
+];
+
+export default newMenuList;
