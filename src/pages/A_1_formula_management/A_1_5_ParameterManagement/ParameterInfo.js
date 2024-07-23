@@ -65,8 +65,38 @@ const ParameterInfo = () => {
     setSelectedRows([]);
   };
 
+  const handleAddRow = () => {
+    const newId = data.length + 1;
+    setData([
+      ...data,
+      {
+        id: newId,
+        parameterID: "",
+        upperGroup: "",
+        group: "",
+        inputType: "",
+        tier: "Tier 1",
+        value: "",
+        version: "",
+        unit: "TJ",
+        fuel: "",
+        activity: "",
+        industry: "",
+      },
+    ]);
+    const newPage = Math.ceil((data.length + 1) / 10);
+    setPage(newPage);
+  };
+
+  const rowsPerPage = 10;
+  const displayedRows = data.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+
   return (
-    <Container maxWidth={false} sx={{ maxWidth: 1600, padding: "0 10px" }}>
+    <Container maxWidth={false} sx={{ maxWidth: 2000, padding: "0 10px" }}>
       <Box display="flex" justifyContent="space-between" my={2}>
         <FormControl
           variant="outlined"
@@ -143,7 +173,7 @@ const ParameterInfo = () => {
         </Button>
 
         <Box display="flex" justifyContent="space-between" my={2}>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleAddRow}>
             추가
           </Button>
           <Box display="flex" alignItems="center">
@@ -162,8 +192,15 @@ const ParameterInfo = () => {
         </Box>
       </Box>
 
-      <TableContainer component={Paper} sx={{ maxHeight: 900 }}>
-        <Table stickyHeader size="small">
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxHeight: 900,
+          overflowX: "auto",
+          maxWidth: 1200,
+        }}
+      >
+        <Table stickyHeader size="small" sx={{ minWidth: 1200 }}>
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
@@ -188,7 +225,7 @@ const ParameterInfo = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.slice((page - 1) * 10, page * 10).map((row, index) => (
+            {displayedRows.map((row, index) => (
               <TableRow key={row.id}>
                 <TableCell padding="checkbox">
                   <Checkbox
@@ -197,11 +234,55 @@ const ParameterInfo = () => {
                     onChange={() => handleSelectRow(row.id)}
                   />
                 </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{row.parameterID}</TableCell>
-                <TableCell>{row.upperGroup}</TableCell>
-                <TableCell>{row.group}</TableCell>
-                <TableCell>{row.inputType}</TableCell>
+                <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    defaultValue={row.parameterID}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 10,
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    defaultValue={row.upperGroup}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 15,
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    defaultValue={row.group}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 15,
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    defaultValue={row.inputType}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 15,
+                      },
+                    }}
+                  />
+                </TableCell>
                 <TableCell>
                   <FormControl variant="outlined" size="small">
                     <Select defaultValue={row.tier} size="small">
@@ -218,6 +299,11 @@ const ParameterInfo = () => {
                     variant="outlined"
                     size="small"
                     defaultValue={row.value}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 6,
+                      },
+                    }}
                   />
                 </TableCell>
                 <TableCell>
@@ -225,10 +311,19 @@ const ParameterInfo = () => {
                     variant="outlined"
                     size="small"
                     defaultValue={row.version}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        marginRight: 10,
+                      },
+                    }}
                   />
                 </TableCell>
                 <TableCell>
-                  <FormControl variant="outlined" size="small">
+                  <FormControl
+                    variant="outlined"
+                    size="small"
+                    sx={{ marginRight: 3 }}
+                  >
                     <Select defaultValue={row.unit} size="small">
                       <MenuItem value="TJ">TJ</MenuItem>
                       <MenuItem value="kJ">kJ</MenuItem>
@@ -273,7 +368,11 @@ const ParameterInfo = () => {
         </Table>
       </TableContainer>
       <Box display="flex" justifyContent="center" my={2}>
-        <Pagination count={5} page={page} onChange={handleChangePage} />
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handleChangePage}
+        />
       </Box>
     </Container>
   );
