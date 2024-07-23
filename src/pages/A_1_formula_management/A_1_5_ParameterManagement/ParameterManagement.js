@@ -1,20 +1,10 @@
+// ParameterManagement.js
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  InputBase,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  IconButton,
-} from "@mui/material";
+import { Box, Typography, InputBase, Paper, IconButton } from "@mui/material";
 import { fetchParameterGroupDetails } from "./api";
 import ParameterGroupTree from "./ParameterGroupTree";
 import MenuList from "./MenuList";
+import ParameterInfo from "./ParameterInfo"; // Import the ParameterInfo component
 
 const ParameterManagement = ({ userId }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -150,49 +140,14 @@ const ParameterManagement = ({ userId }) => {
             >
               파라미터 그룹 정보
             </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>No</TableCell>
-                    <TableCell>그룹 ID</TableCell>
-                    <TableCell>그룹명</TableCell>
-                    <TableCell>입력구분</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {groupDetails.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={4} align="center">
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Typography sx={{ marginLeft: 1 }}>
-                            조회된 정보가 없습니다.
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    groupDetails.map((detail, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{detail.parameterId}</TableCell>
-                        <TableCell>{detail.parameterName}</TableCell>
-                        <TableCell>{detail.inputType}</TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <ParameterInfo />
           </>
         ) : (
-          <Typography>파라미터 그룹을 선택하세요.</Typography>
+          <Typography
+            sx={{ fontWeight: "bold", marginBottom: 2, fontSize: "30px" }}
+          >
+            파라미터 그룹을 선택하세요.
+          </Typography>
         )}
       </Box>
     </Box>
