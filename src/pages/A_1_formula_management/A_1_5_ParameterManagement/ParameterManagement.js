@@ -11,60 +11,10 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Collapse,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import MenuList from "./MenuList";
 import { fetchParameterGroupDetails } from "./api";
-
-const ExpandLess = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M12 16.5002L4.5 9.00019L5.55 7.9502L12 14.4002L18.45 7.9502L19.5 9.00019L12 16.5002Z"
-      fill="#111111"
-    />
-  </svg>
-);
-
-const ExpandMore = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
-      fill="#757575"
-    />
-  </svg>
-);
-
-const ArrowRight = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
-      fill="#757575"
-    />
-  </svg>
-);
+import ParameterGroupTree from "./ParameterGroupTree";
+import MenuList from "./MenuList";
 
 const ParameterManagement = ({ userId }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -93,102 +43,6 @@ const ParameterManagement = ({ userId }) => {
   const filteredGroups = MenuList.filter((group) =>
     group.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const ExpandLess = ({ isSelected }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M12 16.5002L4.5 9.00019L5.55 7.9502L12 14.4002L18.45 7.9502L19.5 9.00019L12 16.5002Z"
-        fill={isSelected ? "#00B096" : "#111111"}
-      />
-    </svg>
-  );
-
-  const ExpandMore = ({ isSelected }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
-        fill={isSelected ? "#00B096" : "#757575"}
-      />
-    </svg>
-  );
-
-  const ArrowRight = ({ isSelected }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M16.55 11.5L9.05 19L8 17.95L14.45 11.5L8 5.05L9.05 4L16.55 11.5Z"
-        fill={isSelected ? "#00B096" : "#757575"}
-      />
-    </svg>
-  );
-
-  const renderTree = (nodes) =>
-    nodes.map((node) => {
-      const isSelected = selectedGroup === node.id;
-      return (
-        <React.Fragment key={node.id}>
-          <ListItem
-            button
-            onClick={() => {
-              handleToggle(node.id);
-              setSelectedGroup(node.id);
-            }}
-            selected={isSelected}
-            sx={{
-              color: isSelected ? "var(--Primary-04, #00B096)" : "inherit",
-              fontFamily: isSelected ? "'Pretendard Variable'" : "inherit",
-              fontSize: isSelected ? "16px" : "inherit",
-              fontStyle: isSelected ? "normal" : "inherit",
-              fontWeight: isSelected ? 700 : "inherit",
-              lineHeight: isSelected ? "150%" : "inherit", // 24px
-              letterSpacing: isSelected ? "-0.32px" : "inherit",
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                color: isSelected ? "var(--Primary-04, #00B096)" : "inherit",
-                marginRight: "-20px",
-              }}
-            >
-              {node.children ? (
-                open[node.id] ? (
-                  <ExpandLess isSelected={isSelected} />
-                ) : (
-                  <ExpandMore isSelected={isSelected} />
-                )
-              ) : (
-                <ArrowRight isSelected={isSelected} />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={node.name} />
-          </ListItem>
-          {node.children && (
-            <Collapse in={open[node.id]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ pl: 4 }}>
-                {renderTree(node.children)}
-              </List>
-            </Collapse>
-          )}
-        </React.Fragment>
-      );
-    });
 
   return (
     <Box
@@ -271,17 +125,15 @@ const ParameterManagement = ({ userId }) => {
             </svg>
           </IconButton>
         </Paper>
-        <List>
-          {filteredGroups.length > 0 ? (
-            renderTree(filteredGroups)
-          ) : (
-            <Typography sx={{ paddingLeft: 2 }}>
-              조회된 정보가 없습니다.
-            </Typography>
-          )}
-        </List>
+        <ParameterGroupTree
+          nodes={filteredGroups}
+          open={open}
+          handleToggle={handleToggle}
+          setSelectedGroup={setSelectedGroup}
+          selectedGroup={selectedGroup}
+        />
       </Box>
-      <Box // 파라미터 그룹정보
+      <Box
         sx={{
           flex: "1",
           paddingLeft: 2,
