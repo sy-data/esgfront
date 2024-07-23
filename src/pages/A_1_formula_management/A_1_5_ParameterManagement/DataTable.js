@@ -14,7 +14,7 @@ import {
 
 const DataTable = ({
   data,
-  setData, // Add setData to the props
+  setData,
   selectedRows,
   allSelected,
   handleSelectRow,
