@@ -4,7 +4,7 @@ import { Box, Typography, InputBase, Paper, IconButton } from "@mui/material";
 import { fetchParameterGroupDetails } from "./api";
 import ParameterGroupTree from "./ParameterGroupTree";
 import MenuList from "./MenuList";
-import ParameterInfo from "./ParameterInfo"; // Import the ParameterInfo component
+import ParameterInfo from "./ParameterInfo";
 
 const ParameterManagement = ({ userId }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
