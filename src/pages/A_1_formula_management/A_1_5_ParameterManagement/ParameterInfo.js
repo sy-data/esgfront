@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container } from "@mui/material";
+import React, { useState, useRef, useEffect } from "react";
+import { Container, Snackbar, Alert } from "@mui/material";
 import { exampleData } from "./exampleData";
 import FilterControls from "./FilterControls";
 import DataTable from "./DataTable";
@@ -15,6 +15,8 @@ const ParameterInfo = () => {
   const [page, setPage] = useState(1);
   const [selectedRows, setSelectedRows] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
+  const newRowRef = useRef(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -71,13 +73,33 @@ const ParameterInfo = () => {
     ]);
     const newPage = Math.ceil((data.length + 1) / 10);
     setPage(newPage);
+    newRowRef.current = newId;
   };
+
+  useEffect(() => {
+    if (newRowRef.current !== null) {
+      document.getElementById(`parameterID-${newRowRef.current}`).focus();
+      newRowRef.current = null;
+    }
+  }, [data]);
 
   const rowsPerPage = 10;
   const displayedRows = data.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.target.blur();
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   return (
     <Container maxWidth={false} sx={{ maxWidth: 2000, padding: "0 10px" }}>
@@ -97,12 +119,22 @@ const ParameterInfo = () => {
         handleSelectRow={handleSelectRow}
         page={page}
         rowsPerPage={rowsPerPage}
+        handleKeyDown={handleKeyDown}
       />
       <PaginationControls
         page={page}
         count={Math.ceil(data.length / rowsPerPage)}
         handleChangePage={handleChangePage}
       />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          저장되었습니다
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

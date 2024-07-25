@@ -22,6 +22,7 @@ const DataTable = ({
   handleSelectRow,
   page,
   rowsPerPage,
+  handleKeyDown,
 }) => {
   return (
     <TableContainer
@@ -65,9 +66,11 @@ const DataTable = ({
               <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
               <TableCell>
                 <TextField
+                  id={`parameterID-${row.id}`}
                   variant="outlined"
                   size="small"
                   defaultValue={row.parameterID}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "95px" } }}
                 />
@@ -77,6 +80,7 @@ const DataTable = ({
                   variant="outlined"
                   size="small"
                   defaultValue={row.upperGroup}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "150px" } }}
                 />
@@ -86,6 +90,7 @@ const DataTable = ({
                   variant="outlined"
                   size="small"
                   defaultValue={row.group}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "250px" } }}
                 />
@@ -95,6 +100,7 @@ const DataTable = ({
                   variant="outlined"
                   size="small"
                   defaultValue={row.inputType}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "150px" } }}
                 />
@@ -115,6 +121,7 @@ const DataTable = ({
                   variant="outlined"
                   size="small"
                   defaultValue={row.value}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "60px" } }}
                 />
@@ -124,6 +131,7 @@ const DataTable = ({
                   variant="outlined"
                   size="small"
                   defaultValue={row.version}
+                  onKeyDown={handleKeyDown}
                   sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
                   InputProps={{ sx: { width: "60px" } }}
                 />
