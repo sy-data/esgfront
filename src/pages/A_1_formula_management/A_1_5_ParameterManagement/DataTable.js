@@ -20,6 +20,8 @@ const DataTable = ({
   allSelected,
   handleSelectAllRows,
   handleSelectRow,
+  page,
+  rowsPerPage,
 }) => {
   return (
     <TableContainer
@@ -60,7 +62,7 @@ const DataTable = ({
                   onChange={() => handleSelectRow(row.id)}
                 />
               </TableCell>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
               <TableCell>
                 <TextField
                   variant="outlined"

@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Pagination } from "@mui/material";
 
-const PaginationControls = ({ page, handleChangePage }) => {
+const PaginationControls = ({ page, count, handleChangePage }) => {
   return (
     <Box display="flex" justifyContent="center" my={2}>
-      <Pagination count={5} page={page} onChange={handleChangePage} />
+      <Pagination count={count} page={page} onChange={handleChangePage} />
     </Box>
   );
 };

@@ -69,11 +69,11 @@ const ParameterInfo = () => {
         industry: "",
       },
     ]);
-    const newPage = Math.ceil((data.length + 1) / 5);
+    const newPage = Math.ceil((data.length + 1) / 10);
     setPage(newPage);
   };
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 10;
   const displayedRows = data.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage
@@ -95,8 +95,14 @@ const ParameterInfo = () => {
         allSelected={allSelected}
         handleSelectAllRows={handleSelectAllRows}
         handleSelectRow={handleSelectRow}
+        page={page}
+        rowsPerPage={rowsPerPage}
       />
-      <PaginationControls page={page} handleChangePage={handleChangePage} />
+      <PaginationControls
+        page={page}
+        count={Math.ceil(data.length / rowsPerPage)}
+        handleChangePage={handleChangePage}
+      />
     </Container>
   );
 };
