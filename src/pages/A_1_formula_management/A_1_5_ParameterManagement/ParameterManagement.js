@@ -1,9 +1,8 @@
-// ParameterManagement.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, InputBase, Paper, IconButton } from "@mui/material";
 import { fetchParameterGroupDetails } from "./api";
 import ParameterGroupTree from "./ParameterGroupTree";
-import MenuList from "./MenuList";
+import newMenuList from "./MenuList";
 import ParameterInfo from "./ParameterInfo";
 
 const ParameterManagement = ({ userId }) => {
@@ -11,6 +10,7 @@ const ParameterManagement = ({ userId }) => {
   const [groupDetails, setGroupDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState({});
+  const searchTimeout = useRef(null);
 
   useEffect(() => {
     if (selectedGroup) {
@@ -22,17 +22,33 @@ const ParameterManagement = ({ userId }) => {
     }
   }, [selectedGroup]);
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   const handleToggle = (id) => {
     setOpen((prevState) => ({ ...prevState, [id]: !prevState[id] }));
   };
 
-  const filteredGroups = MenuList.filter((group) =>
-    group.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filterMenu = (menuList, searchTerm) => {
+    return menuList.reduce((filtered, item) => {
+      if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        filtered.push(item);
+      } else if (item.children && item.children.length > 0) {
+        const filteredChildren = filterMenu(item.children, searchTerm);
+        if (filteredChildren.length > 0) {
+          filtered.push({ ...item, children: filteredChildren });
+        }
+      }
+      return filtered;
+    }, []);
+  };
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      setSearchTerm(value);
+    }, 300);
+  };
+
+  const filteredGroups = filterMenu(newMenuList, searchTerm);
 
   return (
     <Box
@@ -88,7 +104,6 @@ const ParameterManagement = ({ userId }) => {
             sx={{ ml: 1, flex: 1 }}
             placeholder="파라미터 이름으로 검색"
             inputProps={{ "aria-label": "파라미터 이름으로 검색" }}
-            value={searchTerm}
             onChange={handleSearchChange}
           />
           <IconButton sx={{ p: "10px" }} aria-label="search">
