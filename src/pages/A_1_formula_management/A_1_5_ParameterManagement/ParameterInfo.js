@@ -73,12 +73,15 @@ const ParameterInfo = () => {
     ]);
     const newPage = Math.ceil((data.length + 1) / 10);
     setPage(newPage);
-    newRowRef.current = newId;
+    newRowRef.current = `upperGroup-${newId}`;
   };
 
   useEffect(() => {
     if (newRowRef.current !== null) {
-      document.getElementById(`parameterID-${newRowRef.current}`).focus();
+      const newRowElement = document.getElementById(newRowRef.current);
+      if (newRowElement) {
+        newRowElement.focus();
+      }
       newRowRef.current = null;
     }
   }, [data]);

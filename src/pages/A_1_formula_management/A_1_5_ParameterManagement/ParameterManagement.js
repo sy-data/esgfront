@@ -153,7 +153,7 @@ const ParameterManagement = ({ userId }) => {
               variant="h6"
               sx={{ fontWeight: "bold", marginBottom: 2 }}
             >
-              파라미터 그룹 정보
+              파라미터 정보
             </Typography>
             <ParameterInfo />
           </>
