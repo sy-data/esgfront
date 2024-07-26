@@ -6,7 +6,7 @@ import {
 } from "../../../States/leftNavigation/adminTree";
 import NavigationTree from "./NavigationTree";
 import MenuList from "../../../MenuItems";
-import RegCalcFormulaMgmts from "./RegCalcFormulaMgmts";
+import RegCalcFormulaMgmts from "./regCalcFormulaMgmts/RegCalcFormulaMgmts";
 
 /**
  * A_1_2. 산정식 등록

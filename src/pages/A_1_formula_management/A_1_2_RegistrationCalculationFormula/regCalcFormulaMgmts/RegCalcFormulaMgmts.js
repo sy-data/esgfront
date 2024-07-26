@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {ContentWithTitie} from "../../../components/Styles";
+import {ContentWithTitie} from "../../../../components/Styles";
 import RegCalcFormulaList from "./RegCalcFormulaList";
 import RegCalcFormulaTableTitle from "./RegCalcFormulaTableTitle";
 import {useGridApiRef} from "@mui/x-data-grid"; // 그리드 API 참조 훅을 불러옴
