@@ -33,6 +33,11 @@ const ParameterManagement = lazy(() =>
     "../pages/A_1_formula_management/A_1_5_ParameterManagement/ParameterManagement"
   )
 );
+const CalcRegGradeMgmt = lazy(() =>
+  import(
+    "../pages/A_1_formula_management/A_1_6_CalcRegGradeMgmt/CalcRegGradeMgmt"
+  )
+);
 
 const AdminFormula = (props) => {
   const navigate = useNavigate();
@@ -85,6 +90,7 @@ const AdminFormula = (props) => {
             path="parameterManagement"
             element={<ParameterManagement />}
           />
+          <Route exact path="calcRegGradeMgmt" element={<CalcRegGradeMgmt />} />
         </Routes>
       </Suspense>
     </MainContent>
