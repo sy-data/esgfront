@@ -55,19 +55,27 @@ const ParameterInfo = () => {
 
   // 모든 행 선택을 처리하는 함수입니다.
   const handleSelectAllRows = () => {
+    // 모든 행이 선택된 상태인지 여부를 확인합니다.
     if (allSelected) {
+      // 모든 행이 선택된 상태인 경우, 선택된 행 배열을 빈 배열로 설정하여 모든 선택을 해제합니다.
       setSelectedRows([]);
     } else {
+      // 모든 행이 선택되지 않은 상태인 경우, 모든 행의 ID를 선택된 행 배열에 추가하여 모든 행을 선택합니다.
       setSelectedRows(data.map((row) => row.id));
     }
+    // 모든 행 선택 상태를 반전시킵니다.
     setAllSelected(!allSelected);
   };
 
   // 선택된 행 삭제를 처리하는 함수입니다.
   const handleDelete = () => {
+    // setData 함수를 사용하여 데이터를 업데이트합니다.
     setData((prevData) =>
+      // prevData 배열을 필터링합니다. 선택된 행들의 ID를 포함하지 않는 행들만 남깁니다.
       prevData.filter((row) => !selectedRows.includes(row.id))
     );
+
+    // 선택된 행 배열을 빈 배열로 설정하여 모든 선택을 해제합니다.
     setSelectedRows([]);
   };
 
