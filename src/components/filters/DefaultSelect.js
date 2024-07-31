@@ -1,6 +1,7 @@
 import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import { FilterContainer, FilterLabel, FilterSelect } from "../Styles";
 import MenuItem from "@mui/material/MenuItem";
+import SvgIcon from "@mui/material/SvgIcon";
 
 
 /**
@@ -69,7 +70,15 @@ const DefaultSelect = ({selectLabel, selectOptions, onSelectChanged}, ref) => {
   return (
     <FilterContainer>
       <FilterLabel>{selectLabel}</FilterLabel>
-      <FilterSelect value={selected} onChange={e => setSelected(e.target.value)}>
+      <FilterSelect
+        value={selected}
+        onChange={e => setSelected(e.target.value)}
+        IconComponent={(props) => (
+          <SvgIcon width="20" height="20" viewBox="0 0 20 20" fill="none" {...props}>
+            <path d="M10 13.75L3.75 7.5L4.625 6.625L10 12L15.375 6.625L16.25 7.5L10 13.75Z" fill="#111111"/>
+          </SvgIcon>
+        )}
+      >
         {selectOptions && selectOptions.length > 0 ?
           selectOptions.map((data, index) => createMenuItem(data, index)) :
           <MenuItem key={0} value={0} />

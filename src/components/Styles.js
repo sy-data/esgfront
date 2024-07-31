@@ -56,7 +56,26 @@ export const FilterLabel = styled("div")(() => ({
 
 export const FilterSelect = styled(Select)(() => ({
   minWidth: "150px",
-  maxHeight: "37px",
+  '& .MuiSelect-select': {
+    padding: "6px 10px",
+    height: "40px", width: "276px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: "1 0 0",
+    boxSizing: "border-box",
+    borderRadius: "8px",
+    border: "1px solid var(--Gray-eee, #EEE)",
+    background: "var(--Gray-fff, #FFF)",
+    
+    color: "var(--Gray-757575, #757575)",
+    fontFamily: "Pretendard Variable",
+    fontSize: "13px",
+    fontStyle: "normal",
+    fontWeight: 400,
+    lineHeight: "150%", /* 19.5px */
+    letterSpacing: "-0.26px"
+  }
 }));
 
 export const SearchButtonContainer = styled("div")(() => ({
