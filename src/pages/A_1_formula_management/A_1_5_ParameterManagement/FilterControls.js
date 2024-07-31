@@ -9,17 +9,17 @@ import {
 } from "@mui/material";
 
 const FilterControls = ({
-  filters,
-  handleFilterChange,
-  handleSearch,
-  handleAddRow,
-  handleDelete,
-  selectedRows,
+  filters, // 필터 상태를 나타내는 객체
+  handleFilterChange, // 필터 변경을 처리하는 함수
+  handleSearch, // 검색 버튼 클릭을 처리하는 함수
+  handleAddRow, // 행 추가 버튼 클릭을 처리하는 함수
+  handleDelete, // 삭제 버튼 클릭을 처리하는 함수
+  selectedRows, // 선택된 행들의 배열
 }) => {
   return (
     <Box display="flex" justifyContent="space-between" my={2} sx={{}}>
       <FormControl
-        variant="outlined"
+        variant="outlined" // 아웃라인 스타일을 적용합니다.
         sx={{
           minWidth: 200,
           marginRight: -25,
@@ -30,10 +30,11 @@ const FilterControls = ({
         }}
       >
         <InputLabel>에너지 산업</InputLabel>
+        {/* Select 컴포넌트를 사용하여 드롭다운 메뉴를 생성합니다. */}
         <Select
-          name="energyIndustry"
-          value={filters.energyIndustry}
-          onChange={handleFilterChange}
+          name="energyIndustry" // 필드 이름을 설정합니다.
+          value={filters.energyIndustry} // 필터 상태에서 선택된 값을 설정합니다.
+          onChange={handleFilterChange} // 값 변경 시 호출되는 핸들러를 설정합니다.
           label="에너지 산업"
           sx={{
             borderRadius: "8px",
@@ -41,7 +42,7 @@ const FilterControls = ({
             background: "var(--Gray-fff, #FFF)",
             height: "50px",
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "transparent",
+              borderColor: "transparent", // 테두리 색상을 투명하게 설정합니다.
             },
           }}
         >
@@ -122,6 +123,7 @@ const FilterControls = ({
           <MenuItem value="fuel2">연료 2</MenuItem>
         </Select>
       </FormControl>
+
       <Button
         variant="contained"
         onClick={handleSearch}
@@ -144,7 +146,6 @@ const FilterControls = ({
           fontWeight: 700,
           lineHeight: "150%" /* 21px */,
           letterSpacing: "-0.28px",
-
           backgroundColor:
             filters.energyIndustry || filters.activity || filters.fuel
               ? "#00CD9B"
@@ -157,6 +158,7 @@ const FilterControls = ({
       >
         검색
       </Button>
+
       <Box
         display="flex"
         justifyContent="space-between"
@@ -192,6 +194,7 @@ const FilterControls = ({
         >
           추가
         </Button>
+
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Button
             variant="contained"
