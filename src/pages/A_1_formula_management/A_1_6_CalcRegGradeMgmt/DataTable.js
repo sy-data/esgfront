@@ -11,59 +11,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-
-const data = [
-  {
-    no: 1,
-    activity: "고체연료연소",
-    emissionFacility: "A그룹",
-    regulatoryGrade: "A그룹",
-    usageGrade: "Tier 1",
-    netEmissionGrade: "Tier 1",
-    emissionCalcGrade: "Tier 1",
-    calcDate: "2024-02-03",
-  },
-  {
-    no: 2,
-    activity: "고체연료연소",
-    emissionFacility: "A그룹",
-    regulatoryGrade: "A그룹",
-    usageGrade: "Tier 1",
-    netEmissionGrade: "Tier 1",
-    emissionCalcGrade: "Tier 1",
-    calcDate: "2024-02-03",
-  },
-  {
-    no: 3,
-    activity: "고체연료연소",
-    emissionFacility: "A그룹",
-    regulatoryGrade: "A그룹",
-    usageGrade: "Tier 1",
-    netEmissionGrade: "Tier 1",
-    emissionCalcGrade: "Tier 1",
-    calcDate: "2024-02-03",
-  },
-  {
-    no: 4,
-    activity: "고체연료연소",
-    emissionFacility: "A그룹",
-    regulatoryGrade: "A그룹",
-    usageGrade: "Tier 1",
-    netEmissionGrade: "Tier 1",
-    emissionCalcGrade: "Tier 1",
-    calcDate: "2024-02-03",
-  },
-  {
-    no: 5,
-    activity: "고체연료연소",
-    emissionFacility: "A그룹",
-    regulatoryGrade: "A그룹",
-    usageGrade: "Tier 1",
-    netEmissionGrade: "Tier 1",
-    emissionCalcGrade: "Tier 1",
-    calcDate: "2024-02-03",
-  },
-];
+import { data } from "./data";
 
 const DataTable = () => {
   return (
