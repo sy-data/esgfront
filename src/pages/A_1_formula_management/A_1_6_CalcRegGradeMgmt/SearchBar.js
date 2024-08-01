@@ -21,6 +21,7 @@ const SearchBar = () => {
   const [endDate, setEndDate] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [isButtonActive, setIseButtonActive] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
 
   const handleDialogClose = () => {
     setOpenDialog(false);
@@ -29,15 +30,22 @@ const SearchBar = () => {
   const handleStartDateChange = (e) => {
     const selectedDate = e.target.value;
     if (endDate && selectedDate > endDate) {
+      setDialogMessage("종료일 날짜보다 늦습니다.");
       setOpenDialog(true);
     } else {
       setStartDate(selectedDate);
     }
   };
 
-  // const handleEndDateChange = (e) => {
-  //   setEndDate(e.target.value);
-  // };
+  const handleEndDateChange = (e) => {
+    const selectedDate = e.target.value;
+    if (startDate && selectedDate < startDate) {
+      setDialogMessage("시작일 앞으로 지정할 수 없습니다.");
+      setOpenDialog(true);
+    } else {
+      setEndDate(selectedDate);
+    }
+  };
 
   useEffect(() => {
     if (activity && startDate && endDate) {
@@ -79,7 +87,7 @@ const SearchBar = () => {
     alignItems: "center",
     gap: "16px",
     flex: "1 0 0",
-    background: "var(--Gray-fff, #FFF)",
+    // background: "var(--Gray-fff, #FFF)",
     boxSizing: "border-box",
   };
 
@@ -124,7 +132,13 @@ const SearchBar = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" mb={2} gap={2}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      mb={2}
+      gap={2}
+      sx={{ marginTop: 3 }}
+    >
       <Box
         display="flex"
         justifyContent="space-between"
@@ -141,10 +155,20 @@ const SearchBar = () => {
                 <CustomArrowIcon onClick={handleIconClick} />
               )} // 커스텀 아이콘을 설정합니다.
               ref={selectRef}
-              sx={{ flex: 1 }}
+              sx={{
+                flex: 1,
+                backgroundColor: "#FFF",
+                color: "var(--Gray-aaa, #AAA)",
+                fontFamily: "Pretendard Variable",
+                fontSize: "13px",
+                fontStyle: "normal",
+                fontWeight: "400",
+                lineHeight: "150%" /* 19.5px */,
+                letterSpacing: "-0.26px",
+              }}
             >
               <MenuItem value="">
-                <em>배출활동</em>
+                <a>배출활동</a>
               </MenuItem>
               <MenuItem value="sample1">sample1</MenuItem>
               <MenuItem value="sample2">sample2</MenuItem>
@@ -169,7 +193,7 @@ const SearchBar = () => {
             InputProps={{
               endAdornment: <InputAdornment position="end" />,
             }}
-            sx={{ flex: 1, marginRight: -2 }}
+            sx={{ flex: 1, marginRight: -2, backgroundColor: "#FFF" }}
           />
           <CustomArrowRightIcon />
           <TextField
@@ -178,7 +202,7 @@ const SearchBar = () => {
             size="small"
             type="date"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            onChange={handleEndDateChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
             inputRef={endDateRef}
@@ -194,7 +218,7 @@ const SearchBar = () => {
                 },
               },
             }}
-            sx={{ flex: 1, marginLeft: -2 }}
+            sx={{ flex: 1, marginLeft: -2, backgroundColor: "#FFF" }}
           />
         </Box>
         <Button
@@ -217,7 +241,7 @@ const SearchBar = () => {
         <DialogTitle id="alert-dialog-title">{"잘못된 날짜 선택"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            종료일 날짜보다 늦습니다.
+            {dialogMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

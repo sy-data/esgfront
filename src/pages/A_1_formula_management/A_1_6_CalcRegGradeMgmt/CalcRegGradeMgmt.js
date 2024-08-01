@@ -5,9 +5,15 @@ import SearchBar from "./SearchBar";
 
 const CalcRegGradeMgmt = () => {
   return (
-    <Container>
-      <Box sx={{ my: 2 }}>
-        <SearchBar />
+    <Container
+      sx={{
+        border: "3px bold #F7F8F8",
+        backgroundColor: "#F7F8F8",
+        minWidth: "1500px",
+      }}
+    >
+      <SearchBar />
+      <Box sx={{ my: 2, backgroundColor: "#FFF" }}>
         <Box>
           <Box>
             <Box
