@@ -81,38 +81,57 @@ const ParameterInfo = () => {
 
   // 새 행 추가를 처리하는 함수입니다.
   const handleAddRow = () => {
+    // 새로운 행에 대한 고유 ID를 설정합니다. 현재 데이터 배열의 길이에 1을 더한 값입니다.
     const newId = data.length + 1;
+
+    // setData 함수를 사용하여 데이터를 업데이트합니다.
     setData([
+      // 현재의 데이터 배열을 스프레드 연산자를 사용하여 복사합니다.
       ...data,
+
+      // 새로운 행 객체를 데이터 배열에 추가합니다.
       {
-        id: newId,
-        parameterID: "",
-        upperGroup: "",
-        group: "",
-        inputType: "",
-        tier: "Tier 1",
-        value: "",
-        version: "",
-        unit: "TJ",
-        fuel: "",
-        activity: "",
-        industry: "",
+        id: newId, // 새로운 행의 고유 ID
+        parameterID: "", // 초기 파라미터 ID 값
+        upperGroup: "", // 초기 상위 그룹명 값
+        group: "", // 초기 그룹명 값
+        inputType: "", // 초기 입력 구분 값
+        tier: "Tier 1", // 초기 Tier 구분 값
+        value: "0", // 초기 파라미터 값
+        version: "", // 초기 파라미터값 버전
+        unit: "TJ", // 초기 단위 값
+        fuel: "프로판", // 초기 연료 값
+        activity: "역세권 연소", // 초기 배출활동 값
+        industry: "에너지산업", // 초기 산업군 값
       },
     ]);
+
+    // 새로운 페이지 번호를 계산합니다. 새 행이 추가된 후의 데이터 배열 길이를 10으로 나누어 올림한 값입니다.
     const newPage = Math.ceil((data.length + 1) / 10);
+
+    // setPage 함수를 사용하여 현재 페이지 번호를 업데이트합니다.
     setPage(newPage);
+
+    // 새로운 행의 상위 그룹명을 식별하기 위해 newRowRef.current에 새로운 행의 ID를 설정합니다.
     newRowRef.current = `upperGroup-${newId}`;
   };
 
   // 새로 추가된 행에 포커스를 설정하는 useEffect 훅입니다.
   useEffect(() => {
+    // newRowRef.current가 null이 아닌 경우에만 실행합니다.
     if (newRowRef.current !== null) {
+      // newRowRef.current의 값을 사용하여 해당 ID를 가진 DOM 요소를 찾습니다.
       const newRowElement = document.getElementById(newRowRef.current);
+
+      // 해당 DOM 요소가 존재하는 경우
       if (newRowElement) {
+        // 해당 요소에 포커스를 설정합니다.
         newRowElement.focus();
       }
+      // 포커스를 설정한 후 newRowRef.current 값을 null로 재설정합니다.
       newRowRef.current = null;
     }
+    // data 배열이 변경될 때마다 이 useEffect 훅을 실행합니다.
   }, [data]);
 
   // 페이지당 표시할 행의 수를 설정합니다.
@@ -126,9 +145,13 @@ const ParameterInfo = () => {
 
   // 키다운 이벤트를 처리하는 함수입니다.
   const handleKeyDown = (event) => {
+    // 사용자가 누른 키가 "Enter" 키인 경우
     if (event.key === "Enter") {
+      // 기본 이벤트 동작(즉, 폼 제출)을 방지합니다.
       event.preventDefault();
+      // 이벤트 대상(즉, 현재 입력 요소)의 포커스를 해제합니다.
       event.target.blur();
+      // 스낵바를 열도록 상태를 업데이트합니다.
       setOpenSnackbar(true);
     }
   };
