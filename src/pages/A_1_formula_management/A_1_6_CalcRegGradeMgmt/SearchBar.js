@@ -153,10 +153,10 @@ const SearchBar = () => {
               displayEmpty
               IconComponent={() => (
                 <CustomArrowIcon onClick={handleIconClick} />
-              )} // 커스텀 아이콘을 설정합니다.
+              )}
               ref={selectRef}
               sx={{
-                flex: 1,
+                height: "40px",
                 backgroundColor: "#FFF",
                 color: "var(--Gray-aaa, #AAA)",
                 fontFamily: "Pretendard Variable",
@@ -165,6 +165,7 @@ const SearchBar = () => {
                 fontWeight: "400",
                 lineHeight: "150%" /* 19.5px */,
                 letterSpacing: "-0.26px",
+                padding: "2px 13px",
               }}
             >
               <MenuItem value="">

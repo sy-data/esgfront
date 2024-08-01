@@ -8,6 +8,7 @@ export const data = [
     usageGrade: "Tier 1",
     netEmissionGrade: "Tier 1",
     emissionCalcGrade: "Tier 1",
+    calculationCoefficienGrade: "Tier 1",
     calcDate: "2024-02-03",
   },
   {
@@ -18,6 +19,7 @@ export const data = [
     usageGrade: "Tier 1",
     netEmissionGrade: "Tier 1",
     emissionCalcGrade: "Tier 1",
+    calculationCoefficienGrade: "Tier 1",
     calcDate: "2024-02-03",
   },
   {
@@ -28,6 +30,7 @@ export const data = [
     usageGrade: "Tier 1",
     netEmissionGrade: "Tier 1",
     emissionCalcGrade: "Tier 1",
+    calculationCoefficienGrade: "Tier 1",
     calcDate: "2024-02-03",
   },
   {
@@ -38,6 +41,7 @@ export const data = [
     usageGrade: "Tier 1",
     netEmissionGrade: "Tier 1",
     emissionCalcGrade: "Tier 1",
+    calculationCoefficienGrade: "Tier 1",
     calcDate: "2024-02-03",
   },
   {
@@ -48,6 +52,7 @@ export const data = [
     usageGrade: "Tier 1",
     netEmissionGrade: "Tier 1",
     emissionCalcGrade: "Tier 1",
+    calculationCoefficienGrade: "Tier 1",
     calcDate: "2024-02-03",
   },
 ];
