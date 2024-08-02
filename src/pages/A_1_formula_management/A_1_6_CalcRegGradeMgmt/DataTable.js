@@ -53,6 +53,16 @@ const DataTable = ({ data, selectedRows, setSelectedRows }) => {
 
   const isSelected = (no) => selectedRows.indexOf(no) !== -1;
 
+  const TableCellnStyles = {
+    color: "var(--Gray-757575, #757575)",
+    fontFamily: "Pretendard Variable",
+    fontSize: "13px",
+    fontStyle: "normal",
+    fontWeight: 500,
+    lineHeight: "150%" /* 19.5px */,
+    letterSpacing: "-0.26px",
+  };
+
   return (
     <TableContainer sx={{ mt: 2 }}>
       <Table>
@@ -68,14 +78,14 @@ const DataTable = ({ data, selectedRows, setSelectedRows }) => {
               />
               No
             </TableCell>
-            <TableCell>배출활동</TableCell>
-            <TableCell>배출시설규모</TableCell>
-            <TableCell>규정산정등급</TableCell>
-            <TableCell>사용량등급</TableCell>
-            <TableCell>순발열량등급</TableCell>
-            <TableCell>배출계수등급</TableCell>
-            <TableCell>산정계수등급</TableCell>
-            <TableCell>등록일</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>배출활동</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>배출시설규모</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>규정산정등급</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>사용량등급</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>순발열량등급</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>배출계수등급</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>산정계수등급</TableCell>
+            <TableCell sx={{ ...TableCellnStyles }}>등록일</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,7 +100,12 @@ const DataTable = ({ data, selectedRows, setSelectedRows }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  <TextField fullWidth size="small" value={row.activity} />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    value={row.activity}
+                    sx={{ width: 200 }}
+                  />
                 </TableCell>
                 <TableCell>
                   <FormControl fullWidth size="small">
