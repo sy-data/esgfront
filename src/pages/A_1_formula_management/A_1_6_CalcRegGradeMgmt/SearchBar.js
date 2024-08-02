@@ -1,19 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  FormControl,
-  MenuItem,
-  Select,
-  InputAdornment,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
-import CustomArrowIcon, { CustomArrowRightIcon } from "./CustomArrowIcon";
+import React, { useState, useEffect } from "react";
+import { Box, Button } from "@mui/material";
+import CustomSelect from "./CustomSelect";
+import DatePicker from "./DatePicker";
+import DialogAlert from "./DialogAlert";
+import { activeButtonStyles, inactiveButtonStyles } from "./styles";
 
 const SearchBar = () => {
   const [activity, setActivity] = useState("");
@@ -55,82 +45,6 @@ const SearchBar = () => {
     }
   }, [activity, startDate, endDate]);
 
-  const selectRef = useRef(null);
-  const startDateRef = useRef(null);
-  const endDateRef = useRef(null);
-
-  const today = new Date().toISOString().split("T")[0];
-
-  const handleIconClick = () => {
-    if (selectRef.current) {
-      selectRef.current.focus();
-      selectRef.current.click();
-    }
-  };
-
-  const handleStartDateClick = () => {
-    if (startDateRef.current) {
-      startDateRef.current.showPicker();
-    }
-  };
-
-  const handleEndDateClick = () => {
-    if (endDateRef.current) {
-      endDateRef.current.showPicker();
-    }
-  };
-
-  const commonStyles = {
-    display: "flex",
-    height: "40px",
-    padding: "6px 10px",
-    alignItems: "center",
-    gap: "16px",
-    flex: "1 0 0",
-    // background: "var(--Gray-fff, #FFF)",
-    boxSizing: "border-box",
-  };
-
-  const activeButtonStyles = {
-    display: "flex",
-    width: "114px",
-    height: "40px",
-    padding: "10px 16px",
-    justifyContent: "center",
-    alignItems: "center",
-    flexShrink: 0,
-    borderRadius: "8px",
-    background: "var(--Primary-Primary, #00CD9B)",
-    color: "var(--Gray-fff, #FFF)",
-    textAlign: "center",
-    fontFamily: '"Pretendard Variable"',
-    fontSize: "14px",
-    fontStyle: "normal",
-    fontWeight: 700,
-    lineHeight: "150%", // 21px
-    letterSpacing: "-0.28px",
-  };
-
-  const inactiveButtonStyles = {
-    display: "flex",
-    width: "114px",
-    height: "40px",
-    padding: "10px 16px",
-    justifyContent: "center",
-    alignItems: "center",
-    flexShrink: 0,
-    borderRadius: "8px",
-    background: "var(--Gray-eaeaea, #EAEAEA)",
-    color: "var(--Gray-ccc, #CCC)",
-    textAlign: "center",
-    fontFamily: '"Pretendard Variable"',
-    fontSize: "14px",
-    fontStyle: "normal",
-    fontWeight: 700,
-    lineHeight: "150%", // 21px
-    letterSpacing: "-0.28px",
-  };
-
   return (
     <Box
       display="flex"
@@ -145,83 +59,13 @@ const SearchBar = () => {
         alignItems="center"
         gap={2}
       >
-        <Box sx={{ ...commonStyles }}>
-          <FormControl fullWidth size="small">
-            <Select
-              value={activity}
-              onChange={(e) => setActivity(e.target.value)}
-              displayEmpty
-              IconComponent={() => (
-                <CustomArrowIcon onClick={handleIconClick} />
-              )}
-              ref={selectRef}
-              sx={{
-                height: "40px",
-                backgroundColor: "#FFF",
-                color: "var(--Gray-aaa, #AAA)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "400",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                padding: "2px 13px",
-              }}
-            >
-              <MenuItem value="">
-                <a>배출활동</a>
-              </MenuItem>
-              <MenuItem value="sample1">sample1</MenuItem>
-              <MenuItem value="sample2">sample2</MenuItem>
-              <MenuItem value="sample3">sample3</MenuItem>
-              <MenuItem value="sample4">sample4</MenuItem>
-              <MenuItem value="sample5">sample5</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Box display="flex" alignItems="center" sx={{ ...commonStyles }}>
-          <TextField
-            label="시작일"
-            variant="outlined"
-            size="small"
-            type="date"
-            value={startDate}
-            onChange={handleStartDateChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            inputRef={startDateRef}
-            onClick={handleStartDateClick}
-            InputProps={{
-              endAdornment: <InputAdornment position="end" />,
-            }}
-            sx={{ flex: 1, marginRight: -2, backgroundColor: "#FFF" }}
-          />
-          <CustomArrowRightIcon />
-          <TextField
-            label="종료일"
-            variant="outlined"
-            size="small"
-            type="date"
-            value={endDate}
-            onChange={handleEndDateChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            inputRef={endDateRef}
-            onClick={handleEndDateClick}
-            InputProps={{
-              endAdornment: <InputAdornment position="end" />,
-              inputProps: {
-                max: today,
-                style: {
-                  color: endDate && endDate > today ? "gray" : "inherit",
-                  cursor:
-                    endDate && endDate > today ? "not-allowed" : "pointer",
-                },
-              },
-            }}
-            sx={{ flex: 1, marginLeft: -2, backgroundColor: "#FFF" }}
-          />
-        </Box>
+        <CustomSelect activity={activity} setActivity={setActivity} />
+        <DatePicker
+          startDate={startDate}
+          endDate={endDate}
+          handleStartDateChange={handleStartDateChange}
+          handleEndDateChange={handleEndDateChange}
+        />
         <Button
           variant="contained"
           sx={{
@@ -233,24 +77,11 @@ const SearchBar = () => {
           검색
         </Button>
       </Box>
-      <Dialog
+      <DialogAlert
         open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"잘못된 날짜 선택"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {dialogMessage}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary" autoFocus>
-            확인
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleClose={handleDialogClose}
+        message={dialogMessage}
+      />
     </Box>
   );
 };
