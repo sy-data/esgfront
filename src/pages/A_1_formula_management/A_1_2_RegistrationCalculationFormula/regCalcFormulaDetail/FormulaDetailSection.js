@@ -1,7 +1,12 @@
 import {ButtonContainer, ConfirmButton, StyledMenuTitleContainer, TitleButtonContainer} from "../styles";
-import {FormulaDetailSectionContainer} from "./styles";
+import {
+  FormulaDetailLabel,
+  FormulaDetailSectionContainer,
+  FormulaDetailSelectBox,
+  FormulaDetailSelectPlaceholder
+} from "./styles";
 import React, {useCallback, useState} from "react";
-import {styled, Select, MenuItem} from "@mui/material";
+import {styled, MenuItem} from "@mui/material";
 
 const LabelInputContainer = styled("div")({
   display: "flex",
@@ -29,13 +34,6 @@ const RedDot = styled("span")({
   borderRadius: "2px"
 });
 
-const Label = styled("span")({
-  color: "var(--Gray-111, #111)",
-  fontFamily: "Pretendard Variable",
-  fontSize: "14px",
-  fontWeight: 600,
-  marginLeft: "4px",
-});
 
 const Input = styled("input")(({disabled}) => ({
   display: "flex",
@@ -49,26 +47,6 @@ const Input = styled("input")(({disabled}) => ({
   marginTop: "4px",
 }));
 
-const SelectBox = styled(Select)(() => ({
-  display: "flex",
-  height: "40px",
-  justifyContent: "space-between",
-  alignItems: "center",
-  fontSize: "13px",
-  borderRadius: "8px",
-  border: "1px solid var(--Gray-eee, #EEE)",
-  background: "var(--Gray-fff, #FFF)",
-  marginTop: "4px",
-  "& .MuiOutlinedInput-notchedOutline": {
-    border: "transparent",
-  },
-}));
-
-const SelectPlaceholder = styled("span")({
-  color: "var(--Gray-aaa, #AAA)",
-  fontFamily: "Pretendard Variable",
-  fontSize: "13px",
-});
 
 /**
  * A_1_2. 산정식 등록 > 산정식 상세정보 섹션
@@ -82,7 +60,7 @@ export const FormulaDetailSection = () => {
 
   const renderValue = useCallback((selected, placeholder) => {
     if (selected === '') {
-      return <SelectPlaceholder>{placeholder}</SelectPlaceholder>;
+      return <FormulaDetailSelectPlaceholder>{placeholder}</FormulaDetailSelectPlaceholder>;
     }
     return selected;
   }, []);
@@ -115,7 +93,7 @@ export const FormulaDetailSection = () => {
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"배출활동"} isRequire={true}/>
-          <SelectBox
+          <FormulaDetailSelectBox
             value={emissions}
             onChange={(e) => setEmissions(e.target.value)}
             displayEmpty
@@ -124,11 +102,11 @@ export const FormulaDetailSection = () => {
             <MenuItem value="배출활동 2">배출활동 2</MenuItem>
             <MenuItem value="배출활동 3">배출활동 3</MenuItem>
             <MenuItem value="배출활동 4">배출활동 4</MenuItem>
-          </SelectBox>
+          </FormulaDetailSelectBox>
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"Scope"} isRequire={true}/>
-          <SelectBox
+          <FormulaDetailSelectBox
             value={scope}
             onChange={(e) => setScope(e.target.value)}
             displayEmpty
@@ -136,11 +114,11 @@ export const FormulaDetailSection = () => {
             <MenuItem value="Scope 1">Scope 1</MenuItem>
             <MenuItem value="Scope 2">Scope 2</MenuItem>
             <MenuItem value="Scope 3">Scope 3</MenuItem>
-          </SelectBox>
+          </FormulaDetailSelectBox>
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"경계"}/>
-          <SelectBox
+          <FormulaDetailSelectBox
             value={boundary}
             onChange={(e) => setBoundary(e.target.value)}
             displayEmpty
@@ -148,18 +126,18 @@ export const FormulaDetailSection = () => {
             <MenuItem value="경계 1">경계 1</MenuItem>
             <MenuItem value="경계 2">경계 2</MenuItem>
             <MenuItem value="경계 3">경계 3</MenuItem>
-          </SelectBox>
+          </FormulaDetailSelectBox>
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"사용"} isRequire={true}/>
-          <SelectBox
+          <FormulaDetailSelectBox
             value={use}
             onChange={(e) => setUse(e.target.value)}
             displayEmpty
             renderValue={(selected) => renderValue(selected, "사용여부를 선택하세요")}>
             <MenuItem value="사용">사용</MenuItem>
             <MenuItem value="미사용">미사용</MenuItem>
-          </SelectBox>
+          </FormulaDetailSelectBox>
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"등록/변경일"}/>
@@ -177,7 +155,7 @@ export const FormulaDetailSection = () => {
 const LabelRedDotBox = ({text, isRequire}) => {
   return (
     <LabelRedDot>
-      <Label>{text}</Label>
+      <FormulaDetailLabel>{text}</FormulaDetailLabel>
       {isRequire && <RedDot/>}
     </LabelRedDot>
   )
