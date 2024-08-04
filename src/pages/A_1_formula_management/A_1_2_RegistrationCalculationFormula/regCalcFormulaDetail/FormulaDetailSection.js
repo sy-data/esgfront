@@ -7,6 +7,8 @@ import {
 } from "./styles";
 import React, {useCallback, useState} from "react";
 import {styled, MenuItem} from "@mui/material";
+import {CalendarIcon} from "./icon";
+import dayjs from 'dayjs';
 
 const LabelInputContainer = styled("div")({
   display: "flex",
@@ -45,7 +47,29 @@ const Input = styled("input")(({disabled}) => ({
   border: "1px solid var(--Gray-eee, #EEE)",
   background: disabled ? "var(--Gray-eee, #EEE)" : "var(--Gray-fff, #FFF)",
   marginTop: "4px",
+  fontFamily: "Pretendard Variable",
+  fontWeight: 700,
+  color: disabled ? "var(--Gray-aaa, #AAA)" : "var(--Gray-111, #111)",
+  '&::placeholder': {
+    fontWeight: 400,
+    color: "var(--Gray-aaa, #AAA)",
+  }
 }));
+
+const IconInputBox = styled("div")({
+  display: 'flex',
+  alignItems: 'center',
+  background: 'var(--Gray-eee, #EEE)',
+  borderRadius: "8px",
+  marginTop: "4px",
+  padding: "0 0 0 16px",
+});
+
+const IconInput = styled(Input)({
+  display: 'flex',
+  justifyContent: 'center',
+  paddingLeft: 10,
+});
 
 
 /**
@@ -141,7 +165,10 @@ export const FormulaDetailSection = () => {
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"등록/변경일"}/>
-          <Input value="" disabled={true}/>
+          <IconInputBox>
+            <CalendarIcon/>
+            <IconInput value={dayjs().format('YYYY-MM-DD')} disabled={true}/>
+          </IconInputBox>
         </LabelInputBox>
         <LabelInputBox>
           <LabelRedDotBox text={"등록/변경자"}/>

@@ -24,6 +24,9 @@ export const FormulaDetailSelectBox = styled(Select)(() => ({
   justifyContent: "space-between",
   alignItems: "center",
   fontSize: "13px",
+  fontFamily: "Pretendard Variable",
+  fontWeight: 700,
+  color:  "var(--Gray-111, #111)",
   borderRadius: "8px",
   border: "1px solid var(--Gray-eee, #EEE)",
   background: "var(--Gray-fff, #FFF)",
@@ -37,4 +40,5 @@ export const FormulaDetailSelectPlaceholder = styled("span")({
   color: "var(--Gray-aaa, #AAA)",
   fontFamily: "Pretendard Variable",
   fontSize: "13px",
+  fontWeight: 400,
 });
