@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo} from "react";
 import CustomDataGrid from "./RegCalcFormulaDataGrid";
 import CustomTextField from "./CustomTextField";
-import {CustomCheckbox, headerStyle} from "./styles";
+import {CustomCheckbox, headerStyle} from "../styles";
 
 const RegCalcFormulaList = (props) => {
   const {

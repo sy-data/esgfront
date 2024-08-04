@@ -6,73 +6,32 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  styled,
 } from "@mui/material";
 import RegCalcFormulaPagination from "./RegCalcFormulaPagination";
 import {
   StyledMenuTitleContainer,
   TitleButtonContainer,
-  ButtonContainer,
-} from "./styles";
-
-// 스타일이 적용된 AddButton 컴포넌트 정의
-const AddButton = styled(Button)({
-  width: "122px",
-  display: "flex",
-  height: "40px",
-  padding: "10px 16px",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "10px",
-  flex: "1 0 0",
-  borderRadius: "8px",
-  background: "var(--Primary-Primary, #00CD9B)",
-  color: "var(--Gray-fff, #FFF)",
-  textAlign: "center",
-  fontFamily: "Pretendard Variable",
-  fontSize: "14px",
-  fontStyle: "normal",
-  fontWeight: 700,
-  lineHeight: "150%" /* 21px */,
-  letterSpacing: "-0.28px",
-  whiteSpace: "nowrap",
-  marginBottom: "16px",
-  marginRight: "8px",
-});
-
-// 스타일이 적용된 DeleteButton 컴포넌트 정의
-const DeleteButton = styled(Button)({
-  display: "flex",
-  height: "40px",
-  padding: "10px 16px",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "4px",
-  flex: "1 0 0",
-  borderRadius: "8px",
-  border: "1px solid var(--Gray-eee, #EEE)",
-  background: "var(--Gray-fff, #FFF)",
-  color: "var(--Gray-111, #111)",
-  textAlign: "center",
-  fontFamily: "Pretendard Variable",
-  fontSize: "14px",
-  fontStyle: "normal",
-  fontWeight: 700,
-  lineHeight: "150%" /* 21px */,
-  letterSpacing: "-0.28px",
-  whiteSpace: "nowrap",
-  marginRight: "10px",
-});
+  ButtonContainer, ConfirmButton, CancelButton,
+} from "../styles";
 
 const RegCalcFormulaTableTitle = (props) => {
   // props로 전달된 값들 추출
-  const {setData, selectedRow, editRowId, setEditRowId, currentDepth, customDataGridRef} = props;
+  const {setData, selectedRow, editRowId, setEditRowId, currentDepth, setCurrentDepth, customDataGridRef} = props;
 
   // 삭제 다이얼로그의 열림 상태 관리
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
+  const handleClickAdd = () => {
+    if (currentDepth < 4) {
+      addRow()
+    } else {
+      // 4 depth 에서 추가 버튼 클릭 시 5 depth 로 넘어감
+      setCurrentDepth(prevState => prevState + 1);
+    }
+  }
+
   // 행 추가 함수
-  const handleAddRow = () => {
+  const addRow = () => {
     setData((prevState) => {
       // 새로 추가되는 행은 현재 가장 큰 No 다음 값으로 설정
       const newNo = prevState.at(-1).id + 1;
@@ -102,7 +61,7 @@ const RegCalcFormulaTableTitle = (props) => {
   };
 
   // 삭제 버튼 클릭 처리 함수
-  const handleDeleteButton = () => {
+  const handleClickDelete = () => {
     setOpenDeleteDialog(true); // 삭제 다이얼로그 열기
   };
 
@@ -116,15 +75,15 @@ const RegCalcFormulaTableTitle = (props) => {
       <TitleButtonContainer>
         <StyledMenuTitleContainer>산정식 기본 정보</StyledMenuTitleContainer>
         <ButtonContainer>
-          <AddButton onClick={handleAddRow} disabled={editRowId !== null}>
-            그룹 추가
-          </AddButton>
-          <DeleteButton
-            onClick={handleDeleteButton}
+          <ConfirmButton onClick={handleClickAdd} disabled={editRowId !== null}>
+            추가
+          </ConfirmButton>
+          <CancelButton
+            onClick={handleClickDelete}
             disabled={selectedRow.length === 0}
           >
             삭제
-          </DeleteButton>
+          </CancelButton>
         </ButtonContainer>
       </TitleButtonContainer>
 

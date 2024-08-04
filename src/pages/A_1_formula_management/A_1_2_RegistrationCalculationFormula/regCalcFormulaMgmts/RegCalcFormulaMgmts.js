@@ -29,7 +29,7 @@ const NoDataMessage = styled("div")(({theme}) => ({
  * A_1_2. 산정식 등록 > 산정식 기본정보
  */
 const RegCalcFormulaMgmts = (props) => {
-  const {currentDepth} = props;
+  const {currentDepth, setCurrentDepth} = props;
   const gridApiRef = useGridApiRef(); // 그리드 API 참조 생성
   const [data, setData] = useState([]); // 데이터 상태 관리
   const [selectedRow, setSelectedRow] = useState([]); // 선택된 행 상태 관리
@@ -64,6 +64,7 @@ const RegCalcFormulaMgmts = (props) => {
         editRowId={editRowId} // 편집 중인 행 ID
         setEditRowId={setEditRowId} // 편집 중인 행 ID 설정 함수
         currentDepth={currentDepth} // 현재 depth
+        setCurrentDepth={setCurrentDepth}
         customDataGridRef={customDataGridRef}
       />
       {data.length === 0 ? (

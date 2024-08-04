@@ -12,12 +12,13 @@ export const MainContent = styled("div")(() => ({
   display: "flex",
 }));
 
-export const ContentWithTitie = styled("div")(() => ({
+export const ContentWithTitie = styled("div")(({ gap }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   width: "100%",
   height: "100%",
+  gap
 }));
 
 export const FilterBlock = styled("div")(() => ({
