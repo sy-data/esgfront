@@ -28,7 +28,7 @@
     "recoil": "^0.7.7",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://ec2-13-209-12-137.ap-northeast-2.compute.amazonaws.com:1337/",
+  "proxy": "http://54.180.242.25:8001",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
