@@ -18,8 +18,8 @@ export const ContentWithTitie = styled("div")(({ gap }) => ({
   flex: 1,
   width: "100%",
   height: "100%",
-  overflow: "auto"
-  gap
+  overflow: "auto",
+  gap,
 }));
 
 export const FilterBlock = styled("div")(() => ({
