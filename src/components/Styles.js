@@ -12,13 +12,14 @@ export const MainContent = styled("div")(() => ({
   height: "calc(100% - 80px)"
 }));
 
-export const ContentWithTitie = styled("div")(() => ({
+export const ContentWithTitie = styled("div")(({ gap }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   width: "100%",
   height: "100%",
   overflow: "auto"
+  gap
 }));
 
 export const FilterBlock = styled("div")(() => ({
@@ -68,7 +69,7 @@ export const FilterSelect = styled(Select)(() => ({
     borderRadius: "8px",
     border: "1px solid var(--Gray-eee, #EEE)",
     background: "var(--Gray-fff, #FFF)",
-    
+
     color: "var(--Gray-757575, #757575)",
     fontFamily: "Pretendard Variable",
     fontSize: "13px",

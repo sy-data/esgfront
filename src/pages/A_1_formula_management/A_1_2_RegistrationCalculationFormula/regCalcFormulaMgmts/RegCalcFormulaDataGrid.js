@@ -5,7 +5,7 @@ import React, {
   forwardRef,
 } from "react";
 import RegCalcFormulaPagination from "./RegCalcFormulaPagination";
-import { NoPaginationDataGrid, TableContainer } from "./styles";
+import { NoPaginationDataGrid, TableContainer } from "../styles";
 
 const RegCalcFormulaDataGrid = (props, ref) => {
   const { data = [], pageSize, ...otherProps } = props; // props에서 data와 pageSize를 추출하며, data의 기본값을 빈 배열로 설정

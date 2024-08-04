@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { PaginationContainer, NonStyledButton, SelectedButton } from "./styles";
+import { PaginationContainer, NonStyledButton, SelectedButton } from "../styles";
 
 // Pagination 컴포넌트 정의
 const Pagination = (props, ref) => {

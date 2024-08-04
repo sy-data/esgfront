@@ -6,7 +6,8 @@ import {
 } from "../../../States/leftNavigation/adminTree";
 import NavigationTree from "./NavigationTree";
 import MenuList from "../../../MenuItems";
-import RegCalcFormulaMgmts from "./RegCalcFormulaMgmts";
+import RegCalcFormulaMgmts from "./regCalcFormulaMgmts/RegCalcFormulaMgmts";
+import RegCalcFormulaDetail from "./regCalcFormulaDetail/RegCalcFormulaDetail";
 
 /**
  * A_1_2. 산정식 등록
@@ -15,12 +16,12 @@ const Frame = () => {
   const [currentDepth, setCurrentDepth] = useState(1);
 
   const handleClickPlus = () => {
-    if (currentDepth === 4) return;
+    if (currentDepth >= 5) return;
     setCurrentDepth(prevState => prevState + 1);
   }
 
   const handleClickMinus = () => {
-    if (currentDepth === 1) return;
+    if (currentDepth <= 1) return;
     setCurrentDepth(prevState => prevState - 1);
   }
 
@@ -75,9 +76,8 @@ const Frame = () => {
           marginTop: "-15px",
           marginRight: "-15px",
           marginBottom: "-15px",
-          paddingTop: "15px",
+          padding: "24px",
           flex: "1",
-          paddingLeft: 2,
           backgroundColor: "#F7F8F8",
         }}
       >
@@ -85,8 +85,11 @@ const Frame = () => {
         <Button onClick={handleClickPlus}>Depth +</Button>
         <Button onClick={handleClickMinus}>Depth -</Button>
         <span>현재 depth: {currentDepth}</span>
-        {/* TODO 5depth 산정식 상세정보 return 하기 */}
-        {currentDepth < 5 ? <RegCalcFormulaMgmts currentDepth={currentDepth} /> : null}
+        {/* 1~4 depth: 산정식 기본정보, 5depth: 산정식 상세정보 */}
+        {currentDepth < 5 ?
+          <RegCalcFormulaMgmts currentDepth={currentDepth} setCurrentDepth={setCurrentDepth}/> :
+          <RegCalcFormulaDetail/>
+        }
       </Box>
     </Box>
   );
