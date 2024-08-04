@@ -16,6 +16,7 @@ import {
 const CalcRegGradeMgmt = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [data, setData] = useState(initialData);
+  const [focusRowNo, setFocusRowNo] = useState(null);
 
   const handleAddRow = () => {
     const newRow = {
@@ -29,7 +30,8 @@ const CalcRegGradeMgmt = () => {
       calculationCoefficienGrade: "",
       calcDate: "",
     };
-    setData([...data, newRow]);
+    setData([newRow, ...data]);
+    setFocusRowNo(newRow.no);
   };
 
   const handleDelete = () => {
@@ -84,6 +86,8 @@ const CalcRegGradeMgmt = () => {
             data={data}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
+            setData={setData}
+            focusRowNo={focusRowNo}
           />
         </Box>
       </Box>
