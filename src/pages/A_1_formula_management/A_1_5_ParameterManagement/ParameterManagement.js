@@ -12,40 +12,71 @@ const ParameterManagement = ({ userId }) => {
   const [open, setOpen] = useState({});
   const searchTimeout = useRef(null);
 
+  // selectedGroup이 변경될 때마다 실행되는 useEffect 훅입니다.
   useEffect(() => {
+    // selectedGroup이 null 또는 undefined가 아닌 경우에만 실행합니다.
     if (selectedGroup) {
+      // 그룹 세부 정보를 비동기로 로드하는 함수입니다.
       const loadGroupDetails = async () => {
+        // selectedGroup을 사용하여 그룹 세부 정보를 가져옵니다.
         const details = await fetchParameterGroupDetails(selectedGroup);
+        // 가져온 세부 정보를 상태로 설정합니다.
         setGroupDetails(details);
       };
+      // 그룹 세부 정보를 로드하는 함수를 호출합니다.
       loadGroupDetails();
     }
+    // selectedGroup이 변경될 때마다 이 useEffect 훅을 실행합니다.
   }, [selectedGroup]);
 
+  // 노드의 확장/축소 상태를 토글하는 함수입니다.
   const handleToggle = (id) => {
-    setOpen((prevState) => ({ ...prevState, [id]: !prevState[id] }));
+    // setOpen 함수를 사용하여 open 상태를 업데이트합니다.
+    setOpen((prevState) =>
+      // 이전 상태(prevState)를 복사하고, 특정 id의 값을 반전시킵니다.
+      ({
+        ...prevState, // 이전 상태 객체를 스프레드 연산자로 복사합니다.
+        [id]: !prevState[id], // id에 해당하는 값을 반전시킵니다.
+      })
+    );
   };
 
+  // 메뉴 리스트와 검색어를 기반으로 필터링된 메뉴 리스트를 반환하는 함수입니다.
   const filterMenu = (menuList, searchTerm) => {
+    // menuList 배열을 순회하며 필터링을 수행합니다.
     return menuList.reduce((filtered, item) => {
+      // 현재 아이템의 이름이 검색어를 포함하는 경우
       if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        // 현재 아이템을 필터링된 배열에 추가합니다.
         filtered.push(item);
       } else if (item.children && item.children.length > 0) {
+        // 현재 아이템에 자식 아이템이 있는 경우
+        // 자식 아이템들을 재귀적으로 필터링합니다.
         const filteredChildren = filterMenu(item.children, searchTerm);
+        // 필터링된 자식 아이템이 있는 경우
         if (filteredChildren.length > 0) {
+          // 현재 아이템을 복사하고, 자식 아이템을 필터링된 자식 아이템으로 설정하여 필터링된 배열에 추가합니다.
           filtered.push({ ...item, children: filteredChildren });
         }
       }
+      // 필터링된 배열을 반환합니다.
       return filtered;
     }, []);
   };
 
+  // 검색 입력 필드의 변경을 처리하는 함수입니다.
   const handleSearchChange = (event) => {
+    // 이벤트 대상의 값(입력된 검색어)을 변수에 저장합니다.
     const value = event.target.value;
+
+    // 이전에 설정된 타임아웃이 있으면 이를 제거합니다.
     clearTimeout(searchTimeout.current);
+
+    // 새로운 타임아웃을 설정합니다. 타임아웃이 완료되면 검색어 상태를 업데이트합니다.
     searchTimeout.current = setTimeout(() => {
+      // 입력된 값을 검색어 상태로 설정합니다.
       setSearchTerm(value);
-    }, 300);
+    }, 300); // 300밀리초 후에 검색어 상태를 업데이트합니다.
   };
 
   const filteredGroups = filterMenu(newMenuList, searchTerm);

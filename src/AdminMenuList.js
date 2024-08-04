@@ -39,7 +39,7 @@ const AdminMenuList = [
         id: "S-6",
         type: "menu-child",
         name: "산정식규정등급관리",
-        link: "/admin-formula",
+        link: "/admin-formula/calcRegGradeMgmt",
       },
     ],
   },

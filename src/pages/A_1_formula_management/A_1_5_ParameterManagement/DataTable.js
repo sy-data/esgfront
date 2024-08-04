@@ -1,500 +1,97 @@
 import React, { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
   TableContainer,
+  Paper,
+  Table,
   TableHead,
   TableRow,
+  TableBody,
   Checkbox,
-  Paper,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
+  TableCell,
 } from "@mui/material";
+import TableHeader from "./TableHeader";
+import TableRowData from "./TableRowData";
 import { fetchParameterGroups, fetchParameterGroupDetails } from "./api";
 
 const DataTable = ({
-  data,
-  selectedRows,
-  allSelected,
-  handleSelectAllRows,
-  handleSelectRow,
-  page,
-  rowsPerPage,
-  handleKeyDown,
+  data, // 테이블에 표시할 데이터
+  selectedRows, // 선택된 행들의 배열
+  allSelected, // 모든 행이 선택되었는지를 나타내는 불리언 값
+  handleSelectAllRows, // 모든 행 선택을 처리하는 함수
+  handleSelectRow, // 개별 행 선택을 처리하는 함수
+  page, // 현재 페이지 번호
+  rowsPerPage, // 페이지당 행의 수
+  handleKeyDown, // 키다운 이벤트를 처리하는 함수
 }) => {
   const [parameterData, setParameterData] = useState({});
 
   useEffect(() => {
+    // 비동기로 매개변수 데이터를 가져오는 함수
     const fetchParameterData = async () => {
+      // 임시로 설정된 사용자 ID
       const userId = 1;
+
+      // 사용자 ID를 기반으로 매개변수 그룹을 가져옵니다.
       const groups = await fetchParameterGroups(userId);
+
+      // 매개변수 그룹이 있는 경우
       if (groups.length > 0) {
+        // 첫 번째 그룹의 세부 정보를 가져옵니다.
         const groupDetails = await fetchParameterGroupDetails(groups[0].id);
+
+        // 매개변수 ID로 객체를 생성합니다.
         const parameterData = groupDetails.reduce((acc, item) => {
-          acc[item.id] = item.parameter_id;
+          acc[item.id] = item.parameter_id; // 각 아이템의 ID와 매개변수 ID를 매핑합니다.
           return acc;
         }, {});
+
+        // 상태에 매개변수 데이터를 설정합니다.
         setParameterData(parameterData);
       }
     };
+
+    // 데이터를 가져오는 함수를 호출합니다.
     fetchParameterData();
-  }, []);
+  }, []); // 빈 배열을 사용하여 컴포넌트가 처음 마운트될 때만 실행
 
   return (
     <TableContainer
-      component={Paper}
-      sx={{ maxHeight: 900, overflowX: "auto", maxWidth: 1200 }}
+      component={Paper} // Paper 컴포넌트를 사용하여 배경을 설정합니다.
+      sx={{ maxHeight: 900, overflowX: "auto", maxWidth: 1200 }} // 스타일 속성을 사용하여 최대 높이와 너비를 설정합니다.
     >
+      {/* 테이블을 생성하고 stickyHeader 속성을 사용하여 헤더를 고정합니다. */}
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
               <Checkbox
                 size="small"
-                checked={allSelected}
-                onChange={handleSelectAllRows}
+                checked={allSelected} // 모든 행이 선택되었는지 여부에 따라 체크 여부를 결정합니다.
+                onChange={handleSelectAllRows} // 체크박스의 상태 변경 시 호출되는 핸들러
                 sx={{
                   display: "flex",
                   height: "50px",
-                  // padding: "0 50px 0 268px",
-                  // alignItems: "center",
-                  // gap: "16px",
-                  // flexShrink: 0,
                   borderBottom: "1px solid var(--Gray-e5e5e5, #E5E5E5)",
                   background: "var(--Gray-fff, #FFF)",
                 }}
               />
             </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-              }}
-            >
-              No
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                whiteSpace: "nowrap",
-              }}
-            >
-              파라미터 ID
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              상위그룹명
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              그룹명
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              입력구분
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              Tier 구분
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                whiteSpace: "nowrap",
-                textAlign: "center",
-              }}
-            >
-              파라미터 값
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              파라미터값 버전
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              단위
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              연료
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                whiteSpace: "nowrap",
-                textAlign: "center",
-              }}
-            >
-              배출활동
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "var(--Gray-757575, #757575)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "13px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "150%" /* 19.5px */,
-                letterSpacing: "-0.26px",
-                textAlign: "center",
-              }}
-            >
-              산업군
-            </TableCell>
+            <TableHeader />
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
-            <TableRow key={row.id}>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  size="small"
-                  checked={selectedRows.includes(row.id)}
-                  onChange={() => handleSelectRow(row.id)}
-                />
-              </TableCell>
-              <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
-              <TableCell>
-                {parameterData[row.id]
-                  ? parameterData[row.id]
-                  : row.parameterID}
-                {/* <TextField
-                  // id={`parameterID-${row.id}`}
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.parameterID}
-                  onKeyDown={handleKeyDown}
-                  sx={{ "& .MuiInputBase-input": { padding: "10px 14px" } }}
-                  InputProps={{ sx: { width: "95px" } }}
-                /> */}
-              </TableCell>
-              <TableCell>
-                <TextField
-                  id={`upperGroup-${row.id}`} // 여기에 id 추가
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.upperGroup}
-                  onKeyDown={handleKeyDown}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "10px 16px",
-                      alignItems: "center",
-                      gap: "10px",
-                      flex: "1 0 0",
-                    },
-                  }}
-                  InputProps={{ sx: { width: "150px" } }}
-                />
-              </TableCell>
-              <TableCell>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.group}
-                  onKeyDown={handleKeyDown}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "10px 16px",
-                      alignItems: "center",
-                      gap: "10px",
-                      flex: "1 0 0",
-                    },
-                  }}
-                  InputProps={{ sx: { width: "250px" } }}
-                />
-              </TableCell>
-              <TableCell>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.inputType}
-                  onKeyDown={handleKeyDown}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "10px 16px",
-                      alignItems: "center",
-                      gap: "10px",
-                      flex: "1 0 0",
-                    },
-                  }}
-                  InputProps={{ sx: { width: "150px" } }}
-                />
-              </TableCell>
-              <TableCell>
-                <FormControl variant="outlined" size="small">
-                  <Select
-                    defaultValue={row.tier}
-                    size="small"
-                    sx={{
-                      borderRadius: "5px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "2.6px 10px",
-                      alignItems: "center",
-                      gap: "10px",
-                      // flex: "1 0 0",
-                    }}
-                  >
-                    <MenuItem value="Tier 1">Tier 1</MenuItem>
-                    <MenuItem value="Tier 2">Tier 2</MenuItem>
-                    <MenuItem value="Tier 3">Tier 3</MenuItem>
-                    <MenuItem value="Tier 4">Tier 4</MenuItem>
-                    <MenuItem value="Tier 5">Tier 5</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.value}
-                  onKeyDown={handleKeyDown}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "10px 16px",
-                      alignItems: "center",
-                      gap: "10px",
-                      flex: "1 0 0",
-                    },
-                  }}
-                  InputProps={{ sx: { width: "70px" } }}
-                />
-              </TableCell>
-              <TableCell>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  defaultValue={row.version}
-                  onKeyDown={handleKeyDown}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "10px 14px",
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "10px 16px",
-                      alignItems: "center",
-                      gap: "10px",
-                      flex: "1 0 0",
-                    },
-                  }}
-                  InputProps={{ sx: { width: "120px" } }}
-                />
-              </TableCell>
-              <TableCell>
-                <FormControl variant="outlined" size="small">
-                  <Select
-                    defaultValue={row.unit}
-                    size="small"
-                    sx={{
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "2.6px",
-                      alignItems: "center",
-                      gap: "10px",
-                      // flex: "1 0 0",
-                    }}
-                  >
-                    <MenuItem value="TJ">TJ</MenuItem>
-                    <MenuItem value="kJ">kJ</MenuItem>
-                    <MenuItem value="ton-C / 1000 m3">ton-C / 1000 m3</MenuItem>
-                    <MenuItem value="1000 m3">1000 m3</MenuItem>
-                    <MenuItem value="TJ / t-NH3">TJ / t-NH3</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <FormControl variant="outlined" size="small">
-                  <Select
-                    defaultValue={row.fuel}
-                    size="small"
-                    sx={{
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "2.6px",
-                      alignItems: "center",
-                      gap: "10px",
-                      // flex: "1 0 0",
-                    }}
-                  >
-                    <MenuItem value="프로판">프로판</MenuItem>
-                    <MenuItem value="Fuel 1">Fuel 1</MenuItem>
-                    <MenuItem value="Fuel 2">Fuel 2</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <FormControl variant="outlined" size="small">
-                  <Select
-                    defaultValue={row.activity}
-                    size="small"
-                    sx={{
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "2.6px",
-                      alignItems: "center",
-                      gap: "10px",
-                      // flex: "1 0 0",
-                    }}
-                  >
-                    <MenuItem value="역세권 연소">역세권 연소</MenuItem>
-                    <MenuItem value="Activity 1">Activity 1</MenuItem>
-                    <MenuItem value="Activity 2">Activity 2</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <FormControl variant="outlined" size="small">
-                  <Select
-                    defaultValue={row.industry}
-                    size="small"
-                    sx={{
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--Gray-eee, #EEE)",
-                      background: "var(--Gray-fff, #FFF)",
-                      display: "flex",
-                      padding: "2.6px",
-                      alignItems: "center",
-                      gap: "10px",
-                      // flex: "1 0 0",
-                    }}
-                  >
-                    <MenuItem value="에너지산업">에너지산업</MenuItem>
-                    <MenuItem value="Industry 1">Industry 1</MenuItem>
-                    <MenuItem value="Industry 2">Industry 2</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-            </TableRow>
+            <TableRowData
+              key={row.id} // 각 행의 고유 ID를 키로 사용합니다.
+              row={row} // 현재 행의 데이터를 전달합니다.
+              index={index} // 현재 행의 인덱스를 전달합니다.
+              page={page} // 현재 페이지 번호를 전달합니다.
+              rowsPerPage={rowsPerPage} // 페이지당 행의 수를 전달합니다.
+              selectedRows={selectedRows} // 선택된 행들의 배열을 전달합니다.
+              handleSelectRow={handleSelectRow} // 개별 행 선택을 처리하는 핸들러를 전달합니다.
+              handleKeyDown={handleKeyDown} // 키다운 이벤트를 처리하는 핸들러를 전달합니다.
+              parameterData={parameterData} // 매개변수 데이터를 전달합니다.
+            />
           ))}
         </TableBody>
       </Table>
@@ -502,4 +99,5 @@ const DataTable = ({
   );
 };
 
+// DataTable 컴포넌트를 내보냅니다.
 export default DataTable;
