@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Checkbox } from "@mui/material";
+import {Button, Checkbox} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import React from "react";
@@ -123,4 +123,53 @@ export const TableContainer = styled("div")({
   display: "flex",
   flexDirection: "column", // 세로 방향으로 정렬
   gap: "7px",
+});
+
+// 스타일이 적용된 AddButton 컴포넌트 정의
+export const ConfirmButton = styled(Button)({
+  width: "122px",
+  display: "flex",
+  height: "40px",
+  padding: "10px 16px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "10px",
+  flex: "1 0 0",
+  borderRadius: "8px",
+  background: "var(--Primary-Primary, #00CD9B)",
+  color: "var(--Gray-fff, #FFF)",
+  textAlign: "center",
+  fontFamily: "Pretendard Variable",
+  fontSize: "14px",
+  fontStyle: "normal",
+  fontWeight: 700,
+  lineHeight: "150%" /* 21px */,
+  letterSpacing: "-0.28px",
+  whiteSpace: "nowrap",
+  marginBottom: "16px",
+  marginRight: "8px",
+});
+
+// 스타일이 적용된 DeleteButton 컴포넌트 정의
+export const CancelButton = styled(Button)({
+  display: "flex",
+  height: "40px",
+  padding: "10px 16px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "4px",
+  flex: "1 0 0",
+  borderRadius: "8px",
+  border: "1px solid var(--Gray-eee, #EEE)",
+  background: "var(--Gray-fff, #FFF)",
+  color: "var(--Gray-111, #111)",
+  textAlign: "center",
+  fontFamily: "Pretendard Variable",
+  fontSize: "14px",
+  fontStyle: "normal",
+  fontWeight: 700,
+  lineHeight: "150%" /* 21px */,
+  letterSpacing: "-0.28px",
+  whiteSpace: "nowrap",
+  marginRight: "10px",
 });
