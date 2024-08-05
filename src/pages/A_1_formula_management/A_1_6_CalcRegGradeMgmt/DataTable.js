@@ -31,7 +31,7 @@ const DataTable = ({
     if (focusRowNo && textFieldRefs.current[focusRowNo]) {
       textFieldRefs.current[focusRowNo].focus();
     }
-  }, [data, focusRowNo]);
+  }, [focusRowNo]); // data 대신 focusRowNo만 사용
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -72,6 +72,7 @@ const DataTable = ({
 
   const handleActivityBlur = (event, no) => {
     setOpenSnackbar(true);
+    event.target.blur(); // 포커스 잃게 하기
   };
 
   const handleActivityKeyPress = (event, no) => {

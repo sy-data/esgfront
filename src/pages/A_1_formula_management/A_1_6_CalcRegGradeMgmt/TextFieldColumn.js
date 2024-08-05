@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useCallback, useState, useEffect, memo } from "react";
 import { TextField, TableCell } from "@mui/material";
+import _ from "lodash";
 
 const TextFieldColumn = ({
   row,
@@ -8,15 +9,51 @@ const TextFieldColumn = ({
   handleActivityKeyPress,
   textFieldRef,
 }) => {
+  const [value, setValue] = useState(row.activity);
+
+  useEffect(() => {
+    setValue(row.activity);
+  }, [row.activity]);
+
+  const debouncedChangeHandler = useCallback(
+    _.debounce((event) => {
+      handleActivityChange(event, row.no);
+    }, 300),
+    [handleActivityChange, row.no]
+  );
+
+  const onChange = (event) => {
+    setValue(event.target.value);
+    debouncedChangeHandler(event);
+  };
+
+  const onBlur = useCallback(
+    (event) => {
+      handleActivityBlur(event, row.no);
+      event.target.blur(); // 포커스 잃게 하기
+    },
+    [handleActivityBlur, row.no]
+  );
+
+  const onKeyPress = useCallback(
+    (event) => {
+      handleActivityKeyPress(event, row.no);
+      if (event.key === "Enter") {
+        event.target.blur(); // 포커스 잃게 하기
+      }
+    },
+    [handleActivityKeyPress, row.no]
+  );
+
   return (
     <TableCell>
       <TextField
         fullWidth
         size="small"
-        value={row.activity}
-        onChange={(event) => handleActivityChange(event, row.no)}
-        onBlur={(event) => handleActivityBlur(event, row.no)}
-        onKeyPress={(event) => handleActivityKeyPress(event, row.no)}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        onKeyPress={onKeyPress}
         sx={{ width: 200 }}
         inputRef={textFieldRef}
       />
@@ -24,4 +61,4 @@ const TextFieldColumn = ({
   );
 };
 
-export default TextFieldColumn;
+export default memo(TextFieldColumn);

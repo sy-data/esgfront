@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import React, { useState, useCallback } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import DataTable from "./DataTable";
 import SearchBar from "./SearchBar";
 import { data as initialData } from "./data";
@@ -17,8 +24,9 @@ const CalcRegGradeMgmt = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [data, setData] = useState(initialData);
   const [focusRowNo, setFocusRowNo] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleAddRow = () => {
+  const handleAddRow = useCallback(() => {
     const newRow = {
       no: data.length + 1,
       activity: "",
@@ -32,15 +40,15 @@ const CalcRegGradeMgmt = () => {
     };
     setData([newRow, ...data]);
     setFocusRowNo(newRow.no);
-  };
+  }, [data]);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     const newData = data.filter((row) => !selectedRows.includes(row.no));
     setData(newData);
     setSelectedRows([]);
-  };
+  }, [data, selectedRows]);
 
-  const handleSearch = (filters) => {
+  const handleSearch = useCallback((filters) => {
     const filteredData = initialData.filter((row) => {
       return (
         (!filters.activity || row.activity === filters.activity) &&
@@ -51,7 +59,15 @@ const CalcRegGradeMgmt = () => {
       );
     });
     setData(filteredData);
-  };
+  }, []);
+
+  const handleSave = useCallback(() => {
+    setOpenSnackbar(true);
+  }, []);
+
+  const handleCloseSnackbar = useCallback(() => {
+    setOpenSnackbar(false);
+  }, []);
 
   return (
     <Container sx={containerStyles}>
@@ -88,9 +104,19 @@ const CalcRegGradeMgmt = () => {
             setSelectedRows={setSelectedRows}
             setData={setData}
             focusRowNo={focusRowNo}
+            onSave={handleSave} // onSave 함수를 DataTable에 전달합니다.
           />
         </Box>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          저장되었습니다.
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

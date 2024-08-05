@@ -13,12 +13,19 @@ const CustomSelect = ({ activity, setActivity }) => {
     }
   };
 
+  const handleChange = (e) => {
+    setActivity(e.target.value);
+    if (selectRef.current) {
+      selectRef.current.blur(); // 포커스 잃게 하기
+    }
+  };
+
   return (
     <Box sx={{ ...commonStyles }}>
       <FormControl fullWidth size="small">
         <Select
           value={activity}
-          onChange={(e) => setActivity(e.target.value)}
+          onChange={handleChange}
           displayEmpty
           IconComponent={() => <CustomArrowIcon onClick={handleIconClick} />}
           ref={selectRef}
