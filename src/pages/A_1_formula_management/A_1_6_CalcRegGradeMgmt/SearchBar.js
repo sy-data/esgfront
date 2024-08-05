@@ -5,7 +5,7 @@ import DatePicker from "./DatePicker";
 import DialogAlert from "./DialogAlert";
 import { activeButtonStyles, inactiveButtonStyles } from "./styles";
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, onClear }) => {
   const [activity, setActivity] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -49,6 +49,13 @@ const SearchBar = ({ onSearch }) => {
     onSearch({ activity, startDate, endDate });
   };
 
+  const handleClearClick = () => {
+    setActivity("");
+    setStartDate("");
+    setEndDate("");
+    onClear();
+  };
+
   return (
     <Box
       display="flex"
@@ -74,12 +81,19 @@ const SearchBar = ({ onSearch }) => {
           variant="contained"
           sx={{
             ...(isButtonActive ? activeButtonStyles : inactiveButtonStyles),
-            marginRight: 40,
+            marginRight: 2,
           }}
           disabled={!isButtonActive}
           onClick={handleSearchClick}
         >
           검색
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{ marginRight: 40 }}
+          onClick={handleClearClick}
+        >
+          초기화
         </Button>
       </Box>
       <DialogAlert

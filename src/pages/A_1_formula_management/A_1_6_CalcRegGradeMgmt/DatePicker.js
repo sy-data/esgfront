@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Box, TextField, InputAdornment } from "@mui/material";
-import CustomArrowIcon, { CustomArrowRightIcon } from "./CustomArrowIcon";
+import { CustomArrowRightIcon } from "./CustomArrowIcon";
 import { commonStyles } from "./styles";
 
 const DatePicker = ({
@@ -40,6 +40,14 @@ const DatePicker = ({
         onClick={handleStartDateClick}
         InputProps={{
           endAdornment: <InputAdornment position="end" />,
+          inputProps: {
+            max: today,
+            style: {
+              color: startDate && startDate > today ? "gray" : "inherit",
+              cursor:
+                startDate && startDate > today ? "not-allowed" : "pointer",
+            },
+          },
         }}
         sx={{ flex: 1, marginRight: -2, backgroundColor: "#FFF" }}
       />

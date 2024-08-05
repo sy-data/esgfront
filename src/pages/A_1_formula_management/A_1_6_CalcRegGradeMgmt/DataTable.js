@@ -22,6 +22,7 @@ const DataTable = ({
   setData,
   focusRowNo,
   filters,
+  initialData,
 }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [page, setPage] = useState(0);
@@ -32,11 +33,11 @@ const DataTable = ({
     if (focusRowNo && textFieldRefs.current[focusRowNo]) {
       textFieldRefs.current[focusRowNo].focus();
     }
-  }, [focusRowNo]); // data 대신 focusRowNo만 사용
+  }, [focusRowNo]);
 
   useEffect(() => {
     if (filters) {
-      const filteredData = data.filter((row) => {
+      const filteredData = initialData.filter((row) => {
         const isActivityMatch = filters.activity
           ? row.activity === filters.activity
           : true;
@@ -49,8 +50,10 @@ const DataTable = ({
         return isActivityMatch && isStartDateMatch && isEndDateMatch;
       });
       setData(filteredData);
+    } else {
+      setData(initialData);
     }
-  }, [filters, data, setData]);
+  }, [filters, initialData, setData]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -91,7 +94,7 @@ const DataTable = ({
 
   const handleActivityBlur = (event, no) => {
     setOpenSnackbar(true);
-    event.target.blur(); // 포커스 잃게 하기
+    event.target.blur();
   };
 
   const handleActivityKeyPress = (event, no) => {
