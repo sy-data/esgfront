@@ -21,6 +21,7 @@ const DataTable = ({
   setSelectedRows,
   setData,
   focusRowNo,
+  filters,
 }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [page, setPage] = useState(0);
@@ -32,6 +33,24 @@ const DataTable = ({
       textFieldRefs.current[focusRowNo].focus();
     }
   }, [focusRowNo]); // data 대신 focusRowNo만 사용
+
+  useEffect(() => {
+    if (filters) {
+      const filteredData = data.filter((row) => {
+        const isActivityMatch = filters.activity
+          ? row.activity === filters.activity
+          : true;
+        const isStartDateMatch = filters.startDate
+          ? new Date(row.calcDate) >= new Date(filters.startDate)
+          : true;
+        const isEndDateMatch = filters.endDate
+          ? new Date(row.calcDate) <= new Date(filters.endDate)
+          : true;
+        return isActivityMatch && isStartDateMatch && isEndDateMatch;
+      });
+      setData(filteredData);
+    }
+  }, [filters, data, setData]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {

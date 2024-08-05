@@ -5,7 +5,7 @@ import DatePicker from "./DatePicker";
 import DialogAlert from "./DialogAlert";
 import { activeButtonStyles, inactiveButtonStyles } from "./styles";
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
   const [activity, setActivity] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -45,6 +45,10 @@ const SearchBar = () => {
     }
   }, [activity, startDate, endDate]);
 
+  const handleSearchClick = () => {
+    onSearch({ activity, startDate, endDate });
+  };
+
   return (
     <Box
       display="flex"
@@ -73,6 +77,7 @@ const SearchBar = () => {
             marginRight: 40,
           }}
           disabled={!isButtonActive}
+          onClick={handleSearchClick}
         >
           검색
         </Button>

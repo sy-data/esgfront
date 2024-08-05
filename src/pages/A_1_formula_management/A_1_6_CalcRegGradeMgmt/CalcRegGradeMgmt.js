@@ -25,6 +25,7 @@ const CalcRegGradeMgmt = () => {
   const [data, setData] = useState(initialData);
   const [focusRowNo, setFocusRowNo] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [filters, setFilters] = useState(null);
 
   const handleAddRow = useCallback(() => {
     const newRow = {
@@ -49,16 +50,7 @@ const CalcRegGradeMgmt = () => {
   }, [data, selectedRows]);
 
   const handleSearch = useCallback((filters) => {
-    const filteredData = initialData.filter((row) => {
-      return (
-        (!filters.activity || row.activity === filters.activity) &&
-        (!filters.startDate ||
-          new Date(row.calcDate) >= new Date(filters.startDate)) &&
-        (!filters.endDate ||
-          new Date(row.calcDate) <= new Date(filters.endDate))
-      );
-    });
-    setData(filteredData);
+    setFilters(filters);
   }, []);
 
   const handleSave = useCallback(() => {
@@ -104,7 +96,7 @@ const CalcRegGradeMgmt = () => {
             setSelectedRows={setSelectedRows}
             setData={setData}
             focusRowNo={focusRowNo}
-            onSave={handleSave} // onSave 함수를 DataTable에 전달합니다.
+            filters={filters} // filters 전달
           />
         </Box>
       </Box>
