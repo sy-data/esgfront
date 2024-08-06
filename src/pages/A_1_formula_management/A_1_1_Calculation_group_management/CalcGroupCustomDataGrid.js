@@ -14,33 +14,33 @@ const CustomDataGrid = (props, ref) => {
   const [focusRow, setFocusRow] = useState(null); // 포커스가 설정될 행 상태
   const paginationRef = useRef(null); // 페이지네이션 참조 생성
 
-  // 부모 컴포넌트에서 호출할 수 있는 함수들 정의
   useImperativeHandle(ref, () => ({
     focusRow: (row) => {
-      // 만약 현재 페이지에 포커스할 행이 존재하면 포커스 설정
       if (rows.map((v) => v.id).includes(row.id)) {
-        props.apiRef.current.startRowEditMode({ id: row.id }); // 행 편집 모드 시작
-        props.apiRef.current.setCellFocus(row.id, "name"); // 특정 셀에 포커스 설정
+        props.apiRef.current.startRowEditMode({ id: row.id });
+        setTimeout(() => {
+          props.apiRef.current.setCellFocus(row.id, "groupName"); // 'groupName' 셀에 포커스
+        }, 0);
       } else {
-        // 포커스를 설정하기 위해 페이지를 변경해야 하는 경우
-        paginationRef.current.changePage(Math.ceil(row.index / pageSize)); // 페이지 변경
-        setFocusRow(row); // 포커스 행 설정
+        paginationRef.current.changePage(Math.ceil(row.index / pageSize));
+        setFocusRow(row);
       }
     },
     changeToFirstPage: () => {
       if (paginationRef.current) {
-        console.log("첫 페이지로 변경"); // 디버그용 메시지 출력
-        paginationRef.current.changePage(1); // 첫 번째 페이지로 변경
+        console.log("첫 페이지로 변경");
+        paginationRef.current.changePage(1);
       }
     },
   }));
 
-  // 포커스 행이 변경된 후 포커스를 설정하는 효과
   useEffect(() => {
     if (focusRow) {
-      props.apiRef.current.startRowEditMode({ id: focusRow.id }); // 행 편집 모드 시작
-      props.apiRef.current.setCellFocus(focusRow.id, "name"); // 특정 셀에 포커스 설정
-      setFocusRow(null); // 포커스 행 초기화
+      props.apiRef.current.startRowEditMode({ id: focusRow.id });
+      setTimeout(() => {
+        props.apiRef.current.setCellFocus(focusRow.id, "groupName"); // 'groupName' 셀에 포커스
+      }, 0);
+      setFocusRow(null);
     }
   }, [focusRow, props.apiRef]);
 

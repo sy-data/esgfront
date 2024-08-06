@@ -8,7 +8,6 @@ import {
   DialogTitle,
   styled,
 } from "@mui/material";
-import { parameterGroupListDummy } from "./constants";
 import Pagination from "./CalcGroupPagination";
 import {
   StyledMenuTitleContainer,
@@ -73,28 +72,29 @@ const ParameterGroupTableTitle = (props) => {
   // 삭제 다이얼로그의 열림 상태 관리
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-  // 행 추가 함수
   const handleAddRow = () => {
     setData((prevState) => {
       const newNo = prevState.length ? prevState[0].id + 1 : 1;
-      // 새로운 행의 번호 계산 (기존 행이 있으면 첫 번째 행의 id + 1, 없으면 1)
 
-      const defaultGroup = parameterGroupListDummy[0]; // 기본 그룹 설정 (parameterGroupListDummy 배열의 첫 번째 항목)
       const newRow = {
-        no: newNo, // 새로운 행의 번호
-        id: newNo, // 새로운 행의 ID
-        groupId: defaultGroup.groupId, // 기본 그룹의 ID
-        groupName: defaultGroup.groupName, // 기본 그룹의 이름
-        description: "", // 설명은 빈 문자열로 초기화
+        no: newNo,
+        id: newNo,
+        groupId: "",
+        groupName: "",
+        description: "",
       };
-      return [newRow, ...prevState]; // 새로운 행을 기존 행의 앞에 추가하여 반환
+
+      if (customDataGridRef.current) {
+        setTimeout(() => {
+          customDataGridRef.current.changeToFirstPage();
+          customDataGridRef.current.focusRow({ id: newNo, index: 0 });
+        }, 0);
+      }
+
+      return [newRow, ...prevState];
     });
 
-    setEditRowId(-1); // 편집 모드를 비활성화 (editRowId를 -1로 설정)
-    if (customDataGridRef.current) {
-      console.log("HandleAddRow에서 첫 번째 페이지로 변경"); // 디버그용 메시지 출력
-      customDataGridRef.current.changeToFirstPage(); // customDataGridRef가 가리키는 컴포넌트의 첫 번째 페이지로 변경
-    }
+    setEditRowId(-1);
   };
 
   // 삭제 버튼 클릭 처리 함수
