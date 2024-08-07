@@ -1,9 +1,24 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import CustomDataGrid from "./CalcGroupCustomDataGrid";
 import CustomTextField from "./CustomTextField";
-
+import CustomToolbar from "./CustomToolbar";
 import { CustomCheckbox, headerStyle } from "./styles";
 import { Snackbar } from "@mui/material";
+import { handleSnackbarOpen, handleSnackbarClose } from "./snackbarHandlers";
+import {
+  handleGroupNameChange,
+  handleGroupNameBlur,
+  handleGroupNameKeyPress,
+} from "./groupNameHandlers";
+import {
+  handleDescriptionChange,
+  handleDescriptionBlur,
+  handleDescriptionKeyPress,
+} from "./descriptionHandlers";
+import {
+  handleRowSelectionModelChange,
+  handleRowDoubleClick,
+} from "./rowHandlers";
 
 const ParameterGroupList = (props) => {
   const {
@@ -19,129 +34,6 @@ const ParameterGroupList = (props) => {
   const [editingDescriptions, setEditingDescriptions] = useState({});
   const [editingGroupNames, setEditingGroupNames] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const handleSnackbarOpen = () => {
-    setOpenSnackbar(true);
-  };
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-  const handleGroupNameChange = useCallback((id, value) => {
-    setEditingGroupNames((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  }, []);
-
-  const handleGroupNameBlur = useCallback(
-    (id) => {
-      setData((prevState) =>
-        prevState.map((row) => {
-          if (row.id === id) {
-            return {
-              ...row,
-              groupName: editingGroupNames[id] || row.groupName,
-            };
-          }
-          return row;
-        })
-      );
-      setEditingGroupNames((prevState) => {
-        const newState = { ...prevState };
-        delete newState[id];
-        return newState;
-      });
-      handleSnackbarOpen();
-    },
-    [editingGroupNames, setData]
-  );
-
-  const handleDescriptionChange = useCallback((id, value) => {
-    setEditingDescriptions((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  }, []);
-
-  const handleDescriptionBlur = useCallback(
-    (id) => {
-      setData((prevState) =>
-        prevState.map((row) => {
-          if (row.id === id) {
-            return {
-              ...row,
-              description: editingDescriptions[id] || row.description,
-            };
-          }
-          return row;
-        })
-      );
-      setEditingDescriptions((prevState) => {
-        const newState = { ...prevState };
-        delete newState[id];
-        return newState;
-      });
-      handleSnackbarOpen();
-    },
-    [editingDescriptions, setData]
-  );
-
-  const handleDescriptionKeyPress = useCallback(
-    (id, event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        handleDescriptionBlur(id);
-        setEditRowId(null);
-      } else if (event.key === " ") {
-        event.stopPropagation();
-      }
-    },
-    [handleDescriptionBlur, setEditRowId]
-  );
-
-  const handleGroupNameKeyPress = useCallback(
-    (id, event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        handleGroupNameBlur(id);
-        setEditRowId(null);
-      } else if (event.key === " ") {
-        event.stopPropagation();
-      }
-    },
-    [handleGroupNameBlur, setEditRowId]
-  );
-
-  const handleRowSelectionModelChange = useCallback(
-    (rowIds) => {
-      const isEditRow = rowIds[0] === editRowId;
-
-      if (!isEditRow) {
-        setSelectedRow(rowIds);
-      }
-    },
-    [editRowId, setSelectedRow]
-  );
-
-  const handleRowDoubleClick = useCallback(
-    (params) => {
-      setEditRowId(params.row.id);
-      setEditingDescriptions((prevState) => ({
-        ...prevState,
-        [params.row.id]: params.row.description || "",
-      }));
-      setEditingGroupNames((prevState) => ({
-        ...prevState,
-        [params.row.id]: params.row.groupName || "",
-      }));
-    },
-    [setEditRowId]
-  );
 
   const columns = [
     {
@@ -174,9 +66,29 @@ const ParameterGroupList = (props) => {
                   ? editingGroupNames[params.id]
                   : params.value || ""
               }
-              onChange={(value) => handleGroupNameChange(params.id, value)}
-              onKeyDown={(event) => handleGroupNameKeyPress(params.id, event)}
-              onBlur={() => handleGroupNameBlur(params.id)}
+              onChange={(value) =>
+                handleGroupNameChange(params.id, value, setEditingGroupNames)
+              }
+              onKeyDown={(event) =>
+                handleGroupNameKeyPress(
+                  params.id,
+                  event,
+                  setEditRowId,
+                  setData,
+                  editingGroupNames,
+                  setEditingGroupNames,
+                  () => handleSnackbarOpen(setOpenSnackbar)
+                )
+              }
+              onBlur={() =>
+                handleGroupNameBlur(
+                  params.id,
+                  setData,
+                  editingGroupNames,
+                  setEditingGroupNames,
+                  () => handleSnackbarOpen(setOpenSnackbar)
+                )
+              }
               placeholder="산정식그룹 입력"
               autoFocus={isAddRow} // 새로운 행일 경우 autoFocus를 true로 설정
             />
@@ -203,9 +115,33 @@ const ParameterGroupList = (props) => {
                   ? editingDescriptions[params.id]
                   : params.value || ""
               }
-              onChange={(value) => handleDescriptionChange(params.id, value)}
-              onKeyDown={(event) => handleDescriptionKeyPress(params.id, event)}
-              onBlur={() => handleDescriptionBlur(params.id)}
+              onChange={(value) =>
+                handleDescriptionChange(
+                  params.id,
+                  value,
+                  setEditingDescriptions
+                )
+              }
+              onKeyDown={(event) =>
+                handleDescriptionKeyPress(
+                  params.id,
+                  event,
+                  setEditRowId,
+                  setData,
+                  editingDescriptions,
+                  setEditingDescriptions,
+                  () => handleSnackbarOpen(setOpenSnackbar)
+                )
+              }
+              onBlur={() =>
+                handleDescriptionBlur(
+                  params.id,
+                  setData,
+                  editingDescriptions,
+                  setEditingDescriptions,
+                  () => handleSnackbarOpen(setOpenSnackbar)
+                )
+              }
             />
           );
         } else {
@@ -225,16 +161,28 @@ const ParameterGroupList = (props) => {
         checkboxSelection
         pageSize={15}
         rowSelectionModel={selectedRow}
-        onRowSelectionModelChange={handleRowSelectionModelChange}
-        onRowDoubleClick={handleRowDoubleClick}
+        onRowSelectionModelChange={(rowIds) =>
+          handleRowSelectionModelChange(rowIds, editRowId, setSelectedRow)
+        }
+        onRowDoubleClick={(params) =>
+          handleRowDoubleClick(
+            params,
+            setEditRowId,
+            setEditingDescriptions,
+            setEditingGroupNames
+          )
+        }
         components={{
           BaseCheckbox: CustomCheckbox,
+          Toolbar: CustomToolbar,
         }}
       />
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
-        onClose={handleSnackbarClose}
+        onClose={(event, reason) =>
+          handleSnackbarClose(event, reason, setOpenSnackbar)
+        }
         message="저장되었습니다."
       />
     </>
