@@ -22,8 +22,15 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import {
+  createFormulaGroup,
+  updateFormulaGroup,
+  deleteFormulaGroup,
+  fetchUserFormulaGroups,
+} from "./FetchWrapper";
+
 function CalcGroupMgmt() {
-  const [rows, setRows] = useState(generateInitialRows(30));
+  const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selected, setSelected] = useState([]);
@@ -32,6 +39,17 @@ function CalcGroupMgmt() {
   const [editNote, setEditNote] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      const userId = 1; // 예시 사용자 ID, 실제로는 로그인된 사용자 ID를 사용
+      const data = await fetchUserFormulaGroups(userId, page + 1, rowsPerPage);
+      if (data) {
+        setRows(data.data); // 데이터 응답 형식에 맞게 수정
+      }
+    };
+    loadGroups();
+  }, [page, rowsPerPage]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -77,30 +95,72 @@ function CalcGroupMgmt() {
     setEditNote(rows[index].note);
   };
 
-  const handleSave = useCallback(() => {
-    const newRows = [...rows];
-    newRows[editIndex] = {
-      ...newRows[editIndex],
-      groupName: editGroupName,
-      note: editNote,
-    };
-    setRows(newRows);
-    setEditIndex(-1);
-    setIsDialogOpen(true);
+  const handleSave = useCallback(async () => {
+    if (editIndex >= 0) {
+      // 수정 API 호출
+      const result = await updateFormulaGroup(
+        rows[editIndex].id,
+        rows[editIndex].groupId,
+        editGroupName,
+        editNote
+      );
+      if (result) {
+        const newRows = [...rows];
+        newRows[editIndex] = {
+          ...newRows[editIndex],
+          groupName: editGroupName,
+          note: editNote,
+        };
+        setRows(newRows);
+        setEditIndex(-1);
+        setIsDialogOpen(true);
+      }
+    }
   }, [editIndex, editGroupName, editNote, rows]);
 
-  const handleAddRow = () => {
-    const newRows = [
-      { id: `00${rows.length + 1}`, groupName: "", note: "" },
-      ...rows,
-    ];
-    setRows(newRows);
-    setEditIndex(0);
-    setEditGroupName("");
-    setEditNote("");
+  const handleAddRow = async () => {
+    // 그룹 이름과 노트가 입력되었는지 검증
+    if (!editGroupName.trim() || !editNote.trim()) {
+      console.error("Group name and note are required.");
+      return;
+    }
+
+    // 디버깅을 위해 현재 입력 값을 출력
+    console.log("Group name:", editGroupName);
+    console.log("Note:", editNote);
+
+    const groupId = rows.length + 1; // 고유한 groupId 생성 예시
+
+    // API 호출
+    const result = await createFormulaGroup(groupId, editGroupName, editNote);
+
+    // 디버깅을 위해 API 호출 결과를 출력
+    console.log("API call result:", result);
+
+    if (result) {
+      const newRows = [
+        {
+          id: result.data.id,
+          groupId: result.data.groupId,
+          groupName: editGroupName,
+          note: editNote,
+        },
+        ...rows,
+      ];
+      setRows(newRows);
+      setEditIndex(-1); // 수정 모드를 종료
+      setEditGroupName(""); // 입력 필드 초기화
+      setEditNote(""); // 입력 필드 초기화
+    } else {
+      console.error("Failed to add new row");
+    }
   };
 
-  const handleDeleteRows = () => {
+  const handleDeleteRows = async () => {
+    for (const id of selected) {
+      // 삭제 API 호출
+      await deleteFormulaGroup(id);
+    }
     const newRows = rows.filter((row) => !selected.includes(row.id));
     setRows(newRows);
     setSelected([]);
