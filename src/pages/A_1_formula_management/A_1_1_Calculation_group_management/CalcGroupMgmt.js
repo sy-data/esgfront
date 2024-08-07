@@ -131,7 +131,7 @@ function CalcGroupMgmt() {
   }, [handleDocumentClick]);
 
   return (
-    <Box sx={{ width: "100%" }} ref={containerRef}>
+    <Box sx={{ width: "85%", border: "2px solid #ccc" }} ref={containerRef}>
       <Box
         sx={{
           display: "flex",
@@ -140,29 +140,78 @@ function CalcGroupMgmt() {
           mb: 2,
         }}
       >
-        <Typography variant="h6">산정식 기본 그룹정보</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            marginLeft: 3,
+            color: "var(--Neutral-100, #000)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "18px",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "150%" /* 27px */,
+            letterSpacing: "-0.36px",
+            marginTop: 3,
+          }}
+        >
+          산정식 기본 그룹정보
+        </Typography>
         <Box>
           <Button
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
             onClick={handleAddRow}
-            sx={{ mr: 2 }}
+            sx={{
+              mr: 2,
+              mt: 3,
+              color: "var(--Gray-fff, #FFF)",
+              textAlign: "center",
+              fontFamily: "Pretendard Variable",
+              fontSize: "14px",
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "150%" /* 21px */,
+              letterSpacing: "-0.28px",
+              width: 120,
+              height: 40,
+            }}
           >
             그룹 추가
           </Button>
           <Button
             variant="contained"
             color="secondary"
-            startIcon={<DeleteIcon />}
+            startIcon={<DeleteIcon sx={{ minHeight: 23 }} />}
             onClick={handleDeleteRows}
             disabled={selected.length === 0}
+            sx={{
+              mr: 3,
+              mt: 3,
+              textAlign: "center",
+              fontFamily: "Pretendard Variable",
+              fontSize: "14px",
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "150%" /* 21px */,
+              letterSpacing: "-0.28px",
+              background:
+                selected.length === 0
+                  ? "var(--Gray-fff, #FFF)"
+                  : "var(--Primary-Primary, #00CD9B)",
+              color:
+                selected.length === 0
+                  ? "var(--Gray-ccc, #CCC)"
+                  : "var(--Gray-fff, #FFF)",
+              width: 120,
+              height: 40,
+            }}
           >
             삭제
           </Button>
         </Box>
       </Box>
-      <Paper sx={{ mb: 2 }}>
+      <Paper sx={{ mb: 2, border: "2px solid #ccc" }}>
         <TableContainer>
           <Table>
             <TableHead>
@@ -214,6 +263,14 @@ function CalcGroupMgmt() {
                           onClick={(e) => e.stopPropagation()}
                           onKeyPress={(e) => e.key === "Enter" && handleSave()}
                           fullWidth
+                          sx={{
+                            width: "70%",
+                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                              {
+                                width: 70,
+                                height: "0.5rem",
+                              },
+                          }}
                         />
                       ) : (
                         <span
@@ -231,6 +288,14 @@ function CalcGroupMgmt() {
                           onClick={(e) => e.stopPropagation()}
                           onKeyPress={(e) => e.key === "Enter" && handleSave()}
                           fullWidth
+                          sx={{
+                            width: "70%",
+                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                              {
+                                width: 70,
+                                height: "0.5rem",
+                              },
+                          }}
                         />
                       ) : (
                         <span
@@ -261,7 +326,7 @@ function CalcGroupMgmt() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">저장되었습니다</DialogTitle>
+        <DialogTitle id="alert-dialog-title">저장되었습니다.</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             변경 사항이 성공적으로 저장되었습니다.
