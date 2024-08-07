@@ -1,3 +1,4 @@
+// CustomTextField.js
 import React, { useState, useEffect, useRef, memo, useCallback } from "react";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -17,18 +18,8 @@ const CustomTextFieldStyled = styled(TextField)(({ theme }) => ({
       borderColor: "orange",
     },
     "&.Mui-focused fieldset": {
-      marginTop: "7px",
-      height: "35px",
-      width: "100%",
-      display: "flex",
-      padding: "6px 80px",
-      alignItems: "center",
-      gap: "10px",
-      flex: "1 0 0",
-      borderRadius: "20px",
-      border: "1.5px solid var(--Gray-eee, #AAA)",
+      borderRadius: "4px",
     },
-    "&.Mui-focused": {},
   },
 }));
 
@@ -46,6 +37,7 @@ const CustomTextField = memo(
     const [localValue, setLocalValue] = useState(value);
     const inputRef = useRef();
     const wrapperRef = useRef();
+    const [hasFocus, setHasFocus] = useState(false);
 
     useEffect(() => {
       setLocalValue(value);
@@ -56,6 +48,7 @@ const CustomTextField = memo(
         inputRef.current.focus();
         const len = inputRef.current.value.length;
         inputRef.current.setSelectionRange(len, len);
+        setHasFocus(true);
       }
     }, [autoFocus]);
 
@@ -71,13 +64,30 @@ const CustomTextField = memo(
       onKeyDown(e);
     };
 
+    const handleFocus = () => {
+      setHasFocus(true);
+    };
+
+    const handleBlur = () => {
+      setHasFocus(false);
+      setTimeout(() => {
+        if (!hasFocus) {
+          onBlur();
+        }
+      }, 200);
+    };
+
     const clickOutsideHandler = useCallback(
       (event) => {
-        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        if (
+          wrapperRef.current &&
+          !wrapperRef.current.contains(event.target) &&
+          !hasFocus
+        ) {
           handleClickOutside();
         }
       },
-      [handleClickOutside]
+      [handleClickOutside, hasFocus]
     );
 
     useEffect(() => {
@@ -96,7 +106,8 @@ const CustomTextField = memo(
           onChange={handleChange}
           placeholder={placeholder}
           onKeyDown={handleKeyDown}
-          onBlur={onBlur}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
           onClick={(event) => event.stopPropagation()}
         />
       </div>
