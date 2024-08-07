@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import CustomDataGrid from "./CalcGroupCustomDataGrid";
 import CustomTextField from "./CustomTextField";
 import CustomToolbar from "./CustomToolbar";
@@ -34,6 +34,26 @@ const ParameterGroupList = (props) => {
   const [editingDescriptions, setEditingDescriptions] = useState({});
   const [editingGroupNames, setEditingGroupNames] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleSave = useCallback(
+    (id) => {
+      handleGroupNameBlur(
+        id,
+        setData,
+        editingGroupNames,
+        setEditingGroupNames,
+        () => handleSnackbarOpen(setOpenSnackbar)
+      );
+      setEditRowId(null);
+    },
+    [
+      setData,
+      editingGroupNames,
+      setEditingGroupNames,
+      setEditRowId,
+      setOpenSnackbar,
+    ]
+  );
 
   const columns = [
     {
@@ -80,15 +100,8 @@ const ParameterGroupList = (props) => {
                   () => handleSnackbarOpen(setOpenSnackbar)
                 )
               }
-              onBlur={() =>
-                handleGroupNameBlur(
-                  params.id,
-                  setData,
-                  editingGroupNames,
-                  setEditingGroupNames,
-                  () => handleSnackbarOpen(setOpenSnackbar)
-                )
-              }
+              onBlur={() => handleSave(params.id)}
+              handleClickOutside={() => handleSave(params.id)}
               placeholder="산정식그룹 입력"
               autoFocus={isAddRow} // 새로운 행일 경우 autoFocus를 true로 설정
             />
@@ -134,6 +147,15 @@ const ParameterGroupList = (props) => {
                 )
               }
               onBlur={() =>
+                handleDescriptionBlur(
+                  params.id,
+                  setData,
+                  editingDescriptions,
+                  setEditingDescriptions,
+                  () => handleSnackbarOpen(setOpenSnackbar)
+                )
+              }
+              handleClickOutside={() =>
                 handleDescriptionBlur(
                   params.id,
                   setData,

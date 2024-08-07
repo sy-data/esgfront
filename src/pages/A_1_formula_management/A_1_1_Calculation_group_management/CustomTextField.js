@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useEffect, useRef, memo, useCallback } from "react";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -33,9 +33,19 @@ const CustomTextFieldStyled = styled(TextField)(({ theme }) => ({
 }));
 
 const CustomTextField = memo(
-  ({ id, value, onChange, onKeyDown, onBlur, placeholder, autoFocus }) => {
+  ({
+    id,
+    value,
+    onChange,
+    onKeyDown,
+    onBlur,
+    placeholder,
+    autoFocus,
+    handleClickOutside,
+  }) => {
     const [localValue, setLocalValue] = useState(value);
     const inputRef = useRef();
+    const wrapperRef = useRef();
 
     useEffect(() => {
       setLocalValue(value);
@@ -61,17 +71,35 @@ const CustomTextField = memo(
       onKeyDown(e);
     };
 
+    const clickOutsideHandler = useCallback(
+      (event) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+          handleClickOutside();
+        }
+      },
+      [handleClickOutside]
+    );
+
+    useEffect(() => {
+      document.addEventListener("mousedown", clickOutsideHandler);
+      return () => {
+        document.removeEventListener("mousedown", clickOutsideHandler);
+      };
+    }, [clickOutsideHandler]);
+
     return (
-      <CustomTextFieldStyled
-        inputRef={inputRef}
-        type={"text"}
-        value={localValue}
-        onChange={handleChange}
-        placeholder={placeholder}
-        onKeyDown={handleKeyDown}
-        onBlur={onBlur}
-        onClick={(event) => event.stopPropagation()}
-      />
+      <div ref={wrapperRef}>
+        <CustomTextFieldStyled
+          inputRef={inputRef}
+          type={"text"}
+          value={localValue}
+          onChange={handleChange}
+          placeholder={placeholder}
+          onKeyDown={handleKeyDown}
+          onBlur={onBlur}
+          onClick={(event) => event.stopPropagation()}
+        />
+      </div>
     );
   }
 );
