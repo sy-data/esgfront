@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -76,7 +77,7 @@ function CalcGroupMgmt() {
     setEditNote(rows[index].note);
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const newRows = [...rows];
     newRows[editIndex] = {
       ...newRows[editIndex],
@@ -86,7 +87,7 @@ function CalcGroupMgmt() {
     setRows(newRows);
     setEditIndex(-1);
     setIsDialogOpen(true);
-  };
+  }, [editIndex, editGroupName, editNote, rows]);
 
   const handleAddRow = () => {
     const newRows = [
@@ -109,25 +110,58 @@ function CalcGroupMgmt() {
     setIsDialogOpen(false);
   };
 
-  const handleDocumentClick = (event) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(event.target) &&
-      editIndex !== -1
-    ) {
-      handleSave();
-    }
-  };
+  const handleDocumentClick = useCallback(
+    (event) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target) &&
+        editIndex !== -1
+      ) {
+        handleSave();
+      }
+    },
+    [editIndex, handleSave]
+  );
 
   useEffect(() => {
     document.addEventListener("mousedown", handleDocumentClick);
     return () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
-  }, [editIndex, editGroupName, editNote]);
+  }, [handleDocumentClick]);
 
   return (
     <Box sx={{ width: "100%" }} ref={containerRef}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h6">산정식 기본 그룹정보</Typography>
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleAddRow}
+            sx={{ mr: 2 }}
+          >
+            그룹 추가
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            onClick={handleDeleteRows}
+            disabled={selected.length === 0}
+          >
+            삭제
+          </Button>
+        </Box>
+      </Box>
       <Paper sx={{ mb: 2 }}>
         <TableContainer>
           <Table>
@@ -221,24 +255,6 @@ function CalcGroupMgmt() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleAddRow}
-      >
-        그룹 추가
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        startIcon={<DeleteIcon />}
-        onClick={handleDeleteRows}
-        disabled={selected.length === 0}
-        sx={{ ml: 2 }}
-      >
-        삭제
-      </Button>
       <Dialog
         open={isDialogOpen}
         onClose={handleDialogClose}
