@@ -6,6 +6,8 @@ import ItemPlain from "./nodes/ItemPlain";
 import Collapse from "@mui/material/Collapse"; // Collapse 컴포넌트 추가
 
 const Node = (props) => {
+  const menu = Array.isArray(props.menu) ? props.menu : []; // 배열 확인 및 초기화
+
   const nodeComponent = (item) => {
     switch (item.type) {
       case "menu-parent":
@@ -45,7 +47,7 @@ const Node = (props) => {
     }
   };
 
-  return props.menu.map((item, index) => (
+  return menu.map((item, index) => (
     <div key={item.id}>
       {nodeComponent(item)}
       <Collapse in={props.opened[item.id]}>
@@ -55,9 +57,7 @@ const Node = (props) => {
               display: "flex",
               flexDirection: "column",
               ...(item.type.startsWith("menu-") && { padding: "10px 0" }),
-              ...(item.type.startsWith("treeItem-") && {
-                paddingLeft: "28px",
-              }),
+              ...(item.type.startsWith("treeItem-") && { paddingLeft: "28px" }),
               ...(props.opened[item.id] && { marginLeft: "20px" }),
             }}
           >

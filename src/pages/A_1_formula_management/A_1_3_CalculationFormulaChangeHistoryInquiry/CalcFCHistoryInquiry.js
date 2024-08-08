@@ -20,7 +20,7 @@ const CalcFCHistoryInquiry = () => {
       try {
         const res = await esgFetch("/v1/admin/calc/menu-tree");
         const data = await res.json();
-        setMenuList(data);
+        setMenuList(Array.isArray(data) ? data : []); // 여기서 배열 확인
       } catch (error) {
         console.error("Error fetching menu list:", error);
       }
