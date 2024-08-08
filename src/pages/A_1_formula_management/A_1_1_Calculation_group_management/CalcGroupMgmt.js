@@ -42,14 +42,14 @@ function CalcGroupMgmt() {
 
   useEffect(() => {
     const loadGroups = async () => {
-      const userId = 1; // 예시 사용자 ID, 실제로는 로그인된 사용자 ID를 사용
-      const data = await fetchUserFormulaGroups(userId, page + 1, rowsPerPage);
+      const data = await fetchUserFormulaGroups();
+      console.log("Fetched Data:", data); // API 응답 데이터 콘솔에 출력
       if (data) {
         setRows(data.data); // 데이터 응답 형식에 맞게 수정
       }
     };
     loadGroups();
-  }, [page, rowsPerPage]);
+  }, []);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -402,12 +402,12 @@ function CalcGroupMgmt() {
   );
 }
 
-function generateInitialRows(numRows) {
-  return Array.from({ length: numRows }, (_, index) => ({
-    id: `00${index + 1}`,
-    groupName: `산정식그룹${index + 1}`,
-    note: `${index + 1}번 그룹`,
-  }));
-}
-
 export default CalcGroupMgmt;
+
+// function generateInitialRows(numRows) {
+//   return Array.from({ length: numRows }, (_, index) => ({
+//     id: `00${index + 1}`,
+//     groupName: `산정식그룹${index + 1}`,
+//     note: `${index + 1}번 그룹`,
+//   }));
+// }
