@@ -42,7 +42,7 @@ function CalcGroupMgmt() {
   const handleAddRow = async () => {
     // 그룹 이름이나 메모가 비어 있는지 확인합니다.
     if (!editGroupName.trim() || !editNote.trim()) {
-      console.error("그룹 이름과 메모가 필요합니다.");
+      console.error("그룹 이름과 메모가 필요합니다.".error);
       return;
     }
 
@@ -59,7 +59,7 @@ function CalcGroupMgmt() {
         {
           id: result.data.id, // 생성된 그룹의 ID
           groupId: result.data.groupId, // 생성된 그룹의 그룹 ID
-          groupName: editGroupName, // 입력된 그룹 이름
+          name: editGroupName, // 입력된 그룹 이름
           note: editNote, // 입력된 메모
         },
         ...rows, // 기존의 행들
@@ -116,7 +116,7 @@ function CalcGroupMgmt() {
         // 편집 중인 행의 데이터를 업데이트합니다.
         newRows[editIndex] = {
           ...newRows[editIndex], // 기존 행 데이터
-          groupName: editGroupName, // 편집된 그룹 이름으로 업데이트
+          name: editGroupName, // 편집된 그룹 이름으로 업데이트
           note: editNote, // 편집된 메모로 업데이트
         };
 

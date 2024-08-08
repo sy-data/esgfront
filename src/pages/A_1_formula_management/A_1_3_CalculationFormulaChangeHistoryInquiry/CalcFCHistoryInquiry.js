@@ -103,7 +103,7 @@ const Frame = () => {
       className="frame"
       sx={{
         display: "flex",
-        width: "100%",
+        width: "80%",
         backgroundColor: "#fff",
         padding: 2,
         border: "1px solid var(--Gray-eee, #EEE)",

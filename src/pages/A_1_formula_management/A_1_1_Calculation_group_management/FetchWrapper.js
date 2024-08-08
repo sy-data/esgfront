@@ -75,28 +75,28 @@ export async function fetchUserFormulaGroups(userId, page = 1, size = 10) {
 }
 
 // 산정식 그룹을 등록하는 함수
-export async function createFormulaGroup(groupId, groupName, note) {
+export async function createFormulaGroup(groupId, name, note) {
   const url = `v1/admin/calc/group`;
   console.log("Sending request to:", url);
-  console.log("Request body:", { groupId, groupName, note });
+  console.log("Request body:", { groupId, name, note });
 
-  const response = await esgFetch(url, "POST", { groupId, groupName, note });
+  const response = await esgFetch(url, "POST", { groupId, name, note });
 
   if (response.ok) {
     const data = await response.json();
     console.log("Success response:", data);
     return data;
   } else {
-    const error = await response.text(); // JSON 대신 텍스트로 에러 메시지 받기
+    const error = await response.json();
     console.error("Failed to create formula group", error);
     return null;
   }
 }
 
 // 산정식 그룹을 수정하는 함수
-export async function updateFormulaGroup(id, groupId, groupName, note) {
+export async function updateFormulaGroup(id, groupId, name, note) {
   const url = `v1/admin/calc/group/${id}`;
-  const response = await esgFetch(url, "PUT", { groupId, groupName, note });
+  const response = await esgFetch(url, "PUT", { groupId, name, note });
   if (response.ok) {
     const data = await response.json();
     console.log("수정완료");

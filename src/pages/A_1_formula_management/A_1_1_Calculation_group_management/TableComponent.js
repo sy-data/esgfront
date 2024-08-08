@@ -98,7 +98,7 @@ function TableComponent({
     // 편집할 행의 인덱스를 상태로 설정합니다.
     setEditIndex(index);
     // 편집할 행의 groupName을 상태로 설정합니다.
-    setEditGroupName(rows[index].groupName);
+    setEditGroupName(rows[index].name);
     // 편집할 행의 note를 상태로 설정합니다.
     setEditNote(rows[index].note);
   };
@@ -147,7 +147,7 @@ function TableComponent({
                     />
                   </TableCell>
                   <TableCell>{rows.length - index}</TableCell>
-                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.groupId}</TableCell>
                   <TableCell
                     onDoubleClick={() => handleEdit(page * rowsPerPage + index)}
                   >
@@ -160,10 +160,10 @@ function TableComponent({
                         autoFocus
                         fullWidth
                         sx={{
-                          width: "70%",
+                          width: "50%",
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
                             {
-                              width: 70,
+                              width: 200,
                               height: "0.5rem",
                             },
                         }}
@@ -172,7 +172,7 @@ function TableComponent({
                       <span
                         onClick={() => handleEdit(page * rowsPerPage + index)}
                       >
-                        {row.groupName}
+                        {row.name}
                       </span>
                     )}
                   </TableCell>
@@ -185,13 +185,13 @@ function TableComponent({
                         onChange={(e) => setEditNote(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
                         onKeyPress={(e) => e.key === "Enter" && handleSave()}
-                        autoFocus
+                        // autoFocus
                         fullWidth
                         sx={{
-                          width: "70%",
+                          width: "50%",
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
                             {
-                              width: 70,
+                              width: 200,
                               height: "0.5rem",
                             },
                         }}
