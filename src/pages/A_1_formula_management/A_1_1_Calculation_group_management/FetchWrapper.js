@@ -99,6 +99,7 @@ export async function updateFormulaGroup(id, groupId, groupName, note) {
   const response = await esgFetch(url, "PUT", { groupId, groupName, note });
   if (response.ok) {
     const data = await response.json();
+    console.log("수정완료");
     return data;
   } else {
     console.error("Failed to update formula group");
@@ -112,6 +113,7 @@ export async function deleteFormulaGroup(id) {
   const response = await esgFetch(url, "DELETE");
   if (response.ok) {
     const data = await response.json();
+    console.log("삭제완료");
     return data;
   } else {
     console.error("Failed to delete formula group");

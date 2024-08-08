@@ -315,13 +315,19 @@ function CalcGroupMgmt() {
                     </TableCell>
                     <TableCell>{rows.length - index}</TableCell>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      onDoubleClick={() =>
+                        handleEdit(page * rowsPerPage + index)
+                      }
+                    >
                       {editIndex === page * rowsPerPage + index ? (
                         <TextField
                           value={editGroupName}
                           onChange={(e) => setEditGroupName(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => e.stopPropagation()} // 클릭이 행으로 전파되는 것을 방지
                           onKeyPress={(e) => e.key === "Enter" && handleSave()}
+                          // onBlur={handleSave} // 블러 이벤트 저장
+                          autoFocus // 입력 필드에 자동으로 초점 맞추기
                           fullWidth
                           sx={{
                             width: "70%",
@@ -340,13 +346,19 @@ function CalcGroupMgmt() {
                         </span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell
+                      onDoubleClick={() =>
+                        handleEdit(page * rowsPerPage + index)
+                      }
+                    >
                       {editIndex === page * rowsPerPage + index ? (
                         <TextField
                           value={editNote}
                           onChange={(e) => setEditNote(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => e.stopPropagation()} // 클릭이 행으로 전파되는 것을 방지
                           onKeyPress={(e) => e.key === "Enter" && handleSave()}
+                          // onBlur={handleSave} // 블러 이벤트 저장
+                          autoFocus // 입력 필드에 자동으로 초점 맞추기
                           fullWidth
                           sx={{
                             width: "70%",
