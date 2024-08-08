@@ -59,6 +59,51 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   });
 }
 
+//메뉴 트리 데이터를 가져오는 함수
+export async function fetchMenuTree() {
+  const url = `v1/admin/calc/menu-tree`; // 메뉴 트리 데이터를 가져오는 API 엔드포인트
+  const response = await esgFetch(url); // esgfetch 함수를 사용하여 api 요청 수행
+
+  // 응당 성공 할 경우
+  if (response.ok) {
+    const data = await response.json(); // 응답 json 으로 변환
+    return data;
+  } else {
+    console.error("Failed to fetch menu tree");
+    return null;
+  }
+}
+
+// 특정 카테고리의 변경 이력을 가져오는 함수
+export async function fetchChangeHistory(categoryId) {
+  const url = `v1/admin/calc/change-history/${categoryId}`; // 카테고리 ID에 따른 변경 이력 데이터를 가져오는 API 엔드포인트
+  const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
+
+  // 응답이 성공적인 경우
+  if (response.ok) {
+    const data = await response.json(); // 응답을 JSON으로 변환
+    return data; // 데이터를 반환
+  } else {
+    console.error("Failed to fetch change history"); // 실패한 경우 콘솔에 에러 메시지 출력
+    return null; // null 반환
+  }
+}
+
+// 특정 카테고리의 산정식 이력을 가져오는 함수
+export async function fetchCalculationHistory(categoryId) {
+  const url = `v1/admin/calc/calculation-history/${categoryId}`; // 카테고리 ID에 따른 산정식 이력 데이터를 가져오는 API 엔드포인트
+  const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
+
+  // 응답이 성공적인 경우
+  if (response.ok) {
+    const data = await response.json(); // 응답을 JSON으로 변환
+    return data; // 데이터를 반환
+  } else {
+    console.error("Failed to fetch calculation history"); // 실패한 경우 콘솔에 에러 메시지 출력
+    return null; // null 반환
+  }
+}
+
 // 유저의 모든 산정식 그룹을 가져오는 함수
 export async function fetchUserFormulaGroups(userId, page = 1, size = 10) {
   const url = `v1/admin/calc/group/all`; // 페이지와 크기를 쿼리 매개변수로 포함한 URL 생성

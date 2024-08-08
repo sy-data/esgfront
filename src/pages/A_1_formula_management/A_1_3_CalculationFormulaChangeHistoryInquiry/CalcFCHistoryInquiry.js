@@ -5,87 +5,53 @@ import {
   treeOpenedLeaf,
 } from "../../../States/leftNavigation/adminTree";
 import NavigationTree from "./NavigationTree";
-import MenuList from "../../../MenuItems";
 import ChangeHistory from "./ChangeHistory";
 import CalculationHistory from "./CalculationHistory";
 import { esgFetch } from "../../../components/FetchWrapper";
 
-const Frame = () => {
+const CalcFCHistoryInquiry = () => {
+  const [menuList, setMenuList] = useState([]);
   const [changeHistory, setChangeHistory] = useState([]);
   const [calculationHistory, setCalculationHistory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
+    const fetchMenuList = async () => {
+      try {
+        const res = await esgFetch("/v1/admin/calc/menu-tree");
+        const data = await res.json();
+        setMenuList(data);
+      } catch (error) {
+        console.error("Error fetching menu list:", error);
+      }
+    };
+
+    fetchMenuList();
+  }, []);
+
+  useEffect(() => {
     if (selectedCategory) {
       const fetchChangeHistory = async () => {
         try {
-          const res = await esgFetch(`/api/change-history/${selectedCategory}`);
+          const res = await esgFetch(
+            `/v1/admin/calc/change-history/${selectedCategory}`
+          );
           const data = await res.json();
           setChangeHistory(data);
         } catch (error) {
           console.error("Error fetching change history:", error);
-          // 예제 데이터 설정
-          const exampleChangeHistory = [
-            {
-              id: 1, // No와 연결됨
-              create_at: "2023-05-31 06:09:36", // 변경일과 연결됨
-              action_type: "산정식등록", // 변경 유형
-              admin_id: "이현정", // changer와 연결됨
-              table_name: "calculation", // 테이블 이름
-              old_data: {}, // 변경 전 값
-              new_data: {
-                calculationId: "00010",
-                calculationName: "이동연소(도로)",
-                version: 1,
-              }, // 변경 후 값
-            },
-            {
-              id: 2, // No와 연결됨
-              create_at: "2023-06-01 10:11:33", // 변경일과 연결됨
-              action_type: "산정식/파라미터수정", // 변경 유형
-              admin_id: "이현정", // changer와 연결됨
-              table_name: "calculation", // 테이블 이름
-              old_data: {
-                calculationId: "00010",
-                calculationName: "이동연소(도로)",
-                version: 1,
-              }, // 변경 전 값
-              new_data: {
-                calculationId: "00011",
-                calculationName: "이동연소(도로)",
-                version: 2,
-              }, // 변경 후 값
-            },
-          ];
-          setChangeHistory(exampleChangeHistory);
         }
       };
 
       const fetchCalculationHistory = async () => {
         try {
           const res = await esgFetch(
-            `/api/calculation-history/${selectedCategory}`
+            `/v1/admin/calc/calculation-history/${selectedCategory}`
           );
           const data = await res.json();
           setCalculationHistory(data);
         } catch (error) {
           console.error("Error fetching calculation history:", error);
-          // 예제 데이터 설정
-          const exampleCalculationHistory = [
-            {
-              tier: "Tier 2",
-              calculation: `CO2배출량 =활동량 *순발열량계수 / 1000000 * CO2배출계수`,
-              version: 1,
-              change_date: "2023-05-31 06:09:36",
-            },
-            {
-              tier: "Tier 1",
-              calculation: `CO2배출량 =활동량 *순발열량계수 / 1000000 * CO2배출계수`,
-              version: 2,
-              change_date: "2023-06-01 10:11:33",
-            },
-          ];
-          setCalculationHistory(exampleCalculationHistory);
         }
       };
 
@@ -137,7 +103,7 @@ const Frame = () => {
         </Typography>
 
         <NavigationTree
-          items={MenuList}
+          items={menuList}
           stateAtom={treeStateAtom}
           leafAtom={treeOpenedLeaf}
           onCategoryClick={handleCategoryClick}
@@ -161,4 +127,5 @@ const Frame = () => {
   );
 };
 
-export default Frame;
+export default CalcFCHistoryInquiry;
+// /v1/admin/calc/
