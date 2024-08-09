@@ -97,7 +97,8 @@ const ParameterManagement = ({ userId }) => {
     <Box
       sx={{
         display: "flex",
-        width: "100%",
+        width: "85%",
+        // marginRight: -25,
         backgroundColor: "#fff",
         padding: 2,
         border: "1px solid var(--Gray-eee, #EEE)",
