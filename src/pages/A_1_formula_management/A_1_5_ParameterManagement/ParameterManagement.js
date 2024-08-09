@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, InputBase, Paper, IconButton } from "@mui/material";
-import { fetchParameterGroupDetails } from "./api";
+import { fetchParameterGroupDetails, fetchParameterGroups } from "./api";
 import ParameterGroupTree from "./ParameterGroupTree";
 import newMenuList from "./MenuList";
 import ParameterInfo from "./ParameterInfo";
@@ -11,8 +11,18 @@ const ParameterManagement = ({ userId }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState({});
   const searchTimeout = useRef(null);
+  const [menuList, setMenuList] = useState([]); // 리스트 관리
 
-  // selectedGroup이 변경될 때마다 실행되는 useEffect 훅입니다.
+  useEffect(() => {
+    //파라미터 그룹 목록 가져오기
+    const loadParameterGroups = async () => {
+      const groups = await fetchParameterGroups();
+      //상태 업데이트 로직 추가
+      setMenuList(groups); //api에서 가져온 데이터로 메뉴 리스트 설정
+    };
+    loadParameterGroups();
+  }, []);
+
   useEffect(() => {
     // selectedGroup이 null 또는 undefined가 아닌 경우에만 실행합니다.
     if (selectedGroup) {
@@ -20,6 +30,7 @@ const ParameterManagement = ({ userId }) => {
       const loadGroupDetails = async () => {
         // selectedGroup을 사용하여 그룹 세부 정보를 가져옵니다.
         const details = await fetchParameterGroupDetails(selectedGroup);
+
         // 가져온 세부 정보를 상태로 설정합니다.
         setGroupDetails(details);
       };
@@ -36,6 +47,7 @@ const ParameterManagement = ({ userId }) => {
       // 이전 상태(prevState)를 복사하고, 특정 id의 값을 반전시킵니다.
       ({
         ...prevState, // 이전 상태 객체를 스프레드 연산자로 복사합니다.
+
         [id]: !prevState[id], // id에 해당하는 값을 반전시킵니다.
       })
     );
@@ -79,7 +91,7 @@ const ParameterManagement = ({ userId }) => {
     }, 300); // 300밀리초 후에 검색어 상태를 업데이트합니다.
   };
 
-  const filteredGroups = filterMenu(newMenuList, searchTerm);
+  const filteredGroups = filterMenu(newMenuList, searchTerm); // 필터링된 메뉴 리스트 사용
 
   return (
     <Box

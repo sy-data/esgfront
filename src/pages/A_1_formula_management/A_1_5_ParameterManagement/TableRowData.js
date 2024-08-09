@@ -17,10 +17,12 @@ const TableRowData = ({
   selectedRows,
   handleSelectRow,
   handleKeyDown,
+  fetchParameterDetails,
   parameterData,
 }) => {
   return (
-    <TableRow key={row.id}>
+    <TableRow key={row.id} onClick={() => fetchParameterDetails(row.id)}>
+      {/* 행 클릭 시 함수 호출 */}
       <TableCell padding="checkbox">
         <Checkbox
           size="small"

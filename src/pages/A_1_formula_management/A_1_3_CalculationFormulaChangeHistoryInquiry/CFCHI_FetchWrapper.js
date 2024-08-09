@@ -3,7 +3,7 @@ import { getCookie, setCookie } from "../../../States/storage/Cookie";
 // 호스트 URL 설정 (환경 변수에서 가져오거나 기본값으로 빈 문자열 설정)
 const host = process.env.REACT_APP_PROD_API_ENDPOINT
   ? process.env.REACT_APP_PROD_API_ENDPOINT
-  : "연결안됨";
+  : "";
 
 // 로그인 함수
 export async function loginDev(payload) {
@@ -34,7 +34,7 @@ export async function loginDev(payload) {
       }
     }
   } catch (error) {
-    console.log(error); // 에러를 콘솔에 출력
+    console.log(error);
   }
 }
 
@@ -61,8 +61,8 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
 
 //메뉴 트리 데이터를 가져오는 함수
 export async function fetchMenuTree() {
-  const url = `v1/admin/calc/menu-tree`; // 메뉴 트리 데이터를 가져오는 API 엔드포인트
-  const response = await esgFetch(url); // esgfetch 함수를 사용하여 api 요청 수행
+  const url = `v1/admin/calc/menu-tree`;
+  const response = await esgFetch(url);
 
   // 응당 성공 할 경우
   if (response.ok) {
@@ -84,7 +84,7 @@ export async function fetchChangeHistory(categoryId) {
     const data = await response.json(); // 응답을 JSON으로 변환
     return data; // 데이터를 반환
   } else {
-    console.error("Failed to fetch change history"); // 실패한 경우 콘솔에 에러 메시지 출력
+    console.error("Failed to fetch change history");
     return null; // null 반환
   }
 }
@@ -99,69 +99,7 @@ export async function fetchCalculationHistory(categoryId) {
     const data = await response.json(); // 응답을 JSON으로 변환
     return data; // 데이터를 반환
   } else {
-    console.error("Failed to fetch calculation history"); // 실패한 경우 콘솔에 에러 메시지 출력
+    console.error("Failed to fetch calculation history");
     return null; // null 반환
-  }
-}
-
-// 유저의 모든 산정식 그룹을 가져오는 함수
-export async function fetchUserFormulaGroups(userId, page = 1, size = 10) {
-  const url = `v1/admin/calc/group/all`; // 페이지와 크기를 쿼리 매개변수로 포함한 URL 생성
-  const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
-
-  // 응답이 성공적인 경우
-  if (response.ok) {
-    const data = await response.json(); // 응답을 JSON으로 변환
-    return data; // 데이터를 반환
-  } else {
-    console.error("Failed to fetch formula groups"); // 실패한 경우 콘솔에 에러 메시지 출력
-    return null; // null 반환
-  }
-}
-
-// 산정식 그룹을 등록하는 함수
-export async function createFormulaGroup(groupId, groupName, note) {
-  const url = `v1/admin/calc/group`;
-  console.log("Sending request to:", url);
-  console.log("Request body:", { groupId, groupName, note });
-
-  const response = await esgFetch(url, "POST", { groupId, groupName, note });
-
-  if (response.ok) {
-    const data = await response.json();
-    console.log("Success response:", data);
-    return data;
-  } else {
-    const error = await response.text(); // JSON 대신 텍스트로 에러 메시지 받기
-    console.error("Failed to create formula group", error);
-    return null;
-  }
-}
-
-// 산정식 그룹을 수정하는 함수
-export async function updateFormulaGroup(id, groupId, groupName, note) {
-  const url = `v1/admin/calc/group/${id}`;
-  const response = await esgFetch(url, "PUT", { groupId, groupName, note });
-  if (response.ok) {
-    const data = await response.json();
-    console.log("수정완료");
-    return data;
-  } else {
-    console.error("Failed to update formula group");
-    return null;
-  }
-}
-
-// 산정식 그룹을 삭제하는 함수
-export async function deleteFormulaGroup(id) {
-  const url = `v1/admin/calc/group/${id}`;
-  const response = await esgFetch(url, "DELETE");
-  if (response.ok) {
-    const data = await response.json();
-    console.log("삭제완료");
-    return data;
-  } else {
-    console.error("Failed to delete formula group");
-    return null;
   }
 }
