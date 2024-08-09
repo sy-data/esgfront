@@ -20,7 +20,7 @@ const CalcFCHistoryInquiry = () => {
     const fetchMenuList = async () => {
       try {
         // API 호출을 통해 메뉴 리스트 데이터를 가져옵니다.
-        const res = await esgFetch("v1/admin/calc/menu-tree");
+        const res = await esgFetch("/v1/admin/calc/menu-tree");
 
         // 응답 데이터를 JSON 형식으로 변환합니다.
         const data = await res.json();
@@ -44,7 +44,7 @@ const CalcFCHistoryInquiry = () => {
         try {
           // API 호출을 통해 변경 이력 데이터를 가져옵니다.
           const res = await esgFetch(
-            `v1/admin/calc/change-history/${selectedCategory}`
+            `/v1/admin/calc/change-history/${selectedCategory}`
           );
           // 응답 데이터를 JSON 형식으로 변환합니다.
           const data = await res.json();
@@ -61,7 +61,7 @@ const CalcFCHistoryInquiry = () => {
         try {
           // API 호출을 통해 산정 이력 데이터를 가져옵니다.
           const res = await esgFetch(
-            `v1/admin/calc/calculation-history/${selectedCategory}`
+            `/v1/admin/calc/calculation-history/${selectedCategory}`
           );
           // 응답 데이터를 JSON 형식으로 변환합니다.
           const data = await res.json();
