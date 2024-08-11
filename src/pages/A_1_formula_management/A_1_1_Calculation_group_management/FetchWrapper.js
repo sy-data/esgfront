@@ -61,7 +61,7 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
 
 // 유저의 모든 산정식 그룹을 가져오는 함수
 export async function fetchUserFormulaGroups(userId, page = 1, size = 10) {
-  const url = `v1/admin/calc/group/all`; // 페이지와 크기를 쿼리 매개변수로 포함한 URL 생성
+  const url = `/v1/admin/calc/group/all`; // 페이지와 크기를 쿼리 매개변수로 포함한 URL 생성
   const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
 
   // 응답이 성공적인 경우
@@ -95,7 +95,7 @@ export async function createFormulaGroup(groupId, name, note) {
 
 // 산정식 그룹을 수정하는 함수
 export async function updateFormulaGroup(id, groupId, name, note) {
-  const url = `v1/admin/calc/group/${id}`;
+  const url = `/v1/admin/calc/group/${id}`;
   const response = await esgFetch(url, "PUT", { groupId, name, note });
   if (response.ok) {
     const data = await response.json();
@@ -109,7 +109,7 @@ export async function updateFormulaGroup(id, groupId, name, note) {
 
 // 산정식 그룹을 삭제하는 함수
 export async function deleteFormulaGroup(id) {
-  const url = `v1/admin/calc/group/${id}`;
+  const url = `/v1/admin/calc/group/${id}`;
   const response = await esgFetch(url, "DELETE");
   if (response.ok) {
     const data = await response.json();

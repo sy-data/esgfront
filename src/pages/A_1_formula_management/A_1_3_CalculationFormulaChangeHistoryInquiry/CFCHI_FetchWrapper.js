@@ -61,7 +61,7 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
 
 //메뉴 트리 데이터를 가져오는 함수
 export async function fetchMenuTree() {
-  const url = `v1/admin/calc/menu-tree`;
+  const url = `/v1/admin/calc/menu-tree`;
   const response = await esgFetch(url);
 
   // 응당 성공 할 경우
@@ -76,7 +76,7 @@ export async function fetchMenuTree() {
 
 // 특정 카테고리의 변경 이력을 가져오는 함수
 export async function fetchChangeHistory(categoryId) {
-  const url = `v1/admin/calc/change-history/${categoryId}`; // 카테고리 ID에 따른 변경 이력 데이터를 가져오는 API 엔드포인트
+  const url = `/v1/admin/calc/change-history/${categoryId}`; // 카테고리 ID에 따른 변경 이력 데이터를 가져오는 API 엔드포인트
   const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
 
   // 응답이 성공적인 경우
@@ -91,7 +91,7 @@ export async function fetchChangeHistory(categoryId) {
 
 // 특정 카테고리의 산정식 이력을 가져오는 함수
 export async function fetchCalculationHistory(categoryId) {
-  const url = `v1/admin/calc/calculation-history/${categoryId}`; // 카테고리 ID에 따른 산정식 이력 데이터를 가져오는 API 엔드포인트
+  const url = `/v1/admin/calc/calculation-history/${categoryId}`; // 카테고리 ID에 따른 산정식 이력 데이터를 가져오는 API 엔드포인트
   const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
 
   // 응답이 성공적인 경우
