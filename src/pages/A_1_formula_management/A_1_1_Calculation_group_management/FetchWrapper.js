@@ -3,6 +3,29 @@ import { getCookie, setCookie } from "../../../States/storage/Cookie";
 // 호스트 URL 설정 (환경 변수에서 가져오거나 기본값으로 빈 문자열 설정)
 const host = process.env.REACT_APP_PROD_API_ENDPOINT || "";
 
+// 공통 fetch 옵션을 설정하는 함수
+function getFetchOptions(method, body, requiredAuth) {
+  const token = getCookie("token");
+
+  if (requiredAuth && !token) {
+    window.location.href = "/unauthorized";
+    return null;
+  }
+
+  const headers = {
+    ...((method === "POST" || method === "PUT") && {
+      "Content-Type": "application/json",
+    }),
+    ...(requiredAuth && { Authorization: `Bearer${token}` }),
+  };
+
+  return {
+    method,
+    headers,
+    ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
+  };
+}
+
 // 로그인 함수
 export async function loginDev(payload) {
   try {
@@ -17,55 +40,51 @@ export async function loginDev(payload) {
       }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (data.jwt) {
-        localStorage.setItem("token", data.jwt);
-        setCookie("token", data.jwt);
-        return data.user;
-      } else if (data.error) {
-        alert(`Status: ${data.error.status}\n${data.error.message}`);
-      }
-    } else {
+    if (!res.ok) {
       const error = await res.json();
-      alert(`Login failed: ${error.message}`);
+      alert(`로그인 실패: ${error.message}`);
+      return null;
+    }
+
+    const data = await res.json();
+    if (data.jwt) {
+      localStorage.setItem("token", data.jwt);
+      setCookie("token", data.jwt);
+      return data.user;
+    } else {
+      alert(`Status: ${data.error.status}\n${data.error.message}`);
+      return null;
     }
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("로그인 오류:", error);
     alert(
       "데이터를 가져오는 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
     );
+    return null;
   }
 }
 
 // API 요청을 수행하는 함수
 export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
-  const token = getCookie("token");
+  const options = getFetchOptions(method, body, requiredAuth);
+  if (!options) return;
+  console.log(`옵션이 포함된 ${url}에 요청`, options);
 
-  if (requiredAuth && !token) {
-    window.location.href = "/unauthorized";
-    return; // 인증이 없으면 함수 종료
-  }
-
-  const options = {
-    method,
-    headers: {
-      ...((method === "POST" || method === "PUT") && {
-        "Content-Type": "application/json",
-      }),
-      ...(requiredAuth && { Authorization: `Bearer ${token}` }),
-    },
-    ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
-  };
-
-  console.log(`Request to ${url} with options:`, options); // 요청 옵션 로그 출력
-
-  return fetch(`${host}${url}`, options).catch((error) => {
-    console.error("Fetch error:", error);
-    alert(
-      "데이터를 가져오는 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
-    );
-  });
+  return fetch(`${host}${url}`, options)
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.message);
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+      alert(
+        "데이터를 가져오는 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+      );
+    });
 }
 
 // 유저의 모든 산정식 그룹을 페이지네이션을 사용하여 가져오는 함수
@@ -80,27 +99,21 @@ export async function fetchAllUserFormulaGroups(adminId, userId) {
     // 현재 페이지와 크기를 포함한 URL을 설정
     const url = `/v1/admin/calc/group/filter?page=${page}&size=${size}`;
     const body = { adminId }; // 요청 본문에 adminId를 포함
-    const response = await esgFetch(url, "POST", body);
 
-    // 응답이 성공적인 경우
-    if (response && response.ok) {
-      const data = await response.json();
-      console.log("API response data:", data); // 응답 데이터 로그 출력
-
-      // 응답 데이터에 data 필드가 있고, 그 길이가 0보다 큰 경우
-      if (data.data && data.data.length > 0) {
-        allData = allData.concat(data.data); // 모든 데이터 배열에 응답 데이터를 추가
-        // 응답 데이터 길이가 요청한 크기보다 작으면 더 이상 데이터가 없는 것으로 간주
-        if (data.data.length < size) {
+    try {
+      const response = await esgFetch(url, "POST", body);
+      if (response.data && response.data.length > 0) {
+        allData = allData.concat(response.data);
+        if (response.data.length < size) {
           moreData = false;
         } else {
           page++;
         }
       } else {
-        moreData = false; // 응답 데이터가 없으면 더 이상 데이터가 없는 것으로 간주
+        moreData = false;
       }
-    } else {
-      console.error("수식 그룹을 가져오지 못했습니다.");
+    } catch (error) {
+      console.error("수식 그룹을 가져오지 못했습니다.:", error);
       return null;
     }
   }
@@ -113,18 +126,15 @@ export async function createFormulaGroup(adminId, groupId, name, note) {
   const url = `/v1/admin/calc/group`;
   const body = { adminId, groupId, name, note };
 
-  console.log("Sending request to:", url);
-  console.log("Request body:", body);
+  console.log("요청을 보내는 중:", url);
+  console.log("요청 본문:", body);
 
-  const response = await esgFetch(url, "POST", body);
-
-  if (response && response.ok) {
-    const data = await response.json();
-    console.log("Success response:", data);
-    return data;
-  } else {
-    const error = await response.json();
-    console.error("Failed to create formula group", error);
+  try {
+    const response = await esgFetch(url, "POST", body);
+    console.log("Success response:", response);
+    return response;
+  } catch (error) {
+    console.error("수식 그룹을 생성하지 못했습니다.", error);
     return null;
   }
 }
@@ -134,16 +144,14 @@ export async function updateFormulaGroup(id, groupId, name, note) {
   const url = `/v1/admin/calc/group/${id}`;
   const body = { groupId, name, note };
 
-  console.log("Updating formula group with body:", body);
+  console.log("본문으로 수식 그룹 업데이트 중:", body);
 
-  const response = await esgFetch(url, "PUT", body);
-
-  if (response && response.ok) {
-    const data = await response.json();
+  try {
+    const response = await esgFetch(url, "PUT", body);
     console.log("수정완료");
-    return data;
-  } else {
-    console.error("Failed to update formula group");
+    return response;
+  } catch (error) {
+    console.error("수식 그룹을 업데이트하지 못했습니다.");
     return null;
   }
 }
@@ -152,16 +160,14 @@ export async function updateFormulaGroup(id, groupId, name, note) {
 export async function deleteFormulaGroup(id) {
   const url = `/v1/admin/calc/group/${id}`;
 
-  console.log("Deleting formula group with id:", id);
+  console.log("ID가 있는 수식 그룹 삭제 중:", id);
 
-  const response = await esgFetch(url, "DELETE");
-
-  if (response && response.ok) {
-    const data = await response.json();
+  try {
+    const response = await esgFetch(url, "DELETE");
     console.log("삭제완료");
-    return data;
-  } else {
-    console.error("Failed to delete formula group");
+    return response;
+  } catch (error) {
+    console.error("수식 그룹을 삭제하지 못했습니다.", error);
     return null;
   }
 }

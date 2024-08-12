@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 
-function TableComponent({
+const TableComponent = ({
   rows,
   setRows,
   page,
@@ -28,7 +28,9 @@ function TableComponent({
   editGroupName,
   editNote,
   handleSave,
-}) {
+}) => {
+  const isSelected = (id) => selected.indexOf(id) !== -1;
+
   const handleSelectAllClick = (event) => {
     // "전체 선택" 체크박스가 클릭되었는지 여부를 확인
     if (event.target.checked) {
@@ -38,11 +40,11 @@ function TableComponent({
 
       // 선택된 항목의 상태를 newSelecteds로 설정합니다.
       setSelected(newSelecteds);
-      return;
+    } else {
+      // 체크박스가 체크 해제된 경우
+      // 선택된 항목의 상태를 빈 배열로 설정하여 모든 선택을 해제합니다.
+      setSelected([]);
     }
-    // 체크박스가 체크 해제된 경우
-    // 선택된 항목의 상태를 빈 배열로 설정하여 모든 선택을 해제합니다.
-    setSelected([]);
   };
 
   const handleClick = (event, id) => {
@@ -114,88 +116,101 @@ function TableComponent({
             {rows.length > 0 ? (
               rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    aria-checked={selected.indexOf(row.id) !== -1}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={selected.indexOf(row.id) !== -1}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selected.indexOf(row.id) !== -1}
-                        inputProps={{
-                          "aria-labelledby": `enhanced-table-checkbox-${index}`,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>{rows.length - index}</TableCell>
-                    <TableCell>{row.groupId}</TableCell>
-                    <TableCell
-                      onDoubleClick={() =>
-                        handleEdit(page * rowsPerPage + index)
-                      }
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.id)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
                     >
-                      {editIndex === page * rowsPerPage + index ? (
-                        <TextField
-                          value={editGroupName || ""}
-                          onChange={(e) => setEditGroupName(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
-                          onKeyPress={(e) => e.key === "Enter" && handleSave()}
-                          autoFocus
-                          fullWidth
-                          sx={{
-                            width: "50%",
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                width: 200,
-                                height: "0.5rem",
-                              },
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
                           }}
                         />
-                      ) : (
-                        <span
-                          onClick={() => handleEdit(page * rowsPerPage + index)}
-                        >
-                          {row.name}
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell
-                      onDoubleClick={() =>
-                        handleEdit(page * rowsPerPage + index)
-                      }
-                    >
-                      {editIndex === page * rowsPerPage + index ? (
-                        <TextField
-                          value={editNote || ""}
-                          onChange={(e) => setEditNote(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
-                          onKeyPress={(e) => e.key === "Enter" && handleSave()}
-                          // autoFocus
-                          fullWidth
-                          sx={{
-                            width: "50%",
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                width: 200,
-                                height: "0.5rem",
-                              },
-                          }}
-                        />
-                      ) : (
-                        <span
-                          onClick={() => handleEdit(page * rowsPerPage + index)}
-                        >
-                          {row.note}
-                        </span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
+                      </TableCell>
+                      <TableCell>{rows.length - index}</TableCell>
+                      <TableCell>{row.groupId}</TableCell>
+                      <TableCell
+                        onDoubleClick={() =>
+                          handleEdit(page * rowsPerPage + index)
+                        }
+                      >
+                        {editIndex === page * rowsPerPage + index ? (
+                          <TextField
+                            value={editGroupName || ""}
+                            onChange={(e) => setEditGroupName(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyPress={(e) =>
+                              e.key === "Enter" && handleSave()
+                            }
+                            autoFocus
+                            fullWidth
+                            sx={{
+                              width: "50%",
+                              "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                                {
+                                  width: 200,
+                                  height: "0.5rem",
+                                },
+                            }}
+                          />
+                        ) : (
+                          <span
+                            onClick={() =>
+                              handleEdit(page * rowsPerPage + index)
+                            }
+                          >
+                            {row.name}
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell
+                        onDoubleClick={() =>
+                          handleEdit(page * rowsPerPage + index)
+                        }
+                      >
+                        {editIndex === page * rowsPerPage + index ? (
+                          <TextField
+                            value={editNote || ""}
+                            onChange={(e) => setEditNote(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyPress={(e) =>
+                              e.key === "Enter" && handleSave()
+                            }
+                            // autoFocus
+                            fullWidth
+                            sx={{
+                              width: "50%",
+                              "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                                {
+                                  width: 200,
+                                  height: "0.5rem",
+                                },
+                            }}
+                          />
+                        ) : (
+                          <span
+                            onClick={() =>
+                              handleEdit(page * rowsPerPage + index)
+                            }
+                          >
+                            {row.note}
+                          </span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
             ) : (
               <TableRow>
                 <TableCell colSpan={5} align="center">
@@ -217,6 +232,6 @@ function TableComponent({
       />
     </Paper>
   );
-}
+};
 
 export default TableComponent;
