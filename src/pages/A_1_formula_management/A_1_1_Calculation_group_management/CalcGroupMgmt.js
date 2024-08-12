@@ -7,7 +7,7 @@ import EditDialog from "./EditDialog";
 import {
   createFormulaGroup,
   deleteFormulaGroup,
-  fetchUserFormulaGroups,
+  fetchAllUserFormulaGroups,
   updateFormulaGroup,
 } from "./FetchWrapper";
 
@@ -25,14 +25,13 @@ function CalcGroupMgmt() {
   useEffect(() => {
     // 비동기 함수 선언: 사용자 공식 그룹 데이터를 가져옵니다.
     const loadGroups = async () => {
-      // fetchUserFormulaGroups 함수를 호출하여 데이터를 가져옵니다.
-      const data = await fetchUserFormulaGroups();
-      console.log(data);
+      const adminId = "test"; // 실제 adminId를 여기에 설정
+      const userId = "test"; // 실제 userId를 여기에 설정
+      const data = await fetchAllUserFormulaGroups(adminId, userId);
 
       // 데이터가 유효한 경우 상태를 업데이트합니다.
       if (data) {
-        // 가져온 데이터의 data 필드를 rows 상태로 설정합니다.
-        setRows(data.data);
+        setRows(data); // 가져온 데이터를 rows 상태로 설정합니다.
       }
     };
     // 비동기 함수를 호출하여 데이터 로드를 시작합니다.
@@ -40,35 +39,33 @@ function CalcGroupMgmt() {
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행되도록 합니다.
 
   const handleAddRow = async () => {
-    // 그룹 이름이나 메모가 비어 있는지 확인합니다.
     if (!editGroupName.trim() || !editNote.trim()) {
-      console.error("그룹 이름과 메모가 필요합니다.".error);
+      console.error("그룹 이름과 메모가 필요합니다.");
       return;
     }
 
-    // 새로운 그룹 ID를 생성합니다. (현재 행의 수에 1을 더한 값)
     const groupId = rows.length + 1;
 
-    // createFormulaGroup 함수를 호출하여 새로운 그룹을 생성합니다.
-    const result = await createFormulaGroup(groupId, editGroupName, editNote);
+    const adminId = "test"; // 실제 adminId를 여기에 설정
+    const result = await createFormulaGroup(
+      adminId,
+      groupId,
+      editGroupName,
+      editNote
+    );
 
-    // 그룹 생성이 성공했는지 확인합니다.
     if (result) {
-      // 새로운 행을 생성하고 기존의 행들에 추가합니다.
       const newRows = [
         {
-          id: result.data.id, // 생성된 그룹의 ID
-          groupId: result.data.groupId, // 생성된 그룹의 그룹 ID
-          name: editGroupName, // 입력된 그룹 이름
-          note: editNote, // 입력된 메모
+          id: result.id,
+          groupId: result.groupId,
+          name: editGroupName,
+          note: editNote,
         },
-        ...rows, // 기존의 행들
+        ...rows,
       ];
 
-      // 새로운 행 목록으로 상태를 업데이트합니다.
       setRows(newRows);
-
-      // 편집 상태를 초기화합니다.
       setEditIndex(-1);
       setEditGroupName("");
       setEditNote("");
@@ -78,19 +75,13 @@ function CalcGroupMgmt() {
   };
 
   const handleDeleteRows = async () => {
-    // 선택된 각 행의 ID에 대해 반복합니다.
     for (const id of selected) {
-      // deleteFormulaGroup 함수를 호출하여 그룹을 삭제합니다.
       await deleteFormulaGroup(id);
     }
 
-    // 선택된 행을 제외한 새로운 행 목록을 만듭니다.
     const newRows = rows.filter((row) => !selected.includes(row.id));
 
-    // 새로운 행 목록으로 상태를 업데이트합니다.
     setRows(newRows);
-
-    // 선택된 항목 배열을 비워 상태를 업데이트합니다.
     setSelected([]);
   };
 
@@ -99,32 +90,24 @@ function CalcGroupMgmt() {
   };
 
   const handleSave = useCallback(async () => {
-    // 편집 중인 행의 인덱스가 0 이상인 경우에만 실행됩니다.
     if (editIndex >= 0) {
-      // updateFormulaGroup 함수를 호출하여 편집된 데이터를 저장합니다.
       const result = await updateFormulaGroup(
-        rows[editIndex].id, // 편집 중인 행의 ID
-        rows[editIndex].groupId, // 편집 중인 행의 그룹 ID
-        editGroupName, // 편집된 그룹 이름
-        editNote // 편집된 메모
+        rows[editIndex].id,
+        rows[editIndex].groupId,
+        editGroupName,
+        editNote
       );
 
-      // 업데이트가 성공한 경우 상태를 업데이트합니다.
       if (result) {
-        // 기존 행 배열을 복사하여 새로운 배열을 만듭니다.
         const newRows = [...rows];
-        // 편집 중인 행의 데이터를 업데이트합니다.
         newRows[editIndex] = {
-          ...newRows[editIndex], // 기존 행 데이터
-          name: editGroupName, // 편집된 그룹 이름으로 업데이트
-          note: editNote, // 편집된 메모로 업데이트
+          ...newRows[editIndex],
+          name: editGroupName,
+          note: editNote,
         };
 
-        // 새로운 행 배열로 상태를 업데이트합니다.
         setRows(newRows);
-        // 편집 인덱스를 초기화하여 편집 상태를 종료합니다.
         setEditIndex(-1);
-        // 다이얼로그를 열어 성공적으로 저장되었음을 알립니다.
         setIsDialogOpen(true);
       }
     }
@@ -132,26 +115,21 @@ function CalcGroupMgmt() {
 
   const handleDocumentClick = useCallback(
     (event) => {
-      // containerRef.current가 존재하고, event.target이 containerRef.current의 자식이 아니며, editIndex가 -1이 아닌 경우
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target) &&
         editIndex !== -1
       ) {
-        // handleSave 함수를 호출합니다.
         handleSave();
       }
     },
-    [editIndex, handleSave] // 의존성 배열: editIndex와 handleSave에 의존하여 함수가 재생성됩니다.
+    [editIndex, handleSave]
   );
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 문서에 "mousedown" 이벤트 리스너를 추가합니다.
     document.addEventListener("mousedown", handleDocumentClick);
 
-    // useEffect 훅의 클린업 함수: 컴포넌트가 언마운트되거나 의존성 배열의 값이 변경될 때 호출됩니다.
     return () => {
-      // "mousedown" 이벤트 리스너를 제거합니다.
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleDocumentClick]);
@@ -238,21 +216,21 @@ function CalcGroupMgmt() {
         </Box>
       </Box>
       <TableComponent
-        rows={rows} // 테이블에 표시할 행 데이터 배열
-        setRows={setRows} // 행 데이터를 업데이트하는 함수
-        page={page} // 현재 페이지 번호
-        rowsPerPage={rowsPerPage} // 한 페이지에 표시할 행 수
-        setPage={setPage} // 페이지 번호를 업데이트하는 함수
-        setRowsPerPage={setRowsPerPage} // 페이지당 표시할 행 수를 업데이트하는 함수
-        selected={selected} // 선택된 행들의 ID 배열
-        setSelected={setSelected} // 선택된 행들의 ID 배열을 업데이트하는 함수
-        setEditIndex={setEditIndex} // 편집 중인 행의 인덱스를 설정하는 함수
-        setEditGroupName={setEditGroupName} // 편집 중인 행의 그룹 이름을 설정하는 함수
-        setEditNote={setEditNote} // 편집 중인 행의 메모를 설정하는 함수
-        editIndex={editIndex} // 현재 편집 중인 행의 인덱스
-        editGroupName={editGroupName} // 편집 중인 행의 그룹 이름
-        editNote={editNote} // 편집 중인 행의 메모
-        handleSave={handleSave} // 행 데이터를 저장하는 함수
+        rows={rows}
+        setRows={setRows}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        setPage={setPage}
+        setRowsPerPage={setRowsPerPage}
+        selected={selected}
+        setSelected={setSelected}
+        setEditIndex={setEditIndex}
+        setEditGroupName={setEditGroupName}
+        setEditNote={setEditNote}
+        editIndex={editIndex}
+        editGroupName={editGroupName}
+        editNote={editNote}
+        handleSave={handleSave}
       />
       <EditDialog
         isDialogOpen={isDialogOpen}
