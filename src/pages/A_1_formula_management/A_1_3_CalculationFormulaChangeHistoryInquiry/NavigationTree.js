@@ -9,18 +9,16 @@ const NavigationTree = (props) => {
   const [openedLeaf, setOpenedLeaf] = useRecoilState(props.leafAtom);
 
   const toggleMenu = (item) => {
-    // 메뉴 항목을 클릭했을 때 호출되는 함수입니다.
-    setOpened({
-      // 현재 상태를 복사하여 확장합니다.
-      ...opened,
-
+    setOpened((prevState) => ({
+      // Recoil 상태 업데이트 시 이전 상태를 기반으로 변경하는 함수를 사용하여 불변성을 유지합니다.
+      ...prevState,
       // 링크가 없거나 현재 열려 있는 leaf가 클릭된 항목과 다를 경우, 해당 항목의 열림 상태를 토글합니다.
       ...((!item.link || openedLeaf !== item.id) && {
-        [item.id]: !opened[item.id],
+        [item.id]: !prevState[item.id],
       }),
       // 링크가 있고 현재 열려 있는 leaf가 클릭된 항목과 다를 경우, 이전에 열려 있던 leaf를 닫습니다.
       ...(item.link && openedLeaf !== item.id && { [openedLeaf]: false }),
-    });
+    }));
 
     // 링크가 있고 현재 열려 있는 leaf가 클릭된 항목과 다를 경우, 해당 링크로 이동하고 열려 있는 leaf를 업데이트합니다.
     if (item.link && openedLeaf !== item.id) {

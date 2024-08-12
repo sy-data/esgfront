@@ -3,54 +3,33 @@ import MenuParent from "./nodes/MenuParent";
 import MenuChild from "./nodes/MenuChild";
 import ItemBold from "./nodes/ItemBold";
 import ItemPlain from "./nodes/ItemPlain";
-import Collapse from "@mui/material/Collapse"; // Collapse 컴포넌트 추가
+import Collapse from "@mui/material/Collapse";
+
+// nodeComponent 함수를 Node 컴포넌트 바깥으로 추출하여 렌더링 성능을 최적화
+const nodeComponent = (item, opened, toggle) => {
+  switch (item.type) {
+    case "menu-parent":
+      return <MenuParent {...item} opened={opened[item.id]} toggle={toggle} />;
+    case "menu-child":
+      return <MenuChild {...item} opened={opened[item.id]} toggle={toggle} />;
+    case "treeItem-bold":
+      return <ItemBold {...item} opened={opened[item.id]} toggle={toggle} />;
+    case "treeItem-plain":
+      return <ItemPlain {...item} opened={opened[item.id]} toggle={toggle} />;
+    default:
+      return <div>알 수 없는 노드 유형</div>;
+  }
+};
 
 const Node = (props) => {
-  const menu = Array.isArray(props.menu) ? props.menu : []; // 배열 확인 및 초기화
+  // props에서 자주 사용되는 속성들을 구조 분해 할당으로 접근
+  // props 객체에서 자주 사용되는 속성들을 구조 분해 할당으로 더 간결하게 접근.
+  const { menu = [], opened, toggle } = props; // 기본값을 설정하여 배열 확인 및 초기화, menu가 배열인지 확인하고, 기본값을 빈 배열로 설정하여 안전성 확보.
 
-  const nodeComponent = (item) => {
-    switch (item.type) {
-      case "menu-parent":
-        return (
-          <MenuParent
-            {...item}
-            opened={props.opened[item.id]}
-            toggle={props.toggle}
-          />
-        );
-      case "menu-child":
-        return (
-          <MenuChild
-            {...item}
-            opened={props.opened[item.id]}
-            toggle={props.toggle}
-          />
-        );
-      case "treeItem-bold":
-        return (
-          <ItemBold
-            {...item}
-            opened={props.opened[item.id]}
-            toggle={props.toggle}
-          />
-        );
-      case "treeItem-plain":
-        return (
-          <ItemPlain
-            {...item}
-            opened={props.opened[item.id]}
-            toggle={props.toggle}
-          />
-        );
-      default:
-        return <div>unknown node type</div>;
-    }
-  };
-
-  return menu.map((item, index) => (
+  return menu.map((item) => (
     <div key={item.id}>
-      {nodeComponent(item)}
-      <Collapse in={props.opened[item.id]}>
+      {nodeComponent(item, opened, toggle)}
+      <Collapse in={opened[item.id]}>
         {item.children && (
           <Box
             sx={{
@@ -58,15 +37,10 @@ const Node = (props) => {
               flexDirection: "column",
               ...(item.type.startsWith("menu-") && { padding: "10px 0" }),
               ...(item.type.startsWith("treeItem-") && { paddingLeft: "28px" }),
-              ...(props.opened[item.id] && { marginLeft: "20px" }),
+              ...(opened[item.id] && { marginLeft: "20px" }),
             }}
           >
-            <Node
-              {...props}
-              menu={item.children}
-              opened={props.opened}
-              toggle={props.toggle}
-            />
+            <Node {...props} menu={item.children} />
           </Box>
         )}
       </Collapse>
