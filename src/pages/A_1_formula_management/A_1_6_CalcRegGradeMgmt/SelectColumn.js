@@ -5,7 +5,6 @@ const SelectColumn = ({ row, handleSelectChange, field, options }) => {
   return (
     <TableCell>
       <FormControl fullWidth size="small">
-        {" "}
         {/* 전체 너비와 작은 크기로 설정된 폼 컨트롤 */}
         <Select
           value={row[field]} // 셀렉트 박스의 값을 현재 행의 해당 필드 값으로 설정
@@ -17,7 +16,6 @@ const SelectColumn = ({ row, handleSelectChange, field, options }) => {
               index // 주어진 옵션 목록을 반복하여 MenuItem 생성
             ) => (
               <MenuItem key={index} value={option}>
-                {" "}
                 {/* 각 옵션에 대해 MenuItem 생성 */}
                 {option} {/* 옵션 값을 표시 */}
               </MenuItem>

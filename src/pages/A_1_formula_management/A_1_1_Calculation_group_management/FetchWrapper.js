@@ -32,7 +32,9 @@ export async function loginDev(payload) {
     }
   } catch (error) {
     console.error("Login error:", error);
-    alert("An error occurred during login. Please try again later.");
+    alert(
+      "데이터를 가져오는 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+    );
   }
 }
 
@@ -60,41 +62,45 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
 
   return fetch(`${host}${url}`, options).catch((error) => {
     console.error("Fetch error:", error);
-    alert("An error occurred while fetching data. Please try again later.");
+    alert(
+      "데이터를 가져오는 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+    );
   });
 }
 
 // 유저의 모든 산정식 그룹을 페이지네이션을 사용하여 가져오는 함수
 export async function fetchAllUserFormulaGroups(adminId, userId) {
-  let allData = [];
-  let page = 1;
+  let allData = []; // 모든 데이터를 저장할 배열을 초기화
+  let page = 1; // 초기 페이지 번호를 설정
   let size = 10; // 페이지 당 불러올 데이터 수
-  let moreData = true;
+  let moreData = true; // 더 많은 데이터를 불러올 수 있는지 여부를 나타내는 플래그를 초기화
 
+  // 더 많은 데이터가 있는 동안 반복
   while (moreData) {
+    // 현재 페이지와 크기를 포함한 URL을 설정
     const url = `/v1/admin/calc/group/filter?page=${page}&size=${size}`;
-    const body = { adminId };
-
-    console.log(`Fetching data from ${url} with body:`, body); // 요청 본문 로그 출력
-
+    const body = { adminId }; // 요청 본문에 adminId를 포함
     const response = await esgFetch(url, "POST", body);
 
+    // 응답이 성공적인 경우
     if (response && response.ok) {
       const data = await response.json();
       console.log("API response data:", data); // 응답 데이터 로그 출력
 
+      // 응답 데이터에 data 필드가 있고, 그 길이가 0보다 큰 경우
       if (data.data && data.data.length > 0) {
-        allData = allData.concat(data.data);
+        allData = allData.concat(data.data); // 모든 데이터 배열에 응답 데이터를 추가
+        // 응답 데이터 길이가 요청한 크기보다 작으면 더 이상 데이터가 없는 것으로 간주
         if (data.data.length < size) {
           moreData = false;
         } else {
           page++;
         }
       } else {
-        moreData = false;
+        moreData = false; // 응답 데이터가 없으면 더 이상 데이터가 없는 것으로 간주
       }
     } else {
-      console.error("Failed to fetch formula groups");
+      console.error("수식 그룹을 가져오지 못했습니다.");
       return null;
     }
   }

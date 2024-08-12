@@ -39,14 +39,18 @@ function CalcGroupMgmt() {
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행되도록 합니다.
 
   const handleAddRow = async () => {
+    // 그룹 이름과 메모가 입력되었는지 확인합니다.
     if (!editGroupName.trim() || !editNote.trim()) {
       console.error("그룹 이름과 메모가 필요합니다.");
       return;
     }
 
+    // 새로 추가될 그룹의 ID를 설정합니다. 현재 행의 수에 1을 더한 값을 사용합니다.
     const groupId = rows.length + 1;
 
     const adminId = "test"; // 실제 adminId를 여기에 설정
+
+    // createFormulaGroup 함수를 호출하여 새로운 그룹을 생성합니다.
     const result = await createFormulaGroup(
       adminId,
       groupId,
@@ -54,20 +58,22 @@ function CalcGroupMgmt() {
       editNote
     );
 
+    // 그룹 생성이 성공했는지 확인합니다.
     if (result) {
+      // 새로운 행을 생성하고 기존의 행들에 추가합니다.
       const newRows = [
         {
-          id: result.id,
-          groupId: result.groupId,
-          name: editGroupName,
-          note: editNote,
+          id: result.id, // 생성된 그룹의 ID를 설정
+          groupId: result.groupId, // 생성된 그룹의 그룹 ID를 설정
+          name: editGroupName, // 입력된 그룹 이름을 설정
+          note: editNote, // 입력된 메모를 설정
         },
-        ...rows,
+        ...rows, // 기존의 행들을 추가
       ];
 
-      setRows(newRows);
-      setEditIndex(-1);
-      setEditGroupName("");
+      setRows(newRows); // 새로운 행 목록으로 상태를 업데이
+      setEditIndex(-1); // 편집 인덱스를 초기화하여 편집 상태를 종료
+      setEditGroupName(""); // 입력 필드를 초기
       setEditNote("");
     } else {
       console.error("새 행을 추가하지 못했습니다.");
@@ -75,61 +81,74 @@ function CalcGroupMgmt() {
   };
 
   const handleDeleteRows = async () => {
+    // 선택된 각 행의 ID에 대해 반복문을 실행
     for (const id of selected) {
+      // deleteFormulaGroup 함수를 호출하여 해당 ID의 그룹을 삭제
       await deleteFormulaGroup(id);
     }
-
+    // 삭제된 그룹을 제외한 새로운 행 목록을 생성
     const newRows = rows.filter((row) => !selected.includes(row.id));
 
+    // 새로운 행 목록으로 상태를 업데이트
     setRows(newRows);
-    setSelected([]);
+    setSelected([]); // 선택된 항목 배열을 비웁니다.
   };
 
   const handleDialogClose = () => {
+    // 다이얼로그의 열림 상태를 false로 설정하여 다이얼로그를 닫습니다.
     setIsDialogOpen(false);
   };
 
   const handleSave = useCallback(async () => {
+    // 편집 중인 행의 인덱스가 유효한지 확인
     if (editIndex >= 0) {
+      // updateFormulaGroup 함수를 호출하여 편집된 데이터를 서버에 저장
       const result = await updateFormulaGroup(
-        rows[editIndex].id,
-        rows[editIndex].groupId,
-        editGroupName,
-        editNote
+        rows[editIndex].id, // 현재 편집 중인 행의 ID
+        rows[editIndex].groupId, // 현재 편집 중인 행의 그룹 ID
+        editGroupName, // 새로운 그룹 이름
+        editNote // 새로운 메모
       );
 
+      // 업데이트가 성공했는지 확인
       if (result) {
+        // 기존의 행 배열을 복사하여 새로운 배열을 만듭니다.
         const newRows = [...rows];
+
+        // 편집 중인 행의 데이터를 업데이트
         newRows[editIndex] = {
-          ...newRows[editIndex],
-          name: editGroupName,
-          note: editNote,
+          ...newRows[editIndex], // 기존의 행 데이터
+          name: editGroupName, // 새로운 그룹 이름으로 업데이트
+          note: editNote, // 새로운 메모로 업데이트
         };
 
-        setRows(newRows);
-        setEditIndex(-1);
-        setIsDialogOpen(true);
+        setRows(newRows); // 새로운 행 배열로 상태를 업데이트
+        setEditIndex(-1); // 편집 인덱스를 초기화하여 편집 상태를 종료
+        setIsDialogOpen(true); // 다이얼로그를 열어 성공적으로 저장되었음을 알립니다.
       }
     }
   }, [editIndex, editGroupName, editNote, rows]);
 
   const handleDocumentClick = useCallback(
     (event) => {
+      // containerRef.current가 존재하고, event.target이 containerRef.current의 자식이 아니며, 편집 인덱스가 유효한 경우
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target) &&
         editIndex !== -1
       ) {
-        handleSave();
+        handleSave(); // handleSave 함수를 호출하여 현재 편집 중인 내용을 저장합니다.
       }
     },
     [editIndex, handleSave]
   );
 
   useEffect(() => {
+    // "mousedown" 이벤트 리스너를 추가
     document.addEventListener("mousedown", handleDocumentClick);
 
     return () => {
+      // "mousedown" 이벤트 리스너를 제거
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleDocumentClick]);

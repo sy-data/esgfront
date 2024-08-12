@@ -30,28 +30,41 @@ function TableComponent({
   handleSave,
 }) {
   const handleSelectAllClick = (event) => {
+    // "전체 선택" 체크박스가 클릭되었는지 여부를 확인
     if (event.target.checked) {
+      // 체크박스가 체크된 경우
+      // rows 배열의 각 요소의 id를 추출하여 새로운 배열 newSelecteds를 만듭니다.
       const newSelecteds = rows.map((n) => n.id);
+
+      // 선택된 항목의 상태를 newSelecteds로 설정합니다.
       setSelected(newSelecteds);
       return;
     }
+    // 체크박스가 체크 해제된 경우
+    // 선택된 항목의 상태를 빈 배열로 설정하여 모든 선택을 해제합니다.
     setSelected([]);
   };
 
   const handleClick = (event, id) => {
+    // 선택된 항목 배열에서 현재 항목의 id가 있는지 찾습니다.
     const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+    let newSelected = []; // 새로운 선택된 항목 배열을 초기화합니다.
 
+    // 현재 항목의 id가 선택된 항목 배열에 없는 경우 (선택되지 않은 상태)
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, id); // 선택된 항목 배열에 현재 항목의 id를 추가
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
+      // 현재 항목의 id가 선택된 항목 배열의 첫 번째 항목인 경우
+      newSelected = newSelected.concat(selected.slice(1)); // 첫 번째 항목을 제외한 나머지 항목들로 새로운 배열을 만듭니다.
     } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      // 현재 항목의 id가 선택된 항목 배열의 마지막 항목인 경우
+      newSelected = newSelected.concat(selected.slice(0, -1)); // 마지막 항목을 제외한 나머지 항목들로 새로운 배열을 만듭니다.
     } else if (selectedIndex > 0) {
+      // 현재 항목의 id가 선택된 항목 배열의 중간에 있는 경우
+      // 현재 항목을 제외한 나머지 항목들로 새로운 배열을 만듭니다.
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selected.slice(0, selectedIndex), // 현재 항목 전의 항목들
+        selected.slice(selectedIndex + 1) // 현재 항목 후의 항목들
       );
     }
 
@@ -59,18 +72,20 @@ function TableComponent({
   };
 
   const handleChangePage = (event, newPage) => {
+    // 새로운 페이지 번호를 상태로 설정합니다.
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
+    // 선택된 페이지당 행 수를 정수로 변환하여 상태로 설정합니다.
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(0); // 페이지를 첫 페이지로 초기화합니다.
   };
 
   const handleEdit = (index) => {
-    setEditIndex(index);
-    setEditGroupName(rows[index].name);
-    setEditNote(rows[index].note);
+    setEditIndex(index); // 편집할 행의 인덱스를 상태로 설정합니다.
+    setEditGroupName(rows[index].name); // 편집할 행의 그룹 이름을 상태로 설정합니다.
+    setEditNote(rows[index].note); // 편집할 행의 메모를 상태로 설정합니다.
   };
 
   return (
