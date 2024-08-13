@@ -8,27 +8,30 @@ import {
   Button,
 } from "@mui/material";
 
+const DIALOG_TITLE = "잘못된 날짜 선택";
+const CONFIRM_BUTTON_TEXT = "확인";
+
 const DialogAlert = ({ open, handleClose, message }) => {
   return (
     <Dialog
-      open={open} // open 상태에 따라 Dialog를 열거나 닫음
-      onClose={handleClose} // Dialog 외부를 클릭하거나 닫기 버튼을 클릭할 때 호출되는 핸들러
-      aria-labelledby="alert-dialog-title" // 접근성을 위한 타이틀 ID 설정
-      aria-describedby="alert-dialog-description" // 접근성을 위한 설명 ID 설정
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{"잘못된 날짜 선택"}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{DIALOG_TITLE}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {message} {/* props로 전달된 메시지를 표시 */}
+          {message}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary" autoFocus>
-          확인
+          {CONFIRM_BUTTON_TEXT}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DialogAlert;
+export default React.memo(DialogAlert);

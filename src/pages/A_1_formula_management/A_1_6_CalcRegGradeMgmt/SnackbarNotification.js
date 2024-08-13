@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
+const SNACKBAR_AUTOHIDE_DURATION = 3000;
+const ALERT_SEVERITY = "success";
+const ALERT_MESSAGE = "저장되었습니다";
+
 const SnackbarNotification = ({ openSnackbar, setOpenSnackbar }) => {
+  const handleClose = useCallback(() => {
+    setOpenSnackbar(false);
+  }, [setOpenSnackbar]);
+
   return (
     <Snackbar
-      open={openSnackbar} // Snackbar의 열림 상태를 설정
-      autoHideDuration={3000} // 3초 후 자동으로 닫히도록 설정
-      onClose={() => setOpenSnackbar(false)} // Snackbar 닫기 핸들러 설정
+      open={openSnackbar}
+      autoHideDuration={SNACKBAR_AUTOHIDE_DURATION}
+      onClose={handleClose}
     >
       <Alert
-        onClose={() => setOpenSnackbar(false)} // Alert 닫기 핸들러 설정
-        severity="success" // Alert의 심각도 설정 (성공 메시지로 설정)
-        sx={{ width: "100%" }} // Alert의 스타일 설정 (전체 너비 차지)
+        onClose={handleClose}
+        severity={ALERT_SEVERITY}
+        sx={{ width: "100%" }}
       >
-        저장되었습니다 {/* Alert에 표시할 메시지 */}
+        {ALERT_MESSAGE}
       </Alert>
     </Snackbar>
   );

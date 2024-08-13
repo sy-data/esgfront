@@ -1,69 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Button } from "@mui/material";
 import CustomSelect from "./CustomSelect";
 import DatePicker from "./DatePicker";
 import DialogAlert from "./DialogAlert";
 import { activeButtonStyles, inactiveButtonStyles } from "./styles";
 
+const DIALOG_MESSAGES = {
+  INVALID_START_DATE: "종료일 날짜보다 늦습니다.",
+  INVALID_END_DATE: "시작일 앞으로 지정할 수 없습니다.",
+};
+
 const SearchBar = ({ onSearch, onClear }) => {
   const [activity, setActivity] = useState(""); // 활동 상태
   const [startDate, setStartDate] = useState(""); // 시작일 상태
   const [endDate, setEndDate] = useState(""); // 종료일 상태
   const [openDialog, setOpenDialog] = useState(false); // 대화 상자 열림 상태
-  const [isButtonActive, setIseButtonActive] = useState(false); // 버튼 활성화 상태
+  const [isButtonActive, setIsButtonActive] = useState(false); // 버튼 활성화 상태
   const [dialogMessage, setDialogMessage] = useState(""); // 대화 상자 메시지 상태
 
-  const handleDialogClose = () => {
-    // 대화 상자 닫기 핸들러
+  const handleDialogClose = useCallback(() => {
     setOpenDialog(false); // 대화 상자 닫기
-  };
+  }, []);
 
-  const handleStartDateChange = (e) => {
-    // 시작일 변경 핸들러
-    const selectedDate = e.target.value; // 선택된 날짜
-    if (endDate && selectedDate > endDate) {
-      // 선택된 날짜가 종료일보다 늦으면
-      setDialogMessage("종료일 날짜보다 늦습니다."); // 경고 메시지 설정
-      setOpenDialog(true); // 대화 상자 열기
-    } else {
-      setStartDate(selectedDate); // 시작일 설정
-    }
-  };
+  const handleStartDateChange = useCallback(
+    (e) => {
+      const selectedDate = e.target.value;
+      if (endDate && selectedDate > endDate) {
+        setDialogMessage(DIALOG_MESSAGES.INVALID_START_DATE); // 경고 메시지 설정
+        setOpenDialog(true); // 대화 상자 열기
+      } else {
+        setStartDate(selectedDate); // 시작일 설정
+      }
+    },
+    [endDate]
+  );
 
-  const handleEndDateChange = (e) => {
-    // 종료일 변경 핸들러
-    const selectedDate = e.target.value; // 선택된 날짜
-    if (startDate && selectedDate < startDate) {
-      // 선택된 날짜가 시작일보다 이르면
-      setDialogMessage("시작일 앞으로 지정할 수 없습니다."); // 경고 메시지 설정
-      setOpenDialog(true); // 대화 상자 열기
-    } else {
-      setEndDate(selectedDate); // 종료일 설정
-    }
-  };
+  const handleEndDateChange = useCallback(
+    (e) => {
+      const selectedDate = e.target.value;
+      if (startDate && selectedDate < startDate) {
+        setDialogMessage(DIALOG_MESSAGES.INVALID_END_DATE); // 경고 메시지 설정
+        setOpenDialog(true); // 대화 상자 열기
+      } else {
+        setEndDate(selectedDate); // 종료일 설정
+      }
+    },
+    [startDate]
+  );
 
   useEffect(() => {
-    // 활동, 시작일, 종료일이 변경될 때마다 실행되는 효과
-    if (activity && startDate && endDate) {
-      // 모든 필드가 입력되면
-      setIseButtonActive(true); // 버튼 활성화
-    } else {
-      setIseButtonActive(false); // 버튼 비활성화
-    }
+    setIsButtonActive(activity && startDate && endDate);
   }, [activity, startDate, endDate]);
 
-  const handleSearchClick = () => {
-    // 검색 버튼 클릭 핸들러
+  const handleSearchClick = useCallback(() => {
     onSearch({ activity, startDate, endDate }); // 검색 조건 전달
-  };
+  }, [activity, startDate, endDate, onSearch]);
 
-  const handleClearClick = () => {
-    // 초기화 버튼 클릭 핸들러
+  const handleClearClick = useCallback(() => {
     setActivity(""); // 활동 상태 초기화
     setStartDate(""); // 시작일 상태 초기화
     setEndDate(""); // 종료일 상태 초기화
     onClear(); // 초기화 함수 호출
-  };
+  }, [onClear]);
 
   return (
     <Box
@@ -89,7 +87,7 @@ const SearchBar = ({ onSearch, onClear }) => {
         <Button
           variant="contained"
           sx={{
-            ...(isButtonActive ? activeButtonStyles : inactiveButtonStyles), // 버튼 스타일 설정
+            ...(isButtonActive ? activeButtonStyles : inactiveButtonStyles),
             marginRight: 2,
           }}
           disabled={!isButtonActive} // 버튼 활성화 여부 설정
@@ -100,7 +98,7 @@ const SearchBar = ({ onSearch, onClear }) => {
         <Button
           variant="outlined"
           sx={{ marginRight: 40 }}
-          onClick={handleClearClick} // 초기화 버튼 클릭 핸들러 설정
+          onClick={handleClearClick}
         >
           초기화
         </Button>

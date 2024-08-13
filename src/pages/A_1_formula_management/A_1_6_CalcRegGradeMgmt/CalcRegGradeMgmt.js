@@ -23,25 +23,24 @@ import {
 
 const CalcRegGradeMgmt = () => {
   const [selectedRows, setSelectedRows] = useState([]);
-  const [data, setData] = useState(initialData);
-  const [filteredData, setFilteredData] = useState(initialData);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [focusRowNo, setFocusRowNo] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [filters, setFilters] = useState(null);
 
   useEffect(() => {
-    // 컴포넌트 마운트 시 데이터 불러오기
-    fetchData().then((response) => {
-      // fetchData 함수가 반환한 데이터를 상태에 설정
+    const loadData = async () => {
+      const response = await fetchData();
       setData(response);
-      // 필터링된 데이터 상태도 초기 데이터로 설정
       setFilteredData(response);
-    });
+    };
+    loadData();
   }, []);
 
   const handleAddRow = useCallback(async () => {
     const newRow = {
-      no: data.length + 1, // 새로운 행 번호 (현재 데이터 길이에 1을 더한 값)
+      no: data.length + 1,
       activity: "",
       emissionFacility: "",
       regulatoryGrade: "",
@@ -51,58 +50,33 @@ const CalcRegGradeMgmt = () => {
       calculationCoefficienGrade: "",
       calcDate: "",
     };
-    // 새로운 행 데이터를 서버에 추가하는 API 호출을 수행
     const response = await addData(newRow);
-
-    // 새로운 행 데이터를 포함한 새로운 데이터 배열을 생성하고 상태를 업데이트
-    setData([response, ...data]);
-
-    // 필터링된 데이터 배열도 동일하게 업데이트
-    setFilteredData([response, ...data]);
-
-    // 포커스를 새로운 행 번호로 설정
+    const updatedData = [response, ...data];
+    setData(updatedData);
+    setFilteredData(updatedData);
     setFocusRowNo(response.no);
   }, [data]);
 
   const handleDelete = useCallback(async () => {
-    // 선택된 행들의 ID에 대해 비동기 삭제 요청을 병렬로 보냅니다.
     await Promise.all(selectedRows.map((rowId) => deleteData(rowId)));
-
-    // 선택된 행들을 제외한 새로운 데이터 배열을 생성합니다.
-    const newData = data.filter((row) => !selectedRows.includes(row.no));
-
-    // 새로운 데이터 배열로 상태를 업데이트
-    setData(newData);
-
-    // 필터링된 데이터 배열도 동일하게 업데이트
-    setFilteredData(newData);
-
-    // 선택된 행들을 초기화
+    const updatedData = data.filter((row) => !selectedRows.includes(row.no));
+    setData(updatedData);
+    setFilteredData(updatedData);
     setSelectedRows([]);
   }, [data, selectedRows]);
 
   const handleSearch = useCallback((filters) => {
-    // 전달된 필터를 상태로 설정
     setFilters(filters);
-
-    // 초기 데이터를 필터링하여 조건에 맞는 데이터를 찾습니다.
     const filtered = initialData.filter((row) => {
-      // 활동(activity) 필터가 설정된 경우, 행의 활동 값이 필터 값과 일치하는지 확인합니다.
       const isActivityMatch = filters.activity
         ? row.activity === filters.activity
         : true;
-
-      // 시작 날짜(startDate) 필터가 설정된 경우, 행의 계산 날짜(calcDate)가 시작 날짜 이후인지 확인합니다.
       const isStartDateMatch = filters.startDate
         ? new Date(row.calcDate) >= new Date(filters.startDate)
         : true;
-
-      // 종료 날짜(endDate) 필터가 설정된 경우, 행의 계산 날짜(calcDate)가 종료 날짜 이전인지 확인합니다.
       const isEndDateMatch = filters.endDate
         ? new Date(row.calcDate) <= new Date(filters.endDate)
         : true;
-
-      // 모든 필터 조건이 일치하는 경우에만 true를 반환하여 필터링합니다.
       return isActivityMatch && isStartDateMatch && isEndDateMatch;
     });
     setFilteredData(filtered);
@@ -114,7 +88,6 @@ const CalcRegGradeMgmt = () => {
   }, [data]);
 
   const handleCloseSnackbar = useCallback(() => {
-    // 스낵바의 열림 상태를 false로 설정하여 스낵바를 닫습니다.
     setOpenSnackbar(false);
   }, []);
 
@@ -122,7 +95,7 @@ const CalcRegGradeMgmt = () => {
     <Container sx={containerStyles}>
       <SearchBar
         onSearch={handleSearch}
-        onClear={() => setFilteredData(initialData)}
+        onClear={() => setFilteredData(data)}
       />
       <Box sx={innerBoxStyles}>
         <Box>
