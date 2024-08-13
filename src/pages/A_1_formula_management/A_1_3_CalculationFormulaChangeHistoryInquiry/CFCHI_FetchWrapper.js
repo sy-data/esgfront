@@ -1,105 +1,92 @@
 import { getCookie, setCookie } from "../../../States/storage/Cookie";
 
-// 호스트 URL 설정 (환경 변수에서 가져오거나 기본값으로 빈 문자열 설정)
-const host = process.env.REACT_APP_PROD_API_ENDPOINT
-  ? process.env.REACT_APP_PROD_API_ENDPOINT
-  : "";
+const host = process.env.REACT_APP_PROD_API_ENDPOINT || "http://localhost:3000";
 
-// 로그인 함수
+// 반복되는 API 응답 처리 로직을 별도의 함수로 분리하여 중복 코드를 줄임
+async function handleResponse(response) {
+  if (response.ok) {
+    return await response.json();
+  } else {
+    const errorData = await response.json();
+    console.error(`Error: ${errorData.message}`);
+    return null;
+  }
+}
+
+// API 호출 실패 시 재시도 로직을 추가하여 네트워크 문제를 대비함
+async function fetchWithRetry(url, options, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      return await handleResponse(response);
+    } catch (error) {
+      if (i === retries - 1) throw error;
+    }
+  }
+}
+
+// 기본 옵션을 설정하여 코드 중복을 줄이고, 필요한 경우 재시도 로직을 추가
+export function esgFetch(url, method = "GET", body = [], requiredAuth = true) {
+  const token = getCookie("token");
+
+  if (requiredAuth && !token) {
+    window.location.href = "/unauthorized";
+  }
+
+  const options = {
+    method: method,
+    headers: {
+      ...((method === "POST" || method === "PUT") && {
+        "Content-Type": "application/json",
+      }),
+      ...(requiredAuth && { Authorization: `Bearer ${token}` }),
+    },
+    ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
+  };
+
+  return fetchWithRetry(`${host}${url}`, options);
+}
+
+// 로그인 함수의 예외 처리와 에러 메시지를 사용자에게 더 나은 방식으로 전달
 export async function loginDev(payload) {
   try {
-    // 사용자 인증을 위해 POST 요청을 보냄
     const res = await fetch(`${host}/api/auth/local`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        identifier: payload.id, // 사용자 ID
-        password: payload.password, // 사용자 비밀번호
+        identifier: payload.id,
+        password: payload.password,
       }),
     });
+    const data = await handleResponse(res);
 
-    // 응답이 성공적인 경우
-    if (res.ok) {
-      const data = await res.json(); // 응답을 JSON으로 변환
-      if ("jwt" in data) {
-        // 응답에 JWT가 포함된 경우
-        localStorage.setItem("token", data["jwt"]); // JWT를 localStorage에 저장
-        setCookie("token", data["jwt"]); // JWT를 쿠키에 저장
-        return data.user; // 사용자 정보를 반환
-      } else if ("error" in data) {
-        // 에러가 포함된 경우
-        alert(`status : ${data.error.status}\n${data.error.message}`); // 에러 메시지를 알림으로 표시
-      }
+    if (data && data.jwt) {
+      localStorage.setItem("token", data.jwt);
+      setCookie("token", data.jwt);
+      return data.user;
+    } else if (data && data.error) {
+      alert(`Status: ${data.error.status}\n${data.error.message}`);
     }
   } catch (error) {
     console.log(error);
+    alert("예상치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
   }
 }
 
-// API 요청을 수행하는 함수
-export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
-  const token = getCookie("token"); // 쿠키에서 토큰을 가져옴
-
-  // 인증이 필요한 경우 토큰이 없으면 로그인 페이지로 리디렉션
-  if (requiredAuth && !token) {
-    window.location.href = "/unauthorized";
-  }
-
-  return fetch(`${host}${url}`, {
-    method: method,
-    headers: {
-      ...((method === "POST" || method === "PUT") && {
-        "Content-Type": "application/json",
-      }), // POST 또는 PUT 요청인 경우 Content-Type 헤더 설정
-      ...(requiredAuth && { Authorization: `Bearer ${token}` }), // 인증이 필요한 경우 Authorization 헤더에 토큰 추가
-    },
-    ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }), // body가 비어있지 않은 경우 JSON으로 변환하여 추가
-  });
-}
-
-//메뉴 트리 데이터를 가져오는 함수
+// 모든 API 호출 함수에 공통 응답 처리 로직 적용
 export async function fetchMenuTree() {
-  const url = `/v1/admin/calc/menu-tree`;
-  const response = await esgFetch(url);
-
-  // 응당 성공 할 경우
-  if (response.ok) {
-    const data = await response.json(); // 응답 json 으로 변환
-    return data;
-  } else {
-    console.error("Failed to fetch menu tree");
-    return null;
-  }
+  const url = `/v1admin/calc/menu-tree`;
+  return await esgFetch(url);
 }
 
-// 특정 카테고리의 변경 이력을 가져오는 함수
 export async function fetchChangeHistory(categoryId) {
-  const url = `/v1/admin/calc/change-history/${categoryId}`; // 카테고리 ID에 따른 변경 이력 데이터를 가져오는 API 엔드포인트
-  const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
-
-  // 응답이 성공적인 경우
-  if (response.ok) {
-    const data = await response.json(); // 응답을 JSON으로 변환
-    return data; // 데이터를 반환
-  } else {
-    console.error("Failed to fetch change history");
-    return null; // null 반환
-  }
+  const url = `/v1/admin/calc/change-history/${categoryId}`;
+  return await esgFetch(url);
 }
 
-// 특정 카테고리의 산정식 이력을 가져오는 함수
 export async function fetchCalculationHistory(categoryId) {
-  const url = `/v1/admin/calc/calculation-history/${categoryId}`; // 카테고리 ID에 따른 산정식 이력 데이터를 가져오는 API 엔드포인트
-  const response = await esgFetch(url); // esgFetch 함수를 사용하여 API 요청 수행
-
-  // 응답이 성공적인 경우
-  if (response.ok) {
-    const data = await response.json(); // 응답을 JSON으로 변환
-    return data; // 데이터를 반환
-  } else {
-    console.error("Failed to fetch calculation history");
-    return null; // null 반환
-  }
+  const url = `/v1/admin/calc/calculation-history/${categoryId}`;
+  return await esgFetch(url);
 }

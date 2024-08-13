@@ -1,6 +1,6 @@
 import { getCookie } from "../../../States/storage/Cookie";
 
-const host = process.env.REACT_APP_PROD_API_ENDPOINT || "";
+const host = process.env.REACT_APP_PROD_API_ENDPOINT || "http://localhost:3000";
 
 // 공통 fetch 함수
 const apiFetch = async (

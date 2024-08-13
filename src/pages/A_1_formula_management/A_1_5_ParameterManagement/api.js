@@ -1,9 +1,6 @@
 import { getCookie, setCookie } from "../../../States/storage/Cookie";
 
-// 호스트 URL 설정 (환경 변수에서 가져오거나 기본값으로 빈 문자열 설정)
-const host = process.env.REACT_APP_PROD_API_ENDPOINT
-  ? process.env.REACT_APP_PROD_API_ENDPOINT
-  : "";
+const host = process.env.REACT_APP_PROD_API_ENDPOINT || "http://localhost:3000";
 
 // 로그인 함수
 export async function loginDev(payload) {
