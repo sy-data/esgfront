@@ -13,6 +13,18 @@ import TableHeader from "./TableHeader";
 import TableRowData from "./TableRowData";
 import { fetchParameterGroups, fetchParameterGroupDetails } from "./api";
 
+const fetchParameterData = async () => {
+  const groups = await fetchParameterGroups();
+  if (groups.length > 0) {
+    const groupDetails = await fetchParameterGroupDetails(groups[0].id);
+    return groupDetails.reduce((acc, item) => {
+      acc[item.id] = item.parameter_id;
+      return acc;
+    }, {});
+  }
+  return {};
+};
+
 const DataTable = ({
   data,
   selectedRows,
@@ -22,23 +34,15 @@ const DataTable = ({
   page,
   rowsPerPage,
   handleKeyDown,
-  fetchParameterDetails,
 }) => {
   const [parameterData, setParameterData] = useState({});
 
   useEffect(() => {
-    const fetchParameterData = async () => {
-      const groups = await fetchParameterGroups();
-      if (groups.length > 0) {
-        const groupDetails = await fetchParameterGroupDetails(groups[0].id);
-        const parameterData = groupDetails.reduce((acc, item) => {
-          acc[item.id] = item.parameter_id;
-          return acc;
-        }, {});
-        setParameterData(parameterData);
-      }
+    const getData = async () => {
+      const data = await fetchParameterData();
+      setParameterData(data);
     };
-    fetchParameterData();
+    getData();
   }, []);
 
   return (
@@ -76,7 +80,6 @@ const DataTable = ({
               selectedRows={selectedRows}
               handleSelectRow={handleSelectRow}
               handleKeyDown={handleKeyDown}
-              fetchParameterDetails={fetchParameterDetails} // 각 행에 함수 전달
               parameterData={parameterData}
             />
           ))}

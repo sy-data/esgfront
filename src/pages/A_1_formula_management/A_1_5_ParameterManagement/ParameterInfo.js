@@ -8,16 +8,18 @@ import {
   addParameter,
   deleteParameter,
   fetchParameterGroupDetails,
-} from "./api"; // 필요한 함수 import
+} from "./api";
+
+const initialFilters = {
+  energyIndustry: "",
+  activity: "",
+  fuel: "",
+  searchTerm: "",
+};
 
 const ParameterInfo = () => {
   const [data, setData] = useState([]); // 테이블에 표시할 데이터를 저장합니다.
-  const [filters, setFilters] = useState({
-    energyIndustry: "",
-    activity: "",
-    fuel: "",
-    searchTerm: "",
-  }); // 필터 상태를 저장합니다.
+  const [filters, setFilters] = useState({ initialFilters }); // 필터 상태를 저장합니다.
   const [page, setPage] = useState(1); // 현재 페이지 번호를 저장합니다.
   const [selectedRows, setSelectedRows] = useState([]); // 선택된 행들을 저장합니다.
   const [allSelected, setAllSelected] = useState(false); // 모든 행 선택 상태를 저장합니다.
@@ -25,12 +27,23 @@ const ParameterInfo = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false); // 스낵바 열림 상태를 저장합니다.
   const [parameterDetails, setParameterDetails] = useState(null); // 선택된 파라미터의 세부 정보를 저장합니다.
 
+  // 행추가 자동 포커스 최적화 코드
+  useEffect(() => {
+    if (newRowRef.current) {
+      const newRowElement = document.getElementById(newRowRef.current);
+      if (newRowElement) {
+        newRowElement.focus();
+      }
+      newRowRef.current = null;
+    }
+  }, [data]);
+
   // 필터 변경을 처리하는 함수입니다.
   const handleFilterChange = (e) => {
-    setFilters({
-      ...filters,
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   // 검색 버튼 클릭을 처리하는 함수입니다.
@@ -59,8 +72,7 @@ const ParameterInfo = () => {
     const result = await addParameter(newParameter);
     if (result) {
       setData((prevData) => [...prevData, result]);
-      const newPage = Math.ceil((data.length + 1) / 10);
-      setPage(newPage);
+      setPage(Math.ceil((data.length + 1) / 10));
       newRowRef.current = `upperGroup-${result.id}`;
     }
   };
@@ -105,15 +117,15 @@ const ParameterInfo = () => {
   };
 
   // 새로 추가된 행에 포커스를 설정하는 useEffect 훅입니다.
-  useEffect(() => {
-    if (newRowRef.current !== null) {
-      const newRowElement = document.getElementById(newRowRef.current);
-      if (newRowElement) {
-        newRowElement.focus();
-      }
-      newRowRef.current = null;
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (newRowRef.current !== null) {
+  //     const newRowElement = document.getElementById(newRowRef.current);
+  //     if (newRowElement) {
+  //       newRowElement.focus();
+  //     }
+  //     newRowRef.current = null;
+  //   }
+  // }, [data]);
 
   // 페이지당 표시할 행의 수를 설정합니다.
   const rowsPerPage = 10;
@@ -181,7 +193,7 @@ const ParameterInfo = () => {
       />
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
       >
         <Alert onClose={handleCloseSnackbar} severity="success">
