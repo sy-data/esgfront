@@ -2,43 +2,27 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
   Paper,
-  Checkbox,
   TablePagination,
-  Button,
-  TextField,
   Box,
   Typography,
   Snackbar,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import MuiAlert from "@mui/material/Alert";
+import Alert from "./Alert";
+import TableHeader from "./TableHeader";
+import TableRowComponent from "./TableRowComponent";
+import TableControls from "./TableControls";
+import { boxStyle, typographyStyle, tableContainerStyle } from "./Styles";
+import {
+  fetchParameterGroups,
+  addParameter,
+  updateParameter,
+  deleteParameter,
+} from "./ParameterGroupApi";
 
-const generateRows = () => {
-  return Array.from({ length: 50 }, (_, index) => ({
-    id: 50 - index,
-    groupId: String(Math.floor(Math.random() * 90000) + 10000), // 임의의 5자리 숫자 생성
-    groupName: `산정식그룹 ${50 - index}`,
-    note: `비고${50 - index}`,
-  }));
-};
-
-const Alert = React.forwardRef((props, ref) => {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const DataTable = () => {
-  const [rows, setRows] = useState(generateRows());
+const ParameterGroupManagement = () => {
+  const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selected, setSelected] = useState([]);
@@ -46,6 +30,19 @@ const DataTable = () => {
   const [editingRowId, setEditingRowId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const groupNameInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchParameterGroups();
+      if (Array.isArray(data)) {
+        setRows(data);
+      } else {
+        console.error("Fetched data is not an array:", data);
+        setRows([]);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -56,17 +53,17 @@ const DataTable = () => {
     setPage(0);
   };
 
-  const handleAddGroup = () => {
+  const handleAddGroup = async () => {
     const newRow = {
       id: rows.length + 1,
-      groupId: String(Math.floor(Math.random() * 90000) + 10000), // 임의의 5자리 숫자 생성
+      groupId: String(Math.floor(Math.random() * 90000) + 10000),
       groupName: "",
       note: "",
     };
+    await addParameter(newRow);
     setRows([newRow, ...rows]);
     setEditingRowId(newRow.id);
 
-    // 짧은 지연 후에 텍스트 필드로 포커스 이동
     setTimeout(() => {
       if (groupNameInputRef.current) {
         groupNameInputRef.current.focus();
@@ -109,14 +106,16 @@ const DataTable = () => {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const handleSave = () => {
+  const handleSave = async (row) => {
+    await updateParameter(row.id, row);
     setOpenSnackbar(true);
   };
 
   const handleGroupNameChange = (id, value) => {
     const newRows = rows.map((row) => {
       if (row.id === id) {
-        return { ...row, groupName: value };
+        row.groupName = value;
+        handleSave(row);
       }
       return row;
     });
@@ -126,7 +125,8 @@ const DataTable = () => {
   const handleNoteChange = (id, value) => {
     const newRows = rows.map((row) => {
       if (row.id === id) {
-        return { ...row, note: value };
+        row.note = value;
+        handleSave(row);
       }
       return row;
     });
@@ -135,25 +135,20 @@ const DataTable = () => {
 
   const handleBlur = (id) => {
     setEditingRowId(null);
-    handleSave();
   };
 
   const handleKeyDown = (event, id) => {
     if (event.key === "Enter") {
       setEditingRowId(null);
-      handleSave();
-      event.target.blur(); // 포커스 잃기
+      event.target.blur();
     }
   };
 
-  const handleDeleteSelected = () => {
-    const currentPageRows = rows.slice(
-      page * rowsPerPage,
-      page * rowsPerPage + rowsPerPage
-    );
-    const newRows = rows.filter(
-      (row) => !selected.includes(row.id) || !currentPageRows.includes(row)
-    );
+  const handleDeleteSelected = async () => {
+    for (const id of selected) {
+      await deleteParameter(id);
+    }
+    const newRows = rows.filter((row) => !selected.includes(row.id));
     setRows(newRows);
     setSelected([]);
     setOpenDialog(false);
@@ -177,7 +172,6 @@ const DataTable = () => {
   const handleClickOutside = (event) => {
     if (editingRowId !== null && !event.target.closest(".edit-field")) {
       setEditingRowId(null);
-      handleSave();
     }
   };
 
@@ -189,130 +183,46 @@ const DataTable = () => {
   }, [editingRowId]);
 
   return (
-    <Box p={3} sx={{ width: "83%", border: "2px solid #ccc " }}>
-      <Typography
-        variant="h6"
-        sx={{
-          color: "var(--Neutral-100, #000)",
-          fontFamily: "Pretendard Variable",
-          fontSize: "18px",
-          fontWeight: 700,
-        }}
-      >
+    <Box p={3} sx={boxStyle}>
+      <Typography variant="h6" sx={typographyStyle}>
         파라미터 그룹 목록
       </Typography>
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          style={{ marginRight: 8 }}
-          onClick={handleAddGroup}
-        >
-          그룹 추가
-        </Button>
-        <Button
-          variant="outlined"
-          startIcon={<DeleteIcon />}
-          onClick={handleOpenDialog}
-          disabled={selected.length === 0}
-          sx={{
-            color: selected.length === 0 ? "grey.500" : "primary.main",
-            borderColor: selected.length === 0 ? "grey.500" : "primary.main",
-          }}
-        >
-          삭제
-        </Button>
-      </Box>
-      <TableContainer component={Paper} sx={{ border: "2px solid #ccc " }}>
+      <TableControls
+        handleAddGroup={handleAddGroup}
+        handleOpenDialog={handleOpenDialog}
+        handleCloseDialog={handleCloseDialog}
+        handleDeleteSelected={handleDeleteSelected}
+        selected={selected}
+        openDialog={openDialog}
+      />
+      <TableContainer component={Paper} sx={tableContainerStyle}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Box display="flex" alignItems="center">
-                  <Checkbox
-                    indeterminate={
-                      selected.length > 0 &&
-                      selected.length <
-                        rows.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        ).length
-                    }
-                    checked={
-                      rows.length > 0 &&
-                      selected.length ===
-                        rows.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        ).length
-                    }
-                    onChange={handleSelectAllClick}
-                  />
-                  No
-                </Box>
-              </TableCell>
-              <TableCell sx={{ paddingLeft: 10, paddingRight: -10 }}>
-                그룹ID
-              </TableCell>
-              <TableCell>그룹명</TableCell>
-              <TableCell>비고</TableCell>
-            </TableRow>
-          </TableHead>
+          <TableHeader
+            numSelected={selected.length}
+            rowCount={
+              rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .length
+            }
+            onSelectAllClick={handleSelectAllClick}
+          />
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 const isItemSelected = isSelected(row.id);
                 return (
-                  <TableRow
+                  <TableRowComponent
                     key={row.id}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    selected={isItemSelected}
-                    onClick={(event) => handleClick(event, row.id)}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        onClick={(event) => handleClick(event, row.id)}
-                      />
-                      {row.id}
-                    </TableCell>
-                    <TableCell sx={{ paddingLeft: 10, paddingRight: -10 }}>
-                      {row.groupId}
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        className="edit-field"
-                        fullWidth
-                        variant="outlined"
-                        value={row.groupName}
-                        onChange={(e) =>
-                          handleGroupNameChange(row.id, e.target.value)
-                        }
-                        onBlur={() => handleBlur(row.id)}
-                        onKeyDown={(e) => handleKeyDown(e, row.id)}
-                        size="small"
-                        inputRef={
-                          editingRowId === row.id ? groupNameInputRef : null
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        className="edit-field"
-                        fullWidth
-                        variant="outlined"
-                        value={row.note}
-                        onChange={(e) =>
-                          handleNoteChange(row.id, e.target.value)
-                        }
-                        onBlur={() => handleBlur(row.id)}
-                        onKeyDown={(e) => handleKeyDown(e, row.id)}
-                        size="small"
-                      />
-                    </TableCell>
-                  </TableRow>
+                    row={row}
+                    isSelected={isItemSelected}
+                    handleClick={handleClick}
+                    handleGroupNameChange={handleGroupNameChange}
+                    handleNoteChange={handleNoteChange}
+                    handleBlur={handleBlur}
+                    handleKeyDown={handleKeyDown}
+                    editingRowId={editingRowId}
+                    groupNameInputRef={groupNameInputRef}
+                  />
                 );
               })}
           </TableBody>
@@ -336,27 +246,8 @@ const DataTable = () => {
           저장되었습니다.
         </Alert>
       </Snackbar>
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">그룹 삭제</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            선택하신 {selected.length}개의 항목을 삭제 하시겠습니까?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleDeleteSelected} color="error" autoFocus>
-            삭제
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };
 
-export default DataTable;
+export default ParameterGroupManagement;
