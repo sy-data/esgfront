@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {useGridApiRef} from "@mui/x-data-grid";
 import {FormulaParameterList} from "./FormulaParameterList";
 import {ParameterGroupSearchModal} from "./ParameterGroupSearchModal";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 
 const dummyData = Array.from({length: 50}, (_, index) => {
   return {
@@ -26,6 +27,8 @@ export const FormulaParameterSection = () => {
   const [data, setData] = useState(dummyData);
   const [selectedRow, setSelectedRow] = useState([]);
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const handleClickAdd = () => {
@@ -33,10 +36,12 @@ export const FormulaParameterSection = () => {
   }
 
   const handleClickDelete = () => {
-    setData((prevState) =>
-      prevState.filter((v) => !selectedRow.includes(v.id))
-    );
+    setOpenDeleteDialog(true);
   }
+
+  const handleCloseDialog = () => {
+    setOpenDeleteDialog(false);
+  };
 
   return (
     <FormulaDetailSectionContainer>
@@ -63,7 +68,43 @@ export const FormulaParameterSection = () => {
         setSelectedRow={setSelectedRow}
       />
 
+      <DeleteDialog
+        openDeleteDialog={openDeleteDialog}
+        handleCloseDialog={handleCloseDialog}
+        selectedRow={selectedRow}
+        setData={setData}
+      />
+
       <ParameterGroupSearchModal isOpen={isSearchModalOpen} setIsOpen={setIsSearchModalOpen}/>
     </FormulaDetailSectionContainer>
   )
 }
+
+const DeleteDialog = (props) => {
+  const {openDeleteDialog, handleCloseDialog, selectedRow, setData} = props;
+
+  // 삭제 확인 버튼 클릭 처리 함수
+  const handleDeleteConfirmButtonClick = () => {
+    setData((prevState) =>
+      prevState.filter((v) => !selectedRow.includes(v.id))
+    ); // 선택된 행 삭제 (선택된 행의 id를 포함하지 않는 항목들로 필터링)
+    handleCloseDialog(); // 다이얼로그 닫기
+  };
+
+  return (
+    <Dialog open={openDeleteDialog} onClose={handleCloseDialog}>
+      <DialogTitle>그룹삭제</DialogTitle>
+
+      <DialogContent>
+        <DialogContentText>
+          선택하신 {selectedRow.length}개의 항목을 삭제 하시겠습니까?
+        </DialogContentText>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleCloseDialog}>취소</Button>
+        <Button onClick={handleDeleteConfirmButtonClick}>삭제</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
