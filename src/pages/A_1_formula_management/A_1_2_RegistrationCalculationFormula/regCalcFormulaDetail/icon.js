@@ -31,3 +31,12 @@ export const CalendarIcon = () => (
     </defs>
   </svg>
 )
+
+
+export const CloseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M12.0002 13.0602L17.4692 18.5308L18.5312 17.4703L13.0607 11.9998L18.5312 6.53075L17.4707 5.46875L12.0002 10.9393L6.5312 5.46875L5.4707 6.53075L10.9397 11.9998L5.4707 17.4688L6.5312 18.5308L12.0002 13.0602Z"
+          fill="#111111"/>
+  </svg>
+)
