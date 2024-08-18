@@ -13,8 +13,8 @@ const dummyData = Array.from({length: 50}, (_, index) => {
     parentGroupName: "배출량",
     groupId: "00010",
     groupName: "CO2배출량",
-    inputType: '00733',
-    inputTypeCode: '사용자입력값'
+    inputTypeCode: '00733',
+    inputType: '사용자입력값',
   }
 })
 
@@ -41,6 +41,10 @@ export const FormulaParameterSection = () => {
 
   const handleCloseDialog = () => {
     setOpenDeleteDialog(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsSearchModalOpen(false);
   };
 
   return (
@@ -75,7 +79,7 @@ export const FormulaParameterSection = () => {
         setData={setData}
       />
 
-      <ParameterGroupSearchModal isOpen={isSearchModalOpen} setIsOpen={setIsSearchModalOpen}/>
+      <ParameterGroupSearchModal isOpen={isSearchModalOpen} handleCloseModal={handleCloseModal}/>
     </FormulaDetailSectionContainer>
   )
 }

@@ -28,8 +28,8 @@ export const FormulaParameterList = (props) => {
     {field: "parentGroupName", headerName: "파라미터상위그룹명", flex: 2, sortable: false},
     {field: "groupId", headerName: "파라미터그룹ID", flex: 2, sortable: false},
     {field: "groupName", headerName: "파라미터그룹명", flex: 2, sortable: false},
-    {field: "inputType", headerName: "입력구분코드", flex: 2, sortable: false},
-    {field: "inputTypeCode", headerName: "입력구분", flex: 2, sortable: false},
+    {field: "inputTypeCode", headerName: "입력구분코드", flex: 2, sortable: false},
+    {field: "inputType", headerName: "입력구분", flex: 2, sortable: false},
   ];
 
   return (
