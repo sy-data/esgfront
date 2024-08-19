@@ -115,7 +115,6 @@ const ParameterGroupManagement = () => {
     const newRows = rows.map((row) => {
       if (row.id === id) {
         row.groupName = value;
-        handleSave(row);
       }
       return row;
     });
@@ -126,7 +125,6 @@ const ParameterGroupManagement = () => {
     const newRows = rows.map((row) => {
       if (row.id === id) {
         row.note = value;
-        handleSave(row);
       }
       return row;
     });
@@ -134,13 +132,17 @@ const ParameterGroupManagement = () => {
   };
 
   const handleBlur = (id) => {
+    const row = rows.find((row) => row.id === id);
+    handleSave(row); // 변경 사항 저장
     setEditingRowId(null);
   };
 
   const handleKeyDown = (event, id) => {
     if (event.key === "Enter") {
+      const row = rows.find((row) => row.id === id);
+      handleSave(row); // 변경 사항 저장
       setEditingRowId(null);
-      event.target.blur();
+      event.target.blur(); // 포커스 해제
     }
   };
 
@@ -171,6 +173,8 @@ const ParameterGroupManagement = () => {
 
   const handleClickOutside = (event) => {
     if (editingRowId !== null && !event.target.closest(".edit-field")) {
+      const row = rows.find((row) => row.id === editingRowId);
+      handleSave(row); // 변경 사항 저장
       setEditingRowId(null);
     }
   };
@@ -180,7 +184,7 @@ const ParameterGroupManagement = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [editingRowId]);
+  }, [editingRowId, rows]);
 
   return (
     <Box p={3} sx={boxStyle}>
