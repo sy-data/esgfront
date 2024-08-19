@@ -127,7 +127,7 @@ const TableComponent = ({
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row.id || index}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">

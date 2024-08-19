@@ -15,7 +15,7 @@ function getFetchOptions(method, body, requiredAuth) {
     ...((method === "POST" || method === "PUT") && {
       "Content-Type": "application/json",
     }),
-    ...(requiredAuth && { Authorization: `Bearer${token}` }),
+    ...(requiredAuth && { Authorization: `Bearer ${token}` }),
   };
 
   return {
@@ -121,9 +121,15 @@ export async function fetchAllUserFormulaGroups(adminId, userId) {
 }
 
 // 산정식 그룹을 등록하는 함수
-export async function createFormulaGroup(adminId, groupId, name, note) {
+export async function createFormulaGroup(
+  adminId,
+  groupId,
+  groupName,
+  parentGroupId,
+  note
+) {
   const url = `/v1/admin/calc/group`;
-  const body = { adminId, groupId, name, note };
+  const body = { adminId, groupId, groupName, parentGroupId, note };
 
   console.log("요청을 보내는 중:", url);
   console.log("요청 본문:", body);
@@ -139,18 +145,29 @@ export async function createFormulaGroup(adminId, groupId, name, note) {
 }
 
 // 산정식 그룹을 수정하는 함수
-export async function updateFormulaGroup(id, groupId, name, note) {
+export async function updateFormulaGroup(
+  id,
+  adminId,
+  groupId,
+  groupName,
+  note
+) {
   const url = `/v1/admin/calc/group/${id}`;
-  const body = { groupId, name, note };
+  const body = { adminId, groupId: parseInt(groupId), groupName, note };
 
   console.log("본문으로 수식 그룹 업데이트 중:", body);
 
   try {
     const response = await esgFetch(url, "PUT", body);
-    console.log("수정완료");
-    return response;
+    if (response.success) {
+      console.log("수정완료", response);
+      return response.data; // 서버에서 반환된 데이터를 리턴
+    } else {
+      console.error("수정 중 오류:", response);
+      return null;
+    }
   } catch (error) {
-    console.error("수식 그룹을 업데이트하지 못했습니다.");
+    console.error("수정 중 오류 발생:", error);
     return null;
   }
 }
