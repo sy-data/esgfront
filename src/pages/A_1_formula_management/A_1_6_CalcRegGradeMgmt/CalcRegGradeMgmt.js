@@ -6,6 +6,11 @@ import {
   Button,
   Snackbar,
   Alert,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Dialog,
+  DialogActions,
 } from "@mui/material";
 import DataTable from "./DataTable";
 import SearchBar from "./SearchBar";
@@ -28,6 +33,16 @@ const CalcRegGradeMgmt = () => {
   const [focusRowNo, setFocusRowNo] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false); // 삭제 다이얼로그 상태 추가
+  // 삭제 다이얼로그 열기
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  // 삭제 다이얼로그 닫기
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -63,6 +78,7 @@ const CalcRegGradeMgmt = () => {
     setData(updatedData);
     setFilteredData(updatedData);
     setSelectedRows([]);
+    handleCloseDeleteDialog(); // 삭제 후 다이얼로그 닫기
   }, [data, selectedRows]);
 
   const handleSearch = useCallback((filters) => {
@@ -117,7 +133,7 @@ const CalcRegGradeMgmt = () => {
                 color="secondary"
                 disabled={selectedRows.length === 0}
                 sx={deleteButtonStyles(selectedRows.length)}
-                onClick={handleDelete}
+                onClick={handleOpenDeleteDialog}
               >
                 삭제
               </Button>
@@ -143,6 +159,25 @@ const CalcRegGradeMgmt = () => {
           저장되었습니다.
         </Alert>
       </Snackbar>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">삭제 확인</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            선택하신 {selectedRows.length}개의 항목을 삭제하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>취소</Button>
+          <Button onClick={handleDelete} color="error" autoFocus>
+            삭제
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
