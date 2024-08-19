@@ -107,7 +107,7 @@ const TableComponent = ({
                 />
               </TableCell>
               <TableCell>No</TableCell>
-              <TableCell>산정식 ID</TableCell>
+              <TableCell>산정식 그룹ID</TableCell>
               <TableCell>산정식그룹명</TableCell>
               <TableCell>비고</TableCell>
             </TableRow>

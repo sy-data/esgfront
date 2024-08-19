@@ -1,5 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TableComponent from "./TableComponent";
@@ -109,6 +119,24 @@ function CalcGroupMgmt() {
   //   // 다이얼로그의 열림 상태를 false로 설정하여 다이얼로그를 닫습니다.
   //   setIsDialogOpen(false);
   // };
+
+  // 삭제 확인 다이얼로그의 상태를 추가
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  // 삭제 버튼 클릭 시 다이얼로그를 여는 함수
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  // 삭제 확인 후 실제로 삭제를 수행하는 함수
+  const handleConfirmDelete = async () => {
+    await handleDeleteRows();
+    handleCloseDeleteDialog(); // 삭제 후 다이얼로그 닫기
+  };
 
   const handleSave = useCallback(async () => {
     // 편집 중인 행의 인덱스가 유효한지 확인
@@ -225,7 +253,7 @@ function CalcGroupMgmt() {
                 variant="contained"
                 color="secondary"
                 startIcon={<DeleteIcon sx={{ minHeight: 23 }} />}
-                onClick={handleDeleteRows}
+                onClick={handleOpenDeleteDialog}
                 disabled={selected.length === 0}
                 sx={{
                   mr: 3,
@@ -274,6 +302,25 @@ function CalcGroupMgmt() {
             isDialogOpen={isDialogOpen}
             handleDialogClose={() => setIsDialogOpen(false)}
           />
+          <Dialog
+            open={openDeleteDialog}
+            onClose={handleCloseDeleteDialog}
+            aria-labelledby="delete-dialog-title"
+            aria-describedby="delete-dialog-description"
+          >
+            <DialogTitle id="delete-dialog-title">그룹 삭제</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="delete-dialog-description">
+                선택하신 {selected.length}개의 항목을 삭제하시겠습니까?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDeleteDialog}>취소</Button>
+              <Button onClick={handleConfirmDelete} color="error" autoFocus>
+                삭제
+              </Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </Box>
