@@ -138,7 +138,7 @@ const TableComponent = ({
                           }}
                         />
                       </TableCell>
-                      <TableCell>{rows.length - index}</TableCell>
+                      <TableCell>{row.id}</TableCell>
                       <TableCell>{row.groupId}</TableCell>
                       <TableCell
                         onDoubleClick={() =>

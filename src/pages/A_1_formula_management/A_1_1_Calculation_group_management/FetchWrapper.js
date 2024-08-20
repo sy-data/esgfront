@@ -86,38 +86,22 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
     });
 }
 
-// 유저의 모든 산정식 그룹을 페이지네이션을 사용하여 가져오는 함수
-export async function fetchAllUserFormulaGroups(adminId, userId) {
-  let allData = []; // 모든 데이터를 저장할 배열을 초기화
-  let page = 1; // 초기 페이지 번호를 설정
-  let size = 10; // 페이지 당 불러올 데이터 수
-  let moreData = true; // 더 많은 데이터를 불러올 수 있는지 여부를 나타내는 플래그를 초기화
+// 유저의 모든 산정식 그룹을 가져오는 함수
+export async function fetchAllUserFormulaGroups(adminId) {
+  const url = `/v1/admin/calc/group/all`;
 
-  // 더 많은 데이터가 있는 동안 반복
-  while (moreData) {
-    // 현재 페이지와 크기를 포함한 URL을 설정
-    const url = `/v1/admin/calc/group/filter?page=${page}&size=${size}`;
-    const body = { adminId }; // 요청 본문에 adminId를 포함
-
-    try {
-      const response = await esgFetch(url, "POST", body);
-      if (response.data && response.data.length > 0) {
-        allData = allData.concat(response.data);
-        if (response.data.length < size) {
-          moreData = false;
-        } else {
-          page++;
-        }
-      } else {
-        moreData = false;
-      }
-    } catch (error) {
-      console.error("수식 그룹을 가져오지 못했습니다.:", error);
+  try {
+    const response = await esgFetch(url, "GET");
+    if (response && response.data) {
+      return response.data; // 서버에서 받은 전체 데이터를 반환
+    } else {
+      console.error("수식 그룹 데이터를 가져오는 중 오류:", response);
       return null;
     }
+  } catch (error) {
+    console.error("수식 그룹을 가져오는 중 오류가 발생했습니다.", error);
+    return null;
   }
-
-  return allData;
 }
 
 // 산정식 그룹을 등록하는 함수

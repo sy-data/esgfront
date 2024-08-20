@@ -1,7 +1,7 @@
 import { getCookie } from "../../../States/storage/Cookie";
 
 const host = process.env.REACT_APP_PROD_API_ENDPOINT || "http://localhost:3000";
-const API_ENDPOINT = "/v1/admin/calc/rating";
+const API_ENDPOINT = "/v1/admin/calc/rank";
 
 // 공통 fetch 함수
 const apiFetch = async (
@@ -43,7 +43,7 @@ const apiFetch = async (
 
 // 데이터 조회
 export const fetchData = async () => {
-  const data = await apiFetch(API_ENDPOINT, "GET");
+  const data = await apiFetch(`${API_ENDPOINT}/all`, "GET");
   return Array.isArray(data) ? data : []; // 배열인지 확인하여 반환
 };
 

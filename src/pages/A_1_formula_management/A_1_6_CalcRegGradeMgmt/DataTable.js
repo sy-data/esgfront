@@ -211,7 +211,7 @@ const DataTable = ({
               <TableCell sx={{ ...TableCellnStyles }}>사용량등급</TableCell>
               <TableCell sx={{ ...TableCellnStyles }}>순발열량등급</TableCell>
               <TableCell sx={{ ...TableCellnStyles }}>배출계수등급</TableCell>
-              <TableCell sx={{ ...TableCellnStyles }}>산정계수등급</TableCell>
+              <TableCell sx={{ ...TableCellnStyles }}>산화계수등급</TableCell>
               <TableCell sx={{ ...TableCellnStyles }}>등록일</TableCell>
             </TableRow>
           </TableHead>
