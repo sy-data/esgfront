@@ -26,58 +26,85 @@ function CalcGroupMgmt() {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
 
   useEffect(() => {
     fetchGroups();
   }, []);
 
   const fetchGroups = async () => {
-    const data = await esgFetch(`${API_URL}/all`, "GET");
-    const sortedGroups = data.data.sort(
-      (a, b) => new Date(b.createAt) - new Date(a.createAt)
-    );
-    setGroups(sortedGroups);
+    try {
+      const data = await esgFetch(`${API_URL}/all`, "GET");
+      const sortedGroups = data.data.sort(
+        (a, b) => new Date(b.createAt) - new Date(a.createAt)
+      );
+      setGroups(sortedGroups);
+    } catch (error) {
+      console.error("그룹을 불러오는 데 실패했습니다:", error);
+    }
   };
 
   const handleCreateGroup = async () => {
-    const adminId = "12345"; // 예시 관리자 ID
-    const parentGroupId = "67890"; // 예시 부모 그룹 ID
+    try {
+      const adminId = "12345"; // 예시 관리자 ID
+      const parentGroupId = "67890"; // 예시 부모 그룹 ID
 
-    await esgFetch(`${API_URL}`, "POST", {
-      adminId,
-      groupName,
-      parentGroupId: parseInt(parentGroupId),
-      note,
-    });
+      const response = await esgFetch(`${API_URL}`, "POST", {
+        adminId,
+        groupName, // 여기에서 상태를 그대로 전송
+        parentGroupId: parseInt(parentGroupId),
+        note,
+      });
 
-    fetchGroups();
-    clearForm();
+      if (response.success) {
+        // 추가된 그룹을 성공적으로 저장했는지 확인
+        fetchGroups(); // 데이터를 다시 가져오기
+        clearForm(); // 폼 초기화
+        setIsAddingNewGroup(false); // 추가 모드 종료
+      } else {
+        console.error("그룹 추가에 실패했습니다:", response.message);
+      }
+    } catch (error) {
+      console.error("그룹 추가 중 오류가 발생했습니다:", error);
+    }
   };
 
   const handleUpdateGroup = async () => {
-    const adminId = "12345"; // 예시 관리자 ID
-    await esgFetch(`${API_URL}/${editGroupId}`, "PUT", {
-      adminId,
-      groupName,
-      note,
-    });
+    try {
+      const adminId = "test"; // 예시 관리자 ID
+      await esgFetch(`${API_URL}/${editGroupId}`, "PUT", {
+        adminId,
+        groupName,
+        note,
+      });
 
-    fetchGroups();
-    clearForm();
-    setIsEditMode(false);
+      fetchGroups();
+      clearForm();
+      setIsEditMode(false);
+    } catch (error) {
+      console.error("그룹 수정에 실패했습니다:", error);
+    }
   };
 
   const handleDeleteGroup = async (id) => {
-    await esgFetch(`${API_URL}/${id}`, "DELETE");
-    fetchGroups();
+    try {
+      await esgFetch(`${API_URL}/${id}`, "DELETE");
+      fetchGroups();
+    } catch (error) {
+      console.error("그룹 삭제에 실패했습니다:", error);
+    }
   };
 
   const handleBulkDelete = async () => {
-    await Promise.all(
-      selected.map((id) => esgFetch(`${API_URL}/${id}`, "DELETE"))
-    );
-    fetchGroups();
-    setSelected([]);
+    try {
+      await Promise.all(
+        selected.map((id) => esgFetch(`${API_URL}/${id}`, "DELETE"))
+      );
+      fetchGroups();
+      setSelected([]);
+    } catch (error) {
+      console.error("그룹 일괄 삭제에 실패했습니다:", error);
+    }
   };
 
   const handleEditGroup = (group) => {
@@ -85,6 +112,7 @@ function CalcGroupMgmt() {
     setNote(group.note || "");
     setEditGroupId(group.groupId);
     setIsEditMode(true);
+    setIsAddingNewGroup(false);
   };
 
   const clearForm = () => {
@@ -92,6 +120,7 @@ function CalcGroupMgmt() {
     setNote("");
     setIsEditMode(false);
     setEditGroupId(null);
+    setIsAddingNewGroup(false);
   };
 
   const handleSelectAllClick = (event) => {
@@ -138,50 +167,38 @@ function CalcGroupMgmt() {
     handleEditGroup(group);
   };
 
+  const handleKeyPress = async (event) => {
+    if (event.key === "Enter") {
+      await handleUpdateGroup();
+    }
+  };
+
+  const handleAddNewGroup = () => {
+    clearForm();
+    setIsAddingNewGroup(true);
+  };
+
   return (
     <Container>
       <h1>산정식 그룹 기본정보</h1>
       <Paper style={{ padding: 16, marginBottom: 16 }}>
         <Box display="flex" justifyContent="space-between" mb={2}>
-          <TextField
-            label="산정식그룹명"
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
-            fullWidth
-            margin="normal"
-            style={{ marginRight: 16 }}
-          />
-          <TextField
-            label="비고"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            fullWidth
-            margin="normal"
-            style={{ marginRight: 16 }}
-          />
-          <Box display="flex" alignItems="center">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={isEditMode ? handleUpdateGroup : handleCreateGroup}
-              style={{ marginRight: 8 }}
-            >
-              {isEditMode ? "그룹 수정" : "그룹 추가"}
-            </Button>
-            {isEditMode && (
-              <Button onClick={clearForm} style={{ marginRight: 8 }}>
-                취소
-              </Button>
-            )}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleBulkDelete}
-              disabled={selected.length === 0}
-            >
-              삭제
-            </Button>
-          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddNewGroup}
+            style={{ marginRight: 8 }}
+          >
+            그룹 추가
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleBulkDelete}
+            disabled={selected.length === 0}
+          >
+            삭제
+          </Button>
         </Box>
       </Paper>
       <Paper>
@@ -206,6 +223,42 @@ function CalcGroupMgmt() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {isAddingNewGroup && (
+              <TableRow>
+                <TableCell />
+                <TableCell>신규</TableCell>
+                <TableCell>자동 생성됨</TableCell>
+                <TableCell>
+                  <TextField
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    placeholder="그룹명을 입력하세요"
+                    fullWidth
+                    autoFocus
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="비고를 입력하세요"
+                    fullWidth
+                  />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCreateGroup}
+                  >
+                    저장
+                  </Button>
+                  <Button onClick={clearForm} style={{ marginLeft: 8 }}>
+                    취소
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )}
             {groups
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((group, index) => {
@@ -231,8 +284,31 @@ function CalcGroupMgmt() {
                     </TableCell>
                     <TableCell>{groups.length - index}</TableCell>
                     <TableCell>{group.groupId}</TableCell>
-                    <TableCell>{group.name}</TableCell>
-                    <TableCell>{group.note}</TableCell>
+                    <TableCell>
+                      {isEditMode && editGroupId === group.groupId ? (
+                        <TextField
+                          value={groupName}
+                          onChange={(e) => setGroupName(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          fullWidth
+                          autoFocus
+                        />
+                      ) : (
+                        group.name
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditMode && editGroupId === group.groupId ? (
+                        <TextField
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          fullWidth
+                        />
+                      ) : (
+                        group.note
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
