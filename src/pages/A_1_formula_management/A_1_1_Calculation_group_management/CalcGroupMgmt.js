@@ -35,6 +35,7 @@ function CalcGroupMgmt() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
+  const [isNewGroup, setIsNewGroup] = useState(false);
 
   useEffect(() => {
     // 비동기 함수 선언: 사용자 공식 그룹 데이터를 가져옵니다.
@@ -59,10 +60,11 @@ function CalcGroupMgmt() {
   const handleAddRow = async () => {
     // 새로 추가될 그룹의 ID를 설정합니다. 현재 행의 수에 1을 더한 값을 사용합니다.
     const newRow = {
-      id: rows.length + 1,
-      groupId: String(rows.length + 1),
-      groupName: "", // 빈 필드
-      note: "", // 빈 필드
+      id: undefined,
+      groupId: rows.length + 1,
+      groupName: "",
+      note: "",
+      parentGroupId: 0,
     };
 
     // 새로운 빈 행을 추가하고 편집 모드로 전환
@@ -70,6 +72,7 @@ function CalcGroupMgmt() {
     setEditIndex(0); // 새로 추가된 행을 편집 모드로 설정
     setEditGroupName(""); // 그룹 이름 필드를 비웁니다.
     setEditNote(""); // 메모 필드를 비웁니다.
+    setIsNewGroup(true);
   };
 
   const handleDeleteRows = async () => {
@@ -113,44 +116,59 @@ function CalcGroupMgmt() {
     handleCloseDeleteDialog(); // 삭제 후 다이얼로그 닫기
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSave = useCallback(async () => {
     // 현재 편집 중인 행의 데이터를 저장합니다.
     if (editIndex >= 0 && editGroupName.trim() && editNote.trim()) {
       try {
         const rowToUpdate = rows[editIndex];
 
-        // 여기서 updateFormulaGroup 함수를 호출합니다.
-        const result = await updateFormulaGroup(
-          rowToUpdate.id, // 수정할 그룹의 ID
-          adminId, // 관리자의 ID
-          rowToUpdate.groupId, // 그룹 ID (고유 식별자)
-          editGroupName, // 수정된 그룹 이름
-          editNote // 수정된 비고
-        );
+        if (isNewGroup) {
+          //새로운 그룹 추가 로직
+          const result = await createFormulaGroup(
+            adminId,
+            rowToUpdate.groupId,
+            editGroupName,
+            rowToUpdate.parentGroupId,
+            editNote
+          );
+          if (result) {
+            console.log("새로운 그룹이 생성되었습니다.", result);
+            setRows([result, ...rows]);
+          }
+        } else {
+          //기존 그룹 수정 로직
+          // 여기서 updateFormulaGroup 함수를 호출합니다.
+          const result = await updateFormulaGroup(
+            rowToUpdate.id, // 수정할 그룹의 ID
+            adminId, // 관리자의 ID
+            rowToUpdate.groupId, // 그룹 ID (고유 식별자)
+            editGroupName, // 수정된 그룹 이름
+            editNote // 수정된 비고
+          );
+          if (result) {
+            console.log("서버 응답 데이터:", result); // 서버에서 반환된 전체 데이터 확인
 
-        if (result) {
-          console.log("서버 응답 데이터:", result); // 서버에서 반환된 전체 데이터 확인
-
-          // 업데이트된 데이터를 반영합니다.
-          const updatedRows = [...rows];
-          updatedRows[editIndex] = {
-            ...rowToUpdate,
-            name: result.name, // 서버에서 반환된 데이터로 업데이트
-            note: result.note, // 서버에서 반환된 데이터로 업데이트
-          };
-          console.log("업데이트된 행 데이터:", updatedRows[editIndex]); // 업데이트된 데이터 확인
-          setRows(updatedRows);
-          setEditIndex(-1); // 편집 모드를 해제합니다.
-          setIsDialogOpen(true); // 저장 완료 후 다이얼로그 표시
+            // 업데이트된 데이터를 반영합니다.
+            const updatedRows = [...rows];
+            updatedRows[editIndex] = {
+              ...rowToUpdate,
+              name: result.name, // 서버에서 반환된 데이터로 업데이트
+              note: result.note, // 서버에서 반환된 데이터로 업데이트
+            };
+            console.log("업데이트된 행 데이터:", updatedRows[editIndex]); // 업데이트된 데이터 확인
+            setRows(updatedRows);
+          }
         }
+        setEditIndex(-1); // 편집 모드를 해제합니다.
+        setIsDialogOpen(true); // 저장 완료 후 다이얼로그 표시
+        setIsNewGroup(false); // 작업이 완료되면 새로운 그룹 플래그를 초기화
       } catch (error) {
         console.error("그룹 저장 중 오류가 발생했습니다.", error);
       }
     } else {
       alert("그룹 이름과 메모를 입력해 주세요.");
     }
-  }, [editIndex, editGroupName, editNote, rows]);
+  }, [editIndex, editGroupName, editNote, rows, isNewGroup]);
 
   const handleDocumentClick = useCallback(
     (event) => {
