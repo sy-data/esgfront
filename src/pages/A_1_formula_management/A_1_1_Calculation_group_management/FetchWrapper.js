@@ -137,13 +137,13 @@ export async function updateFormulaGroup(
   note
 ) {
   const url = `/v1/admin/calc/group/${id}`;
-  const body = { adminId, groupId: parseInt(groupId), groupName, note };
+  const body = { adminId, groupId: parseInt(groupId, 10), groupName, note };
 
   console.log("본문으로 수식 그룹 업데이트 중:", body);
 
   try {
     const response = await esgFetch(url, "PUT", body);
-    if (response.success) {
+    if (response && response.success) {
       console.log("수정완료", response);
       return response.data; // 서버에서 반환된 데이터를 리턴
     } else {
