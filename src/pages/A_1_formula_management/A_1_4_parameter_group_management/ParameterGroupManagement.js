@@ -1,257 +1,262 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Container,
   Table,
   TableBody,
-  TableContainer,
+  TableCell,
+  TableHead,
+  TableRow,
   Paper,
-  TablePagination,
-  Box,
   Typography,
-  Snackbar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Checkbox,
 } from "@mui/material";
-import Alert from "./Alert";
-import TableHeader from "./TableHeader";
-import TableRowComponent from "./TableRowComponent";
-import TableControls from "./TableControls";
-import { boxStyle, typographyStyle, tableContainerStyle } from "./Styles";
-import {
-  fetchParameterGroups,
-  addParameter,
-  updateParameter,
-  deleteParameter,
-} from "./ParameterGroupApi";
+import AddIcon from "@mui/icons-material/Add";
 
-const ParameterGroupManagement = () => {
-  const [rows, setRows] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selected, setSelected] = useState([]);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [editingRowId, setEditingRowId] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
-  const groupNameInputRef = useRef(null);
+const ParameterGroupList = () => {
+  const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedGroups, setSelectedGroups] = useState([]);
+  const [newGroup, setNewGroup] = useState({
+    adminId: "",
+    name: "",
+    groupId: "",
+    parentGroupId: "",
+    inputDivision: "",
+    isEarthWarming: false,
+    isActive: true,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchParameterGroups();
-      if (Array.isArray(data)) {
-        setRows(data);
-      } else {
-        console.error("Fetched data is not an array:", data);
-        setRows([]);
-      }
-    };
-    fetchData();
+    fetchParameterGroups();
   }, []);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const fetchParameterGroups = async () => {
+    try {
+      const response = await fetch(
+        "http://54.180.242.25:8001/v1/admin/calc/parameter/group/all"
+      );
+      const result = await response.json();
+      setData(result.data || []);
+    } catch (error) {
+      console.error("파라미터 그룹을 가져오는 중 오류 발생:", error);
+    }
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewGroup((prev) => ({
+      ...prev,
+      [name]:
+        name === "groupId" ||
+        name === "parentGroupId" ||
+        name === "inputDivision"
+          ? value === ""
+            ? ""
+            : parseInt(value, 10)
+          : value,
+    }));
   };
 
   const handleAddGroup = async () => {
-    const newRow = {
-      id: rows.length + 1,
-      groupId: String(Math.floor(Math.random() * 90000) + 10000),
-      groupName: "",
-      note: "",
-    };
-    await addParameter(newRow);
-    setRows([newRow, ...rows]);
-    setEditingRowId(newRow.id);
+    try {
+      const response = await fetch(
+        "http://54.180.242.25:8001/v1/admin/calc/parameter/group",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newGroup),
+        }
+      );
 
-    setTimeout(() => {
-      if (groupNameInputRef.current) {
-        groupNameInputRef.current.focus();
+      if (response.ok) {
+        fetchParameterGroups();
+        setOpen(false);
+      } else {
+        console.error("그룹 추가 실패");
       }
-    }, 100);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = rows
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((row) => row.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    if (event.target.type === "checkbox") {
-      const selectedIndex = selected.indexOf(id);
-      let newSelected = [];
-
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, id);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
-
-      setSelected(newSelected);
+    } catch (error) {
+      console.error("그룹을 추가하는 중 오류 발생:", error);
     }
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const handleSave = async (row) => {
-    await updateParameter(row.id, row);
-    setOpenSnackbar(true);
+  const handleCheckboxChange = (groupId) => {
+    setSelectedGroups((prev) =>
+      prev.includes(groupId)
+        ? prev.filter((id) => id !== groupId)
+        : [...prev, groupId]
+    );
   };
 
-  const handleGroupNameChange = (id, value) => {
-    const newRows = rows.map((row) => {
-      if (row.id === id) {
-        row.groupName = value;
-      }
-      return row;
-    });
-    setRows(newRows);
-  };
-
-  const handleNoteChange = (id, value) => {
-    const newRows = rows.map((row) => {
-      if (row.id === id) {
-        row.note = value;
-      }
-      return row;
-    });
-    setRows(newRows);
-  };
-
-  const handleBlur = (id) => {
-    const row = rows.find((row) => row.id === id);
-    handleSave(row); // 변경 사항 저장
-    setEditingRowId(null);
-  };
-
-  const handleKeyDown = (event, id) => {
-    if (event.key === "Enter") {
-      const row = rows.find((row) => row.id === id);
-      handleSave(row); // 변경 사항 저장
-      setEditingRowId(null);
-      event.target.blur(); // 포커스 해제
+  const handleDeleteGroups = async () => {
+    try {
+      await Promise.all(
+        selectedGroups.map((groupId) =>
+          fetch(
+            `http://54.180.242.25:8001/v1/admin/calc/parameter/group/${groupId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer <token>", // 여기에 적절한 토큰을 삽입하세요
+              },
+            }
+          )
+        )
+      );
+      fetchParameterGroups();
+      setSelectedGroups([]); // 선택 항목 초기화
+    } catch (error) {
+      console.error("그룹을 삭제하는 중 오류 발생:", error);
     }
   };
-
-  const handleDeleteSelected = async () => {
-    for (const id of selected) {
-      await deleteParameter(id);
-    }
-    const newRows = rows.filter((row) => !selected.includes(row.id));
-    setRows(newRows);
-    setSelected([]);
-    setOpenDialog(false);
-  };
-
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-  const handleClickOutside = (event) => {
-    if (editingRowId !== null && !event.target.closest(".edit-field")) {
-      const row = rows.find((row) => row.id === editingRowId);
-      handleSave(row); // 변경 사항 저장
-      setEditingRowId(null);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [editingRowId, rows]);
 
   return (
-    <Box p={3} sx={boxStyle}>
-      <Typography variant="h6" sx={typographyStyle}>
-        파라미터 그룹 목록
+    <Container component={Paper} style={{ marginTop: "20px", padding: "20px" }}>
+      <Typography variant="h4" gutterBottom>
+        파라미터 그룹 리스트
       </Typography>
-      <TableControls
-        handleAddGroup={handleAddGroup}
-        handleOpenDialog={handleOpenDialog}
-        handleCloseDialog={handleCloseDialog}
-        handleDeleteSelected={handleDeleteSelected}
-        selected={selected}
-        openDialog={openDialog}
-      />
-      <TableContainer component={Paper} sx={tableContainerStyle}>
-        <Table>
-          <TableHeader
-            numSelected={selected.length}
-            rowCount={
-              rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .length
-            }
-            onSelectAllClick={handleSelectAllClick}
-          />
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                const isItemSelected = isSelected(row.id);
-                return (
-                  <TableRowComponent
-                    key={row.id}
-                    row={row}
-                    isSelected={isItemSelected}
-                    handleClick={handleClick}
-                    handleGroupNameChange={handleGroupNameChange}
-                    handleNoteChange={handleNoteChange}
-                    handleBlur={handleBlur}
-                    handleKeyDown={handleKeyDown}
-                    editingRowId={editingRowId}
-                    groupNameInputRef={groupNameInputRef}
-                  />
-                );
-              })}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
+
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={() => setOpen(true)}
+        style={{ marginBottom: "20px" }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success">
-          저장되었습니다.
-        </Alert>
-      </Snackbar>
-    </Box>
+        그룹 추가
+      </Button>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleDeleteGroups}
+        disabled={selectedGroups.length === 0}
+        style={{ marginBottom: "20px", marginLeft: "10px" }}
+      >
+        선택한 그룹 삭제
+      </Button>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>선택</TableCell>
+            <TableCell>ID</TableCell>
+            <TableCell>그룹 ID</TableCell>
+            <TableCell>그룹명</TableCell>
+            <TableCell>상위 그룹 ID</TableCell>
+            <TableCell>입력 구분</TableCell>
+            <TableCell>지구 온난화 여부</TableCell>
+            <TableCell>활성화 여부</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((group) => (
+            <TableRow key={group.id}>
+              <TableCell>
+                <Checkbox
+                  checked={selectedGroups.includes(group.groupId)}
+                  onChange={() => handleCheckboxChange(group.groupId)}
+                />
+              </TableCell>
+              <TableCell>{group.id}</TableCell>
+              <TableCell>{group.groupId}</TableCell>
+              <TableCell>{group.name}</TableCell>
+              <TableCell>{group.parentGroupId}</TableCell>
+              <TableCell>{group.inputDivision}</TableCell>
+              <TableCell>{group.isEarthWarming ? "예" : "아니오"}</TableCell>
+              <TableCell>{group.isActive ? "예" : "아니오"}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>새 그룹 추가</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="adminId"
+            label="관리자 ID"
+            fullWidth
+            variant="outlined"
+            value={newGroup.adminId}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="name"
+            label="그룹명"
+            fullWidth
+            variant="outlined"
+            value={newGroup.name}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="groupId"
+            label="그룹 ID"
+            fullWidth
+            variant="outlined"
+            value={newGroup.groupId}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="parentGroupId"
+            label="상위 그룹 ID"
+            fullWidth
+            variant="outlined"
+            value={newGroup.parentGroupId}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="inputDivision"
+            label="입력 구분"
+            fullWidth
+            variant="outlined"
+            value={newGroup.inputDivision}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="isEarthWarming"
+            label="지구 온난화 여부 (true/false)"
+            fullWidth
+            variant="outlined"
+            value={newGroup.isEarthWarming}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="isActive"
+            label="활성화 여부 (true/false)"
+            fullWidth
+            variant="outlined"
+            value={newGroup.isActive}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="secondary">
+            취소
+          </Button>
+          <Button onClick={handleAddGroup} color="primary">
+            추가
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
-export default ParameterGroupManagement;
+export default ParameterGroupList;
