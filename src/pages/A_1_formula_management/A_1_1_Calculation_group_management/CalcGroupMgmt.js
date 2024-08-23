@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Container,
   TextField,
@@ -12,196 +12,124 @@ import {
   Checkbox,
   TablePagination,
   Box,
+  Typography,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
-import { esgFetch } from "./FetchWrapper";
-
-const API_URL = "/v1/admin/calc/group";
+import { useGroupManagement } from "./useGroupManagement";
 
 function CalcGroupMgmt() {
-  const [groups, setGroups] = useState([]);
-  const [groupName, setGroupName] = useState("");
-  const [note, setNote] = useState("");
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editGroupId, setEditGroupId] = useState(null);
-  const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
-
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  const fetchGroups = async () => {
-    try {
-      const data = await esgFetch(`${API_URL}/all`, "GET");
-      const sortedGroups = data.data.sort(
-        (a, b) => new Date(b.createAt) - new Date(a.createAt)
-      );
-      setGroups(sortedGroups);
-    } catch (error) {
-      console.error("그룹을 불러오는 데 실패했습니다:", error);
-    }
-  };
-
-  const handleCreateGroup = async () => {
-    try {
-      const adminId = "12345"; // 예시 관리자 ID
-      const parentGroupId = "67890"; // 예시 부모 그룹 ID
-
-      const response = await esgFetch(`${API_URL}`, "POST", {
-        adminId,
-        groupName, // 여기에서 상태를 그대로 전송
-        parentGroupId: parseInt(parentGroupId),
-        note,
-      });
-
-      if (response.success) {
-        // 추가된 그룹을 성공적으로 저장했는지 확인
-        fetchGroups(); // 데이터를 다시 가져오기
-        clearForm(); // 폼 초기화
-        setIsAddingNewGroup(false); // 추가 모드 종료
-      } else {
-        console.error("그룹 추가에 실패했습니다:", response.message);
-      }
-    } catch (error) {
-      console.error("그룹 추가 중 오류가 발생했습니다:", error);
-    }
-  };
-
-  const handleUpdateGroup = async () => {
-    try {
-      const adminId = "test"; // 예시 관리자 ID
-      await esgFetch(`${API_URL}/${editGroupId}`, "PUT", {
-        adminId,
-        groupName,
-        note,
-      });
-
-      fetchGroups();
-      clearForm();
-      setIsEditMode(false);
-    } catch (error) {
-      console.error("그룹 수정에 실패했습니다:", error);
-    }
-  };
-
-  const handleDeleteGroup = async (id) => {
-    try {
-      await esgFetch(`${API_URL}/${id}`, "DELETE");
-      fetchGroups();
-    } catch (error) {
-      console.error("그룹 삭제에 실패했습니다:", error);
-    }
-  };
-
-  const handleBulkDelete = async () => {
-    try {
-      await Promise.all(
-        selected.map((id) => esgFetch(`${API_URL}/${id}`, "DELETE"))
-      );
-      fetchGroups();
-      setSelected([]);
-    } catch (error) {
-      console.error("그룹 일괄 삭제에 실패했습니다:", error);
-    }
-  };
-
-  const handleEditGroup = (group) => {
-    setGroupName(group.name);
-    setNote(group.note || "");
-    setEditGroupId(group.groupId);
-    setIsEditMode(true);
-    setIsAddingNewGroup(false);
-  };
-
-  const clearForm = () => {
-    setGroupName("");
-    setNote("");
-    setIsEditMode(false);
-    setEditGroupId(null);
-    setIsAddingNewGroup(false);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = groups.map((n) => n.groupId);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const handleRowDoubleClick = (group) => {
-    handleEditGroup(group);
-  };
-
-  const handleKeyPress = async (event) => {
-    if (event.key === "Enter") {
-      await handleUpdateGroup();
-    }
-  };
-
-  const handleAddNewGroup = () => {
-    clearForm();
-    setIsAddingNewGroup(true);
-  };
+  const {
+    groups,
+    groupName,
+    note,
+    isEditMode,
+    selected,
+    page,
+    rowsPerPage,
+    isAddingNewGroup,
+    openSnackbar,
+    snackbarMessage,
+    openDeleteDialog,
+    openWarningDialog,
+    setGroupName,
+    setNote,
+    handleCreateGroup,
+    handleUpdateGroup,
+    handleSelectAllClick,
+    handleClick,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleRowDoubleClick,
+    handleKeyPress,
+    handleAddNewGroup,
+    clearForm,
+    setOpenSnackbar,
+    setOpenDeleteDialog,
+    setOpenWarningDialog,
+    handleConfirmDelete,
+    editGroupId,
+    setEditGroupId,
+  } = useGroupManagement();
 
   return (
-    <Container>
-      <h1>산정식 그룹 기본정보</h1>
-      <Paper style={{ padding: 16, marginBottom: 16 }}>
-        <Box display="flex" justifyContent="space-between" mb={2}>
+    <Container
+      sx={{
+        minWidth: "100rem",
+        border: "2px solid #D8D8D8",
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            color: "var(--Neutral-100, #000)",
+            fontFamily: "Pretendard Variable",
+            fontStyle: "normal",
+            fontWeight: 700,
+            letterSpacing: "-0.36px",
+            marginTop: "1rem",
+          }}
+        >
+          산정식 그룹 기본정보
+        </Typography>
+        <Box sx={{ marginTop: "2rem", marginBottom: "0.5rem" }}>
           <Button
             variant="contained"
-            color="primary"
             onClick={handleAddNewGroup}
-            style={{ marginRight: 8 }}
+            style={{
+              height: "40px",
+              width: "7rem",
+              marginRight: "1rem",
+              borderRadius: "8px",
+              background: "var(--Primary, #00CD9B)",
+              color: "var(--Gray-fff, #FFF)",
+              textAlign: "center",
+              fontFamily: "Pretendard Variable",
+              fontWeight: 700,
+              letterSpacing: "-0.28px",
+            }}
           >
             그룹 추가
           </Button>
           <Button
             variant="contained"
-            color="secondary"
-            onClick={handleBulkDelete}
+            onClick={() => setOpenDeleteDialog(true)}
             disabled={selected.length === 0}
+            sx={{
+              height: "40px",
+              width: "7rem",
+              marginRight: "1rem",
+              borderRadius: "8px",
+              background: "var(--Primary, #00CD9B)",
+              fontWeight: 700,
+              color: "var(--Gray-fff, #FFF)",
+              textAlign: "center",
+              fontFamily: "Pretendard Variable",
+              letterSpacing: "-0.28px",
+            }}
           >
             삭제
           </Button>
         </Box>
-      </Paper>
-      <Paper>
+      </Box>
+      <Paper
+        sx={{
+          border: "2px solid #D8D8D8",
+          borderRadius: "1rem",
+          marginBottom: "-15rem",
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -232,17 +160,19 @@ function CalcGroupMgmt() {
                   <TextField
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
-                    placeholder="그룹명을 입력하세요"
+                    placeholder="그룹명을 입력해주세요"
                     fullWidth
                     autoFocus
+                    onKeyDown={handleKeyPress}
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    placeholder="비고를 입력하세요"
+                    placeholder="비고내용"
                     fullWidth
+                    onKeyDown={handleKeyPress}
                   />
                 </TableCell>
                 <TableCell>
@@ -253,7 +183,10 @@ function CalcGroupMgmt() {
                   >
                     저장
                   </Button>
-                  <Button onClick={clearForm} style={{ marginLeft: 8 }}>
+                  <Button
+                    onClick={clearForm}
+                    style={{ marginLeft: 8, marginRight: "-4rem" }}
+                  >
                     취소
                   </Button>
                 </TableCell>
@@ -262,7 +195,7 @@ function CalcGroupMgmt() {
             {groups
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((group, index) => {
-                const isItemSelected = isSelected(group.groupId);
+                const isItemSelected = selected.includes(group.groupId);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -285,25 +218,25 @@ function CalcGroupMgmt() {
                     <TableCell>{groups.length - index}</TableCell>
                     <TableCell>{group.groupId}</TableCell>
                     <TableCell>
-                      {isEditMode && editGroupId === group.groupId ? (
+                      {isEditMode && group.groupId === editGroupId ? (
                         <TextField
                           value={groupName}
                           onChange={(e) => setGroupName(e.target.value)}
-                          onKeyPress={handleKeyPress}
                           fullWidth
                           autoFocus
+                          onKeyPress={handleKeyPress}
                         />
                       ) : (
                         group.name
                       )}
                     </TableCell>
                     <TableCell>
-                      {isEditMode && editGroupId === group.groupId ? (
+                      {isEditMode && group.groupId === editGroupId ? (
                         <TextField
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
-                          onKeyPress={handleKeyPress}
                           fullWidth
+                          onKeyPress={handleKeyPress}
                         />
                       ) : (
                         group.note
@@ -324,6 +257,59 @@ function CalcGroupMgmt() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">그룹 삭제</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            선택하신 {selected.length}개의 데이터를 삭제하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+            취소
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClick={() => setOpenSnackbar(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+      <Dialog
+        open={openWarningDialog}
+        onClose={() => setOpenWarningDialog(false)}
+        aria-labelledby="warning-dialog-title"
+        aria-describedby="warning-dialog-description"
+      >
+        <DialogTitle id="warning-dialog-title">입력 오류</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="warning-dialog-description">
+            산정식 그룹명을 입력해주세요.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenWarningDialog(false)} color="primary">
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
