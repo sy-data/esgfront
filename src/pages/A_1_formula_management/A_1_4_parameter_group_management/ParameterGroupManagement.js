@@ -25,12 +25,9 @@ const ParameterGroupList = () => {
   const [newGroup, setNewGroup] = useState({
     adminId: "",
     name: "",
-    groupId: "",
-    parentGroupId: "",
     inputDivision: "",
-    isEarthWarming: false,
-    isActive: true,
   });
+  const [allSelected, setAllSelected] = useState(false);
 
   useEffect(() => {
     fetchParameterGroups();
@@ -42,29 +39,43 @@ const ParameterGroupList = () => {
         "http://54.180.242.25:8001/v1/admin/calc/parameter/group/all"
       );
       const result = await response.json();
-      setData(result.data || []);
+
+      if (Array.isArray(result.data)) {
+        // createdAt을 기준으로 오름차순 정렬하여 최신 항목이 맨 마지막에 오도록 설정
+        const sortedData = result.data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+        setData(sortedData);
+      } else {
+        setData([]); // 데이터가 배열이 아닐 경우 빈 배열 설정
+      }
     } catch (error) {
       console.error("파라미터 그룹을 가져오는 중 오류 발생:", error);
+      setData([]); // 오류 발생 시 빈 배열로 설정
     }
+  };
+
+  const findNextGroupId = () => {
+    const groupIds = data.map((group) => group.groupId);
+    let nextGroupId = 1;
+    while (groupIds.includes(nextGroupId)) {
+      nextGroupId += 1;
+    }
+    return nextGroupId;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewGroup((prev) => ({
       ...prev,
-      [name]:
-        name === "groupId" ||
-        name === "parentGroupId" ||
-        name === "inputDivision"
-          ? value === ""
-            ? ""
-            : parseInt(value, 10)
-          : value,
+      [name]: name === "inputDivision" ? parseInt(value, 10) : value,
     }));
   };
 
   const handleAddGroup = async () => {
     try {
+      const groupData = { ...newGroup, groupId: findNextGroupId() }; // 사용되지 않은 groupId 할당
+
       const response = await fetch(
         "http://54.180.242.25:8001/v1/admin/calc/parameter/group",
         {
@@ -72,12 +83,13 @@ const ParameterGroupList = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(newGroup),
+          body: JSON.stringify(groupData),
         }
       );
 
       if (response.ok) {
-        fetchParameterGroups();
+        const newGroupFromResponse = await response.json(); // 추가된 그룹의 실제 데이터를 서버에서 받아옵니다.
+        setData((prevData) => [...prevData, newGroupFromResponse.data]); // 새 데이터를 배열의 마지막에 추가
         setOpen(false);
       } else {
         console.error("그룹 추가 실패");
@@ -93,6 +105,15 @@ const ParameterGroupList = () => {
         ? prev.filter((id) => id !== groupId)
         : [...prev, groupId]
     );
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedGroups([]);
+    } else {
+      setSelectedGroups(data.map((group) => group.groupId));
+    }
+    setAllSelected(!allSelected);
   };
 
   const handleDeleteGroups = async () => {
@@ -147,32 +168,35 @@ const ParameterGroupList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>선택</TableCell>
-            <TableCell>ID</TableCell>
+            <TableCell padding="checkbox">
+              <Checkbox
+                indeterminate={
+                  selectedGroups.length > 0 &&
+                  selectedGroups.length < data.length
+                }
+                checked={allSelected}
+                onChange={handleSelectAll}
+              />
+            </TableCell>
+            <TableCell>No</TableCell>
             <TableCell>그룹 ID</TableCell>
             <TableCell>그룹명</TableCell>
-            <TableCell>상위 그룹 ID</TableCell>
             <TableCell>입력 구분</TableCell>
-            <TableCell>지구 온난화 여부</TableCell>
-            <TableCell>활성화 여부</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((group) => (
-            <TableRow key={group.id}>
-              <TableCell>
+          {data.map((group, index) => (
+            <TableRow key={group.id} hover>
+              <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedGroups.includes(group.groupId)}
                   onChange={() => handleCheckboxChange(group.groupId)}
                 />
               </TableCell>
-              <TableCell>{group.id}</TableCell>
+              <TableCell>{data.length - index}</TableCell>
               <TableCell>{group.groupId}</TableCell>
               <TableCell>{group.name}</TableCell>
-              <TableCell>{group.parentGroupId}</TableCell>
               <TableCell>{group.inputDivision}</TableCell>
-              <TableCell>{group.isEarthWarming ? "예" : "아니오"}</TableCell>
-              <TableCell>{group.isActive ? "예" : "아니오"}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -202,47 +226,11 @@ const ParameterGroupList = () => {
           />
           <TextField
             margin="dense"
-            name="groupId"
-            label="그룹 ID"
-            fullWidth
-            variant="outlined"
-            value={newGroup.groupId}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="parentGroupId"
-            label="상위 그룹 ID"
-            fullWidth
-            variant="outlined"
-            value={newGroup.parentGroupId}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
             name="inputDivision"
             label="입력 구분"
             fullWidth
             variant="outlined"
             value={newGroup.inputDivision}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="isEarthWarming"
-            label="지구 온난화 여부 (true/false)"
-            fullWidth
-            variant="outlined"
-            value={newGroup.isEarthWarming}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="isActive"
-            label="활성화 여부 (true/false)"
-            fullWidth
-            variant="outlined"
-            value={newGroup.isActive}
             onChange={handleInputChange}
           />
         </DialogContent>

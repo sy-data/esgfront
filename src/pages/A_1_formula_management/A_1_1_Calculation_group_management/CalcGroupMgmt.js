@@ -196,7 +196,6 @@ function CalcGroupMgmt() {
               .map((group, index) => {
                 const isItemSelected = selected.includes(group.groupId);
                 const labelId = `enhanced-table-checkbox-${index}`;
-                // Calculate the correct "No" value based on page and rowsPerPage
                 const no = groups.length - (page * rowsPerPage + index);
 
                 return (
