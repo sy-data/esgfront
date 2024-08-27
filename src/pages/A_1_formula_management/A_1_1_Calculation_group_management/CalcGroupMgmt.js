@@ -56,13 +56,21 @@ function CalcGroupMgmt() {
     handleConfirmDelete,
   } = useGroupManagement();
 
+  const buttonStyle = {
+    height: "40px",
+    width: "7rem",
+    marginRight: "1rem",
+    borderRadius: "8px",
+    background: "var(--Primary, #00CD9B)",
+    fontWeight: 700,
+    color: "var(--Gray-fff, #FFF)",
+    textAlign: "center",
+    fontFamily: "Pretendard Variable",
+    letterSpacing: "-0.28px",
+  };
+
   return (
-    <Container
-      sx={{
-        minWidth: "100rem",
-        border: "2px solid #D8D8D8",
-      }}
-    >
+    <Container sx={{ minWidth: "100rem", border: "2px solid #D8D8D8" }}>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -74,30 +82,18 @@ function CalcGroupMgmt() {
           sx={{
             color: "var(--Neutral-100, #000)",
             fontFamily: "Pretendard Variable",
-            fontStyle: "normal",
             fontWeight: 700,
             letterSpacing: "-0.36px",
-            marginTop: "1rem",
+            mt: 2,
           }}
         >
           산정식 그룹 기본정보
         </Typography>
-        <Box sx={{ marginTop: "2rem", marginBottom: "0.5rem" }}>
+        <Box sx={{ mt: 2, mb: 0.5 }}>
           <Button
             variant="contained"
             onClick={handleAddNewGroup}
-            style={{
-              height: "40px",
-              width: "7rem",
-              marginRight: "1rem",
-              borderRadius: "8px",
-              background: "var(--Primary, #00CD9B)",
-              color: "var(--Gray-fff, #FFF)",
-              textAlign: "center",
-              fontFamily: "Pretendard Variable",
-              fontWeight: 700,
-              letterSpacing: "-0.28px",
-            }}
+            sx={buttonStyle}
           >
             그룹 추가
           </Button>
@@ -105,29 +101,14 @@ function CalcGroupMgmt() {
             variant="contained"
             onClick={() => setOpenDeleteDialog(true)}
             disabled={selected.length === 0}
-            sx={{
-              height: "40px",
-              width: "7rem",
-              marginRight: "1rem",
-              borderRadius: "8px",
-              background: "var(--Primary, #00CD9B)",
-              fontWeight: 700,
-              color: "var(--Gray-fff, #FFF)",
-              textAlign: "center",
-              fontFamily: "Pretendard Variable",
-              letterSpacing: "-0.28px",
-            }}
+            sx={buttonStyle}
           >
             삭제
           </Button>
         </Box>
       </Box>
       <Paper
-        sx={{
-          border: "2px solid #D8D8D8",
-          borderRadius: "1rem",
-          marginBottom: "-15rem",
-        }}
+        sx={{ border: "2px solid #D8D8D8", borderRadius: "1rem", mb: -30 }}
       >
         <Table>
           <TableHead>
@@ -182,10 +163,7 @@ function CalcGroupMgmt() {
                   >
                     저장
                   </Button>
-                  <Button
-                    onClick={clearForm}
-                    style={{ marginLeft: 8, marginRight: "-4rem" }}
-                  >
+                  <Button onClick={clearForm} sx={{ ml: 1 }}>
                     취소
                   </Button>
                 </TableCell>
