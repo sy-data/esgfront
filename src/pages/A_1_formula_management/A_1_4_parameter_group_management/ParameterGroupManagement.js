@@ -20,6 +20,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { styles } from "./parameterGroupStyles";
 
 const ALERT_MESSAGES = {
   DUPLICATE: "그룹명이 중복됩니다.",
@@ -62,9 +63,7 @@ const ParameterGroupList = () => {
       const response = await fetch(`${API_URL}/all`);
       const result = await response.json();
       const sortedData = Array.isArray(result.data)
-        ? result.data.sort(
-            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-          )
+        ? result.data.sort((a, b) => a.groupId - b.groupId) // groupId 기준으로 정렬
         : [];
       setData(sortedData);
     } catch (error) {
@@ -74,10 +73,11 @@ const ParameterGroupList = () => {
   };
 
   const findNextGroupId = () => {
-    const groupIds = data.map((group) => group.groupId);
-    let nextGroupId = 1;
-    while (groupIds.includes(nextGroupId)) nextGroupId += 1;
-    return nextGroupId;
+    const maxGroupId = data.reduce(
+      (maxId, group) => Math.max(maxId, group.groupId),
+      0
+    );
+    return maxGroupId + 1;
   };
 
   const handleAddMode = () => {
@@ -90,7 +90,6 @@ const ParameterGroupList = () => {
     const { name, value } = e.target;
     setNewGroup((prev) => ({ ...prev, [name]: value }));
   }, []);
-
   const handleSaveNewGroup = useCallback(async () => {
     if (!newGroup.name.trim()) {
       setOpenDialog({ type: "EMPTY_NAME", isOpen: true });
@@ -111,7 +110,10 @@ const ParameterGroupList = () => {
 
       if (response.ok) {
         const newGroupFromResponse = await response.json();
-        setData((prevData) => [...prevData, newGroupFromResponse.data]);
+        setData((prevData) => {
+          const updatedData = [...prevData, newGroupFromResponse.data];
+          return updatedData.sort((a, b) => a.groupId - b.groupId); // groupId 기준으로 정렬
+        });
         setIsAdding(false);
         setNewGroup({ adminId: "test", name: "", note: "" });
         setSnackbarOpen(true);
@@ -215,24 +217,8 @@ const ParameterGroupList = () => {
   const handleDialogClose = () => setOpenDialog({ type: "", isOpen: false });
 
   return (
-    <Container
-      component={Paper}
-      sx={{
-        minWidth: "100rem",
-        border: "2px solid #D8D8D8",
-      }}
-    >
-      <Typography
-        variant="h5"
-        sx={{
-          color: "var(--Neutral-100, #000)",
-          fontFamily: "Pretendard Variable",
-          fontStyle: "normal",
-          fontWeight: 700,
-          letterSpacing: "-0.36px",
-          marginTop: "1rem",
-        }}
-      >
+    <Container component={Paper} sx={styles.container}>
+      <Typography variant="h5" sx={styles.title}>
         파라미터 그룹 목록
       </Typography>
 
@@ -245,18 +231,7 @@ const ParameterGroupList = () => {
             setIsEditing(null);
             handleAddMode();
           }}
-          sx={{
-            height: "40px",
-            width: "7rem",
-            marginRight: "1rem",
-            borderRadius: "8px",
-            background: "var(--Primary, #00CD9B)",
-            fontWeight: 700,
-            color: "var(--Gray-fff, #FFF)",
-            textAlign: "center",
-            fontFamily: "Pretendard Variable",
-            letterSpacing: "-0.28px",
-          }}
+          sx={styles.button}
         >
           그룹 추가
         </Button>
@@ -268,31 +243,13 @@ const ParameterGroupList = () => {
             setOpenDialog({ type: "DELETE_CONFIRM", isOpen: true })
           }
           disabled={!selectedGroups.length}
-          sx={{
-            height: "40px",
-            width: "7rem",
-            marginRight: "1rem",
-            borderRadius: "8px",
-            background: "var(--Primary, #00CD9B)",
-            fontWeight: 700,
-            color: "var(--Gray-fff, #FFF)",
-            textAlign: "center",
-            fontFamily: "Pretendard Variable",
-            letterSpacing: "-0.28px",
-          }}
+          sx={styles.button}
         >
           삭제
         </Button>
       </div>
 
-      <Table
-        sx={{
-          border: "2px solid #D8D8D8",
-          borderRadius: "1rem",
-          marginBottom: "-15rem",
-          marginTop: "1rem",
-        }}
-      >
+      <Table sx={styles.table}>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
@@ -352,7 +309,7 @@ const ParameterGroupList = () => {
                   key={group.id}
                   hover
                   onDoubleClick={() => handleDoubleClick(group)}
-                  sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}
+                  sx={styles.tableRowHover}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -407,13 +364,7 @@ const ParameterGroupList = () => {
         </TableBody>
       </Table>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "16rem",
-        }}
-      >
+      <div style={styles.pagination}>
         <Pagination
           count={Math.ceil(data.length / itemsPerPage)}
           page={currentPage}
