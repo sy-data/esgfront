@@ -6,6 +6,7 @@ import { userStateAtom, loginFailCountAtom } from "../../States/auth/auth";
 import { Router, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getCookie, setCookie } from "../../States/storage/Cookie";
+import loginLogo from "./images/loginLogo.svg"
 
 //! 요구사항
 // 1. 아이디, 비밀번호 미 입력 시 모달 출력 (하나라도 입력 안했을 시) -> 아이디, 비번 팝업 (완료)
@@ -85,69 +86,92 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" style={{ height: "100vh" }}>
-      <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: "100%" }}>
-        <Paper elevation={3} style={{ width: "100%", padding: "20px", boxSizing: "border-box" }}>
-          <Grid item xs={12}>
-            <Typography variant="h5" align="center" gutterBottom>
-              쉽고 빠르게 시작하는 탄소배출관리
-            </Typography>
-            <Typography variant="h4" align="center" gutterBottom>
-              E-Scope+
-            </Typography>
-          </Grid>
-          <Grid container spacing={2} alignItems="flex-end">
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="아이디를 입력하세요"
-                variant="outlined"
-                required
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="비밀번호를 입력하세요"
-                variant="outlined"
-                required
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="saveId"
-                    color="primary"
-                    checked={isChecked}
-                    onChange={(e) => setIsChecked(e.target.checked)}
-                  />
-                }
-                label="아이디 저장"
-                style={{ justifyContent: "center" }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" color="primary" onClick={onLogin}>
+    <Container component="main" maxWidth="xs" style={{ height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "40px"}}>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "16px"}}>
+          <Typography style={{color: "var(--Gray-111, #111)",
+            fontFamily: "Pretendard Variable",
+            fontSize: "24px",
+            fontStyle: "normal",
+            fontWeight: 600,
+            lineHeight: "150%", /* 36px */
+            letterSpacing: "-0.48px", textAlign: "center"}}
+          >
+            쉽고 빠르게 시작하는 탄소배출관리
+          </Typography>
+          <img alt="" src={loginLogo} />
+        </div>
+          <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "16px"}}>
+            <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
+              <Typography style={{color: "var(--Gray-111, #111)",
+                fontFamily: "Pretendard Variable",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "150%", /* 21px */
+                letterSpacing: "-0.28px"}}>
                 로그인
-              </Button>
-            </Grid>
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Link href="#" variant="body2" className="ly-padding-xm" onClick={onJoin}>
-                회원가입
-              </Link>
-              <Link href="#" variant="body2" className="ly-padding-xm" onClick={onFindIdPassword}>
-                아이디/비밀번호 찾기
-              </Link>
-            </Grid>
-          </Grid>
-        </Paper>
-      </Grid>
+              </Typography>
+              <input
+                type="text"
+                placeholder="아이디를 입력하세요"
+                onChange={(e) => setId(e.target.value)}
+                style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
+                borderRadius: "8px",
+                border: "1px solid var(--Gray-eee, #EEE)",
+                background: "var(--Gray-fff, #FFF)"}}
+              />
+            </div>
+            <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
+              <Typography style={{color: "var(--Gray-111, #111)",
+                fontFamily: "Pretendard Variable",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "150%", /* 21px */
+                letterSpacing: "-0.28px"}}>
+                비밀번호
+              </Typography>
+              <input
+                type="text"
+                placeholder="비밀번호를 입력하세요"
+                onChange={(e) => setPassword(e.target.value)}
+                style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
+                borderRadius: "8px",
+                
+                border: "1px solid var(--Gray-eee, #EEE)",
+                background: "var(--Gray-fff, #FFF)"
+              }}>
+              </input>
+            </div>
+          </div>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "16px", width: "100%"}}>
+          <div style={{marginRight: "auto", display: "flex", alignItems: "center"}}>
+            <input type="checkbox" id="rememberId" />
+            <label 
+              for="rememberId"
+              style={{color: "var(--Gray-111, #111)",
+              fontFamily: "Pretendard Variable",
+              fontSize: "14px",
+              fontWeight: 600,
+              marginLeft: "6px"}}
+            >
+              <span className="custom-checkbox"></span>
+              아이디저장
+            </label>
+          </div>
+          <Button
+            fullWidth
+            onClick={onLogin}
+            {...{
+              disabled: !(id && password),
+              variant: (id && password) ? "loginFilled": "loginEmpty"
+            }}
+          >
+            로그인
+          </Button>
+        </div>
+      </div>
     </Container>
   );
 };

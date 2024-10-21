@@ -5,3 +5,34 @@
 .r-magrgin-xm {
   margin-right: 1rem;
 }
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--Gray-eee, #EEE);
+  background: var(--Gray-fff, #FFF);
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 3px;
+  margin-right: 6px;
+  position: relative;
+}
+
+input[type="checkbox"]:checked+label .custom-checkbox {
+  background: var(--Gray-eee, #EEE);
+}
+
+input[type="checkbox"]:checked+label .custom-checkbox::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
