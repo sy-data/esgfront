@@ -1,24 +1,13 @@
-import { Paper, styled } from "@mui/material"
-
-const AreaPadding = styled('div')(() => ({
-  display: 'flex',
-  padding: '10px',
-  width: "calc(100% - 20px)",
-  height: "calc(100% - 20px)",
-}))
-
-const PaperStyle = styled(Paper)(() => ({
-  flex: 1,
-  padding: '10px'
-}));
-
-const ContentBody = ({children, className}) => {
+const ContentBody = ({children, className, ...props}) => {
   return (
-    <AreaPadding className={className}>
-      <PaperStyle elevation={4}>
-        {children}
-      </PaperStyle>
-    </AreaPadding>
+    <div style={{
+      display: "flex", flexDirection: "column",
+      backgroundColor: "#FFFFFF", borderRadius: "8px", border: "1px solid #E5E5E5", overflow: "auto",
+      width: props.width||"100%", height: props.height||"100%", padding: props.padding||"24px", boxSizing: "border-box",
+      ...props
+    }}>
+      {children}
+    </div>
   )
 }
 

@@ -63,11 +63,11 @@ const Login = () => {
     // const user = await loginDev(loginData);
 
     if (user) {
-      checkPasswordDate(user.password_date);
-      setUserState(user);
-      saveId(user.email);
-      setLoginFailCount(0);
-      navigate("/emissions");
+      // checkPasswordDate(user.password_date);
+      // setUserState(user);
+      // saveId(user.email);
+      // setLoginFailCount(0);
+      // navigate("/emissions");
     } else if (user === undefined) {
       setLoginFailCount(loginFailCount + 1);
       navigate("/loginFaile");
@@ -101,50 +101,50 @@ const Login = () => {
           </Typography>
           <img alt="" src={loginLogo} />
         </div>
-          <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "16px"}}>
-            <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
-              <Typography style={{color: "var(--Gray-111, #111)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "150%", /* 21px */
-                letterSpacing: "-0.28px"}}>
-                로그인
-              </Typography>
-              <input
-                type="text"
-                placeholder="아이디를 입력하세요"
-                onChange={(e) => setId(e.target.value)}
-                style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
-                borderRadius: "8px",
-                border: "1px solid var(--Gray-eee, #EEE)",
-                background: "var(--Gray-fff, #FFF)"}}
-              />
-            </div>
-            <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
-              <Typography style={{color: "var(--Gray-111, #111)",
-                fontFamily: "Pretendard Variable",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "150%", /* 21px */
-                letterSpacing: "-0.28px"}}>
-                비밀번호
-              </Typography>
-              <input
-                type="text"
-                placeholder="비밀번호를 입력하세요"
-                onChange={(e) => setPassword(e.target.value)}
-                style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
-                borderRadius: "8px",
-                
-                border: "1px solid var(--Gray-eee, #EEE)",
-                background: "var(--Gray-fff, #FFF)"
-              }}>
-              </input>
-            </div>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "16px"}}>
+          <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
+            <Typography style={{color: "var(--Gray-111, #111)",
+              fontFamily: "Pretendard Variable",
+              fontSize: "14px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "150%", /* 21px */
+              letterSpacing: "-0.28px"}}>
+              로그인
+            </Typography>
+            <input
+              type="text"
+              placeholder="아이디를 입력하세요"
+              onChange={(e) => setId(e.target.value)}
+              style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
+              borderRadius: "8px",
+              border: "1px solid var(--Gray-eee, #EEE)",
+              background: "var(--Gray-fff, #FFF)"}}
+            />
           </div>
+          <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px"}}>
+            <Typography style={{color: "var(--Gray-111, #111)",
+              fontFamily: "Pretendard Variable",
+              fontSize: "14px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "150%", /* 21px */
+              letterSpacing: "-0.28px"}}>
+              비밀번호
+            </Typography>
+            <input
+              type="text"
+              placeholder="비밀번호를 입력하세요"
+              onChange={(e) => setPassword(e.target.value)}
+              style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
+              borderRadius: "8px",
+              
+              border: "1px solid var(--Gray-eee, #EEE)",
+              background: "var(--Gray-fff, #FFF)"
+            }}>
+            </input>
+          </div>
+        </div>
         <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "16px", width: "100%"}}>
           <div style={{marginRight: "auto", display: "flex", alignItems: "center"}}>
             <input type="checkbox" id="rememberId" />
@@ -165,11 +165,21 @@ const Login = () => {
             onClick={onLogin}
             {...{
               disabled: !(id && password),
-              variant: (id && password) ? "loginFilled": "loginEmpty"
+              variant: (id && password) ? "btnActive": "btnDisabled"
             }}
           >
             로그인
           </Button>
+        </div>
+        <div
+          style={{
+            display: "flex", alignItems: "center", gap: "14px", height: "21px",
+            fontFamily: "Pretendard Variable", fontSize: "14px",fontWeight: 600
+          }}
+        >
+          <div style={{cursor: "pointer"}} onClick={() => onJoin()}>회원가입</div>
+          <div style={{width: "1px", height: "14px", backgroundColor: "black"}}/>
+          <div style={{cursor: "pointer"}} onClick={() => onFindIdPassword()}>아이디/비밀번호 찾기</div>
         </div>
       </div>
     </Container>

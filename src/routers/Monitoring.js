@@ -18,7 +18,7 @@ const Monitoring = props => {
   return (
     <MainContent>
       <Box sx={{
-        width: '236px',
+        minWidth: '236px',
         padding: '0 14px', boxSizing: 'border-box',
         display: 'flex', flexDirection: 'column', overflow: 'auto'
       }}>

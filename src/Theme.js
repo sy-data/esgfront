@@ -9,6 +9,37 @@ const theme = createTheme({
     btnSearch: {
       main: grey[900]
     }
+  },
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'btnActive' },
+          style: {
+            backgroundColor: '#00CD9B',
+            color: '#FFFFFF',
+            fontWeight: "bold"
+          },
+        },
+        {
+          props: { variant: 'btnDisabled' },
+          style: {
+            backgroundColor: '#EAEAEA',
+            color: '#CCCCCC',
+            fontWeight: "bold"
+          },
+        },
+        {
+          props: { variant: 'btnInit' },
+          style: {
+            backgroundColor: '#FFFFFF',
+            color: '#111111',
+            fontWeight: "bold",
+            border: "1px solid #EEEEEE"
+          },
+        },
+      ]
+    }
   }
 });
 

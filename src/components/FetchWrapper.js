@@ -31,6 +31,7 @@ export async function loginDev(payload) {
 }
 
 export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
+  return {};
   // const token = localStorage.getItem("token");
   const token = getCookie("token");
 

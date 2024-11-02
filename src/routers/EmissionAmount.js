@@ -13,8 +13,8 @@ const EmissionByScope = lazy(() => import('../pages/4_emissions/4_5_scope/ByScop
 const EmissionAmount = props => {
   const navigate = useNavigate();
 
+  const token = getCookie('token');
   useEffect(() => {
-    const token = getCookie('token');
     if (!token) {
       navigate('/unauthorized');
     }
@@ -23,7 +23,7 @@ const EmissionAmount = props => {
   return (
     <MainContent>
       <Box sx={{
-        width: '236px',
+        minWidth: '236px',
         padding: '0 14px', boxSizing: 'border-box',
         display: 'flex', flexDirection: 'column', overflow: 'auto'
       }}>

@@ -8,6 +8,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { esgFetch } from "../../../components/FetchWrapper";
+import CloseIcon from '@mui/icons-material/Close';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const ButtonContainer = styled('div')(() => ({
@@ -45,6 +50,20 @@ const InputField = props => {
       <InputLabel>{props.label}</InputLabel>
       <TextField sx={{ width: 200 }} variant="outlined" size="small" value={props.value} onChange={props.change} />
     </InputContainer>
+  )
+}
+
+const DetailField = ({ children, title, row = false, required = true }) => {
+  return (
+    <div style={{display:"flex", width:"100%", height:"40px"}}>
+      <div style={{flex: 1, display: "flex", alignItems: "center", fontSize: "14px", fontWeight: 600, gap: "4px"}}>
+        {title}
+        {required && <div style={{width: "4px", height: "4px", backgroundColor: "red", borderRadius: "50%", marginBottom: "14px"}} />}
+      </div>
+      <div style={{width: "367px", ...(row && {display: "flex", flexDirection:"row", alignItems: "center"})}}>
+        {children}
+      </div>
+    </div>
   )
 }
 
@@ -139,19 +158,20 @@ const RightArea = forwardRef((props, ref) => {
       esgFetch(`/api/factories/${props.selectedWorkplace}`, 'PUT', {
         data: updateData
       }).then(() => {
-        // update datagrid values
-        const updateListData = JSON.parse(JSON.stringify(props.workplaceList));
-        const changeIndex = updateListData.find(w => w.id === props.selectedWorkplace).index;
+        // // update datagrid values
+        // const updateListData = JSON.parse(JSON.stringify(props.workplaceList));
+        // const changeIndex = updateListData.find(w => w.id === props.selectedWorkplace).index;
         
-        for(let k of Object.keys(updateData)){
-          if(k in updateListData[changeIndex-1]){
-            updateListData[changeIndex-1][k] = updateData[k];
-          }
-          if(k in updateListData[changeIndex-1]['attributes']){
-            updateListData[changeIndex-1]['attributes'][k] = updateData[k];
-          }
-        }
-        props.setWorkplaceList(updateListData);
+        // for(let k of Object.keys(updateData)){
+        //   if(k in updateListData[changeIndex-1]){
+        //     updateListData[changeIndex-1][k] = updateData[k];
+        //   }
+        //   if(k in updateListData[changeIndex-1]['attributes']){
+        //     updateListData[changeIndex-1]['attributes'][k] = updateData[k];
+        //   }
+        // }
+        // props.setWorkplaceList(updateListData);
+        props.setWorkplaceList([]);
       });
     }
     else{
@@ -183,92 +203,116 @@ const RightArea = forwardRef((props, ref) => {
   }
   
   useEffect(() => {
-    esgFetch('/api/type-industries', 'GET')
-      .then(res => res.json())
-      .then(result => {
-        setIndustryType(result.data);
-      })
+    // esgFetch('/api/type-industries', 'GET')
+    //   .then(res => res.json())
+    //   .then(result => {
+    //     setIndustryType(result.data);
+    //   })
   },[]);
   
   return (
-    <ContentBody>
-      <SubTitle title={"사업장 상세"} />
-      <ButtonContainer>
-        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => clearFields()}>신규</ButtonNewSave>
-        <ButtonNewSave color="btnSearch" variant="outlined" size="small" onClick={() => saveWorkspace()}>저장</ButtonNewSave>
-      </ButtonContainer>
-      
-      <InputBlock>
-        <InputField label="사업장명 *" value={workplaceName} change={e => setWorkplaceName(e.target.value)} />
-        <InputContainer>
-          <InputLabel>사업장 사용 *</InputLabel>
-          <Select value={selectUse} sx={{ width: 200 }} size="small">
-            <MenuItem value={true}>사용</MenuItem>
-            <MenuItem value={false}>미사용</MenuItem>
+    <ContentBody width={props.width} padding="24px" gap="32px">
+      <SubTitle title={"사업장 상세"}>
+        <CloseIcon />
+      </SubTitle>
+      <div style={{width: "100%", height: "auto", overflow: "scroll", display: "flex", flexDirection: "column", gap: "24px"}}>
+        <DetailField title="회사구분" row={true}>
+          <RadioGroup row name="company_type" sx={{flex: 1}}>
+            <FormControlLabel value="bs" control={<Radio />} label="본사" />
+            <FormControlLabel value="js" control={<Radio />} label="지사(지점)" />
+          </RadioGroup>
+          <Select label="지사(지점) 선택" value="" size="small" IconComponent={ExpandMoreIcon} sx={{flex: 0.9}} disabled >
+            <MenuItem value={1}>사용</MenuItem>
+            <MenuItem value={0}>미사용</MenuItem>
           </Select>
-        </InputContainer>
-      </InputBlock>
-      
-      <InputBlock>
-        <InputField label="사업자 등록번호" value={regNumber} change={e => {!props.selectedWorkplace && setRegNumber(e.target.value)}} />
-        <InputField label="사업자명" value={companyName} />
-      </InputBlock>
-      
-      <InputBlock>
-        <InputField label="전화번호" value={phoneNumber} change={e => setPhoneNumber(e.target.value)} />
-        <InputContainer>
-          <InputLabel>산업군 *</InputLabel>
-          <Select value={selectCategory} sx={{ width: 200 }} size="small" onChange={e => setSelectCategory(e.target.value)}>
-            {industryType.map(i => <MenuItem key={`ind-type-${i.id}`} value={i.id}>{i.attributes.type}</MenuItem>)}
+        </DetailField>
+        
+        <DetailField title="사업장명">
+          <TextField placeholder="사업장명을 입력하세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="사업장사용">
+          <Select label="사용 여부를 선택해주세요" value="" size="small" fullWidth IconComponent={ExpandMoreIcon} >
+            <MenuItem value={1}>사용</MenuItem>
+            <MenuItem value={0}>미사용</MenuItem>
           </Select>
-        </InputContainer>
-      </InputBlock>
-      
-      <>
-        <InputContainer>
-          <InputLabel></InputLabel>
-          <TextField sx={{ width: 250 }} variant="outlined" size="small"
-            InputProps={{ endAdornment: <InputAdornment position="end"><Search /></InputAdornment> }} />
-        </InputContainer>
-        <InputContainer>
-          <InputLabel>주소</InputLabel>
-          <TextField sx={{ width: 1, maxWidth: 540, bgcolor: '#CCCCCC' }} variant="outlined" size="small" disabled />
-        </InputContainer>
-        <InputContainer>
-          <InputLabel></InputLabel>
-          <TextField sx={{ width: 1, maxWidth: 540 }} variant="outlined" size="small" />
-        </InputContainer>
-      </>
-      
-      <InputBlock>
-        <InputField label="종업원수" value={employees} change={e => setEmployees(e.target.value)} />
-        <InputField label={<>당해년도 매출<br />(원)</>} value={thisSales} />
-      </InputBlock>
-      
-      <InputBlock>
-        <InputField label="전용면적" value={grossArea} change={e => setGrossArea(e.target.value)} />
-        <InputField label="연면적" value={netArea} change={e => setNetArea(e.target.value)} />
-      </InputBlock>
-      
-      <InputBlock>  
-        <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={datePickerUtils}>
-          <InputContainer>
-            <InputLabel>이전일</InputLabel>
-            <DatePicker label='' formatDensity="spacious" format="YYYY / MM / DD"
-              slotProps={{ textField: {size: 'small', sx: {width: 200}}}} 
-              value={dayjs(dateSince)} onChange={newDate => changeSince(newDate)} />
-          </InputContainer>
-          
-          <InputContainer>
-            <InputLabel>폐쇄일</InputLabel>
-            <DatePicker label='' formatDensity="spacious" format="YYYY / MM / DD"
-              slotProps={{ textField: { size: 'small', sx: { width: 200 } } }}
-              value={dayjs(dateUntil)} onChange={newDate => changeUntil(newDate)} />
-          </InputContainer>
-        </LocalizationProvider>
-      </InputBlock>
-      <div style={{ margin: '10px', color: 'red' }}>
-        * 필수 입력 항목
+        </DetailField>
+        
+        <DetailField title="사업장 등록번호" row={true}>
+          <TextField placeholder="000" value="" size="small" sx={{width: "110px"}} />
+          <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+          <TextField placeholder="00" value="" size="small" sx={{width: "110px"}} />
+          <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+          <TextField placeholder="00000" value="" size="small" />
+        </DetailField>
+        
+        <DetailField title="사업장명" required={false}>
+          <TextField placeholder="사업장명을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="전화번호" row={true} required={false}>
+          <TextField placeholder="000" value="" size="small" />
+          <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+          <TextField placeholder="0000" value="" size="small" />
+          <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+          <TextField placeholder="0000" value="" size="small" />
+        </DetailField>
+        
+        <DetailField title="산업군">
+          <Select value="" size="small" fullWidth IconComponent={ExpandMoreIcon}>
+            <MenuItem value={1}>산업군1</MenuItem>
+          </Select>
+        </DetailField>
+        
+        <DetailField title="회사규모">
+          <Select value="" size="small" fullWidth IconComponent={ExpandMoreIcon}>
+            <MenuItem value={1}>회사규모1</MenuItem>
+          </Select>
+        </DetailField>
+        
+        <DetailField title="종업원 수(명)" required={false}>
+          <TextField placeholder="종업원 수(명)을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
+          <DetailField title="주소" required={false}>
+            <TextField placeholder="우편번호 검색" value="" size="small" />
+          </DetailField>
+          <DetailField title="" required={false}>
+            <TextField placeholder="" value="" size="small" disabled fullWidth />
+          </DetailField>
+          <DetailField title="" required={false}>
+            <TextField placeholder="상세 주소를 입력해주세요" value="" size="small" fullWidth />
+          </DetailField>
+        </div>
+        
+        <DetailField title="전년도 매출(원)" required={false}>
+          <TextField placeholder="전년도 매출액을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="당해년도 매출(원)" required={false}>
+          <TextField placeholder="당해년도 매출액을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="전용면적 (㎡)" required={false}>
+          <TextField placeholder="전용면적 (㎡)을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="연면적 (㎡)" required={false}>
+          <TextField placeholder="연면적 (㎡)을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="사업장 등록일" required={false}>
+          <TextField placeholder="을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+        
+        <DetailField title="사업장 폐쇄일" required={false}>
+          <TextField placeholder="을 입력해주세요" value="" size="small" fullWidth />
+        </DetailField>
+      </div>
+      <div style={{display:"flex", gap: "8px"}}>
+        <Button variant="btnInit" sx={{flex:1}}>초기화</Button>
+        <Button variant="btnDisabled" sx={{flex:1}}>저장</Button>
       </div>
     </ContentBody>
   )
