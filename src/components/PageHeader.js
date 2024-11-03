@@ -36,7 +36,7 @@ const PageHeader = () => {
 
   return (
     <HeaderContainer>
-      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '236px', height: '80px', borderRight: "1px solid #E5E5E5" }}>
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '236px', height: '80px', borderRight: "1px solid #E5E5E5" }} onClick={() => navigate("/facility/workplace")}>
         <img src={title} alt="E-Scope" style={{width: '116px', height: '18px'}} />
       </Box>
       <div style={{display: "flex", flexGrow: 1, height: "100%", alignItems: "center", borderBottom: "1px solid #E5E5E5"}}>
