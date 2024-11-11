@@ -60,9 +60,9 @@ const ManageFacility = () => {
 
 
   return (
-    <div style={{ backgroundColor: "#eaeaea", width: "calc(100% - 236px)", height: "100%", padding: "24px", boxSizing: "border-box",
+    <div style={{ backgroundColor: "#eee", width: "calc(100% - 236px)", height: "100%", padding: "24px", boxSizing: "border-box",
       display: "flex", flexDirection: "column", gap: "24px"
-     }}>
+    }}>
       {/* <MenuTitle title={<div style={{ display: "flex", alignItems: "center" }}>시설정보관리 <ChevronRight sx={{ fontSize: 40 }} /> 사업장 시설정보 관리</div>} /> */}
 
       <div style={{display: "flex", gap: "6px"}}>

@@ -44,7 +44,7 @@ const ManageWorkplace = () => {
   }, []);
   
   return (
-    <div style={{ backgroundColor: "#eaeaea", width: "calc(100% - 236px)", padding: "24px", boxSizing: "border-box" }}>
+    <div style={{ backgroundColor: "#eee", width: "calc(100% - 236px)", padding: "24px", boxSizing: "border-box" }}>
       <Stack direction="row" spacing={3} height={"100%"} width={"100%"}>
         <LeftArea flex={selectedWorkplace?"1":"none"} width={selectedWorkplace?"auto":"100%"} workplaceList={workplaceList} setSelectedWorkplace={setSelectedWorkplace} /*updateFields={updateFields}*/ loading={loading} />
         {selectedWorkplace && <RightArea width={"529px"} selectedWorkplace={selectedWorkplace} setSelectedWorkplace={setSelectedWorkplace} workplaceList={workplaceList} setWorkplaceList={setWorkplaceList} ref={rightRef} />}
