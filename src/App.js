@@ -13,6 +13,7 @@ import Monitoring from './routers/Monitoring';
 import AdminFuel from './routers/Admin-Fuel';
 import AdminFormula from './routers/Admin-Formula';
 import AdminManagement from './routers/Admin-Management';
+import Report from './routers/Report';
 
 import AdminMenuList from './AdminMenuList';
 import { treeStateAtom, treeOpenedLeaf } from './States/leftNavigation/adminTree';
@@ -36,6 +37,7 @@ function App() {
         <Route exact path="/admin-formula/*" element={<AdminFormula items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
         <Route exact path="/admin-fuel/*" element={<AdminFuel items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
         <Route exact path="/admin-management/*" element={<AdminManagement items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
+        <Route exact path="/report/*" element={<Report items={AdminMenuList} stateAtom={treeStateAtom} leafAtom={treeOpenedLeaf} />} />
       </Routes>
     </MasterLayout>
   );
