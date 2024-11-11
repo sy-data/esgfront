@@ -28,7 +28,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
  */
 const BaseYearSelect = (props, ref) => {
   const thisYear = new Date().getFullYear();
-  const arrayYear = Array.from({ length: thisYear - 1900 + 1 }, (v, k) => k + 1900);
+  const arrayYear = Array.from({ length: ("displayItemCount" in props) ? props.displayItemCount : thisYear - 1900 + 1 }, (v, k) => thisYear - k).reverse();
   
   const [baseYear, setBaseYear] = useState(thisYear);
   const handleChange = e => {
