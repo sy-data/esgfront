@@ -29,7 +29,7 @@
     "recoil": "^0.7.7",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://54.180.242.25:8001",
+  "proxy": "https://escope-system.web.app",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

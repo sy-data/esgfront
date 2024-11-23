@@ -18,7 +18,12 @@ const theme = createTheme({
           style: {
             backgroundColor: '#00CD9B',
             color: '#FFFFFF',
-            fontWeight: "bold"
+            fontWeight: "bold",
+            '&:hover': {
+              backgroundColor: '#00CD9B',
+              color: '#FFFFFF',
+              fontWeight: "bold",
+            }
           },
         },
         {
@@ -26,7 +31,12 @@ const theme = createTheme({
           style: {
             backgroundColor: '#EAEAEA',
             color: '#CCCCCC',
-            fontWeight: "bold"
+            fontWeight: "bold",
+            '&:hover': {
+              backgroundColor: '#EAEAEA',
+              color: '#CCCCCC',
+              fontWeight: "bold",
+            }
           },
         },
         {
@@ -35,7 +45,13 @@ const theme = createTheme({
             backgroundColor: '#FFFFFF',
             color: '#111111',
             fontWeight: "bold",
-            border: "1px solid #EEEEEE"
+            border: "1px solid #EEEEEE",
+            '&:hover': {
+              backgroundColor: '#FFFFFF',
+              color: '#111111',
+              fontWeight: "bold",
+              border: "1px solid #EEEEEE",
+            }
           },
         },
       ]

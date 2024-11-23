@@ -5,8 +5,8 @@ const StyledSignUpMain = styled('div')(() => ({
     flexDirection: 'column',
     gap: '60px',
     padding: '20px 40px',
-    backgroundColor: '#D3D3D3',
-    height: '100%',
+    // backgroundColor: '#D3D3D3',
+    height: '100%', width: '100%'
 }));
 
 const SignUpMain = ({children}) => {

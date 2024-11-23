@@ -1,203 +1,140 @@
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-    Divider,
-    InputLabel,
-    Typography,
-    Autocomplete,
-    TextField,
-    Button,
-} from "@mui/material";
-import {
-    FormContainer,
-    FormHeader,
-    ButtonSection,
-    LabelSection,
-    FirstFormSection,
-    FirstFormRow,
-} from "../Styles";
-import { signupFormState, activeStep } from "../State";
+import { Typography, TextField, Button, Select, MenuItem } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { activeStep, signupForm1 } from "../State";
 import { esgFetch } from "../../FetchWrapper";
 import countriesData from './country.json';
+import "./forms.css";
+import FormTitle from "./FormTitle";
 
-const countryNames = Object.values(countriesData).map((country) => country.CountryNameKR)
 
 const FirstStepForm = () => {
+    const countryNames = useMemo(()=>Object.values(countriesData).map((country) => country.CountryNameKR),[]);
     const navigate = useNavigate();
-    const [fields, setFields] = useRecoilState(signupFormState);
+    const [fields, setFields] = useRecoilState(signupForm1);
     const setActiveStep = useSetRecoilState(activeStep);
+    const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
         setActiveStep(0);
         window.scrollTo(0, 0);
     }, []);
 
-    const handleChange = (field, value, error = false) => {
-        setFields((prevFields) => ({
-            ...prevFields,
-            [field]: { ...fields[field], value: value, error },
-        }))
+    const handleChange = (field, value) => {
+        setFields({
+            ...fields,
+            [field]: value
+        })
     }
-
-    const formatBizNumber = (value) => {
-        const onlyNums = value.replace(/[^\d]/g, '');
-        if (onlyNums.length <= 3) {
-            return onlyNums;
-        }
-        if (onlyNums.length <= 5) {
-            return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
-        }
-        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 5)}-${onlyNums.slice(5, 10)}`;
-    };
 
     const validateBizNumber = (number) => {
         const regex = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
         return regex.test(number);
     }
 
-    const handleSubmit = async () => {
-        if (checkErrorFields()) return;
-        if (await checkRegister()) return;
-        navigate('/signup/step2');
-    }
-
-    const checkErrorFields = () => {
-        const firstForms = ['country', 'companyCategory', 'bizNumber', 'companyName']
-        for (let form of firstForms) {
-            if (fields[form].error) {
-                alert(fields[form].errorText);
-                return true;
+    const checkRegister = async () => {
+        if(fields.bizNumber.length > 0){
+            setProcessing(true);
+            const result = await esgFetch(`/registration/company/${fields.bizNumber.split('-').join('')}`).then(res => res.json());
+            setProcessing(false);
+            if("data" in result) {
+                if(result.data.count === 0) {
+                    if(fields.bizNumber.length === 0
+                        || fields.type.length === 0
+                        || fields.country.length === 0
+                        || fields.name.length === 0) {
+                        alert("모든 항목을 기입해주세요");
+                        return;
+                    }
+                    if(validateBizNumber(fields.bizNumber))
+                        navigate('/signup/step2');
+                    else
+                        alert("잘못된 사업자등록번호입니다.");
+                }
+                else {
+                    alert("이미 가입된 사업자입니다.")
+                }
             }
         }
-        return false;
+        else{
+            alert("사업자등록번호를 입력해주세요.")
+        }
     }
-
-    const checkRegister = async () => {
-        const url = `/api/companies?` + 
-            `filters[country][$eq]=${convertToCountryCode(fields.country)}&` +
-            `filters[brn][$eq]=${fields.bizNumber.value}&` +
-            `filters[type][$eq]=${fields.companyCategory.value === "개인사업체" ? "personal" : "company"}&` +
-            `filters[name][$eq]=${fields.companyName.value}`;
-        const result = esgFetch(url, 'GET', {}, false).then((response) => {
-            if (response.ok) return response.json();
-            else throw new Error(`${response.status} ${response.statusText}`);
-        }).then(({data: value}) => {
-            if (value.length === 0) {
-                return false;
-            }
-            alert('이미 등록된 회사입니다.');
-            return true;
-        }).catch((error) => {
-            alert(error);
-        });
-        return result;
-    }
-
-    const convertToCountryCode = (countryName) => {
-        const country = Object.values(countriesData).find((country) => country.CountryNameKR === countryName.value);
-        return country.Country2digitCode.toLowerCase();
+    
+    const handleBizNumber = event => {
+        const input = event.target.value.replace(/[^0-9]/g, "")
+        if(input.length >= 11) return;
+        
+        let result = input.slice(0,3);
+        if(input.length > 3){
+            result = result + "-" + input.slice(3,5);
+        }
+        if(input.length > 5){
+            result = result + "-" + input.slice(5)
+        }
+        setFields({
+            ...fields,
+            "bizNumber": result
+        })
     }
 
     return (
-        <FormContainer>
-            <FormHeader>가입여부 확인</FormHeader>
-            <Divider sx={{ borderBottomWidth: 5 }} />
-            <FirstFormSection>
-                <FirstFormRow>
-                    <LabelSection>
-                        <InputLabel>국가</InputLabel>
-                        <Typography color={'red'}>*</Typography>
-                    </LabelSection>
-                    <Autocomplete
-                        disableClearable
-                        value={fields.country.value}
-                        options={countryNames}
-                        onChange={(_, value) => {
-                            const error = value === null
-                            handleChange('country', value, error);
-                            if (value === '대한민국') {
-                                const error = !validateBizNumber(fields.bizNumber.value);
-                                handleChange('bizNumber', fields.bizNumber.value, error);
-                            } else {
-                                handleChange('bizNumber', fields.bizNumber.value, false);
-                                handleChange('foreignerBizNumber', fields.foreignerBizNumber.value);
-                            }
-                        }}
-                        sx={{ width: '60%' }}
-                        renderInput={(params) => <TextField {...params} label="국가" />}
-                    />
-                </FirstFormRow>
-                <FirstFormRow>
-                    <LabelSection>
-                        <InputLabel>회사구분</InputLabel>
-                        <Typography color={'red'}>*</Typography>
-                    </LabelSection>
-                    <Autocomplete
-                        disableClearable
-                        value={fields.companyCategory.value}
-                        options={['개인사업체', '법인사업체']}
-                        onChange={(_, value) => {
-                            const error = value === null;
-                            handleChange('companyCategory', value, error);
-                            if (value === '법인사업체') {
-                                handleChange('companyNumber', fields.companyNumber.value, true);
-                            } else {
-                                handleChange('companyNumber', fields.companyNumber.value, false);
-                            }
-                        }}
-                        sx={{ width: '60%' }}
-                        renderInput={(params) => <TextField {...params} label="회사 구분" />}
-                    />
-                </FirstFormRow>
-                {fields.country.value === '대한민국' && <FirstFormRow>
-                    <LabelSection>
-                        <InputLabel>사업자등록번호</InputLabel>
-                        <Typography color={'red'}>*</Typography>
-                    </LabelSection>
-                    <TextField
-                        required
-                        type="text"
-                        value={fields.bizNumber.value}
-                        onChange={({ target: { value } }) => {
-                            const formattedValue = formatBizNumber(value);
-                            const error = !validateBizNumber(formattedValue);
-                            handleChange('bizNumber', formattedValue, error);
-                        }}
-                        placeholder="사업자등록번호를 입력하세요"
-                        sx={{ width: '60%' }}
-                    />
-                </FirstFormRow>}
-                <FirstFormRow>
-                    <LabelSection>
-                        <InputLabel>회사명</InputLabel>
-                        <Typography color={'red'}>*</Typography>
-                    </LabelSection>
-                    <TextField
-                        required
-                        value={fields.companyName.value}
-                        onChange={({ target: { value } }) => {
-                            const error = value === '';
-                            handleChange('companyName', value, error);
-                        }}
-                        sx={{ width: '60%' }}
-                    />
-                </FirstFormRow>
-            </FirstFormSection>
-            <Divider sx={{ borderBottomWidth: 5 }} />
-            <ButtonSection>
-                <Button
-                    variant='contained'
-                    onClick={handleSubmit}
-                >
-                    가입여부 확인
+        <div className="form-content">
+            <div className="form-label">가입여부 확인</div>
+            <FormTitle title="국가" required />
+            <Select
+                value={fields.country}
+                size="small"
+                IconComponent={ExpandMoreIcon}
+                sx={{marginBottom: '10px'}}
+                onChange={event => handleChange('country', event.target.value)}
+                MenuProps={{
+                    PaperProps: {sx: {maxHeight: "240px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+                }}
+                displayEmpty
+                renderValue={selected => {
+                    if(!selected || selected.length === 0){
+                        return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>국가를 선택하세요</Typography>
+                    }
+                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                }}
+                fullWidth
+            >
+                {countryNames.map((option, idx) => <MenuItem key={`c-val${idx}`} value={option}>{option}</MenuItem>)}
+            </Select>
+            <FormTitle title="회사구분" required />
+            <Select
+                value={fields.type}
+                size="small"
+                IconComponent={ExpandMoreIcon}
+                sx={{marginBottom: '10px'}}
+                onChange={event => handleChange('type', event.target.value)}
+                displayEmpty
+                renderValue={selected => {
+                    if(!selected || selected.length === 0){
+                        return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>회사구분을 선택하세요</Typography>
+                    }
+                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                }}
+                fullWidth
+            >
+                <MenuItem value="법인사업체">법인사업체</MenuItem>
+            </Select>
+            <FormTitle title="사업자등록번호" required />
+            <TextField error={false} placeholder="사업자등록번호를 입력하세요" value={fields.bizNumber} size="small" onChange={handleBizNumber} fullWidth sx={{marginBottom: '10px'}}/>
+                
+            <FormTitle title="회사명" required />
+            <TextField error={false} placeholder="회사명을 입력하세요" value={fields.name} size="small" onChange={event=>handleChange('name', event.target.value)} fullWidth/>
+                
+            <div style={{display:"flex", gap: "10px", marginTop: "30px"}}>
+                <Button variant={processing?"btnDisabled":"btnActive"} disabled={processing} sx={{flex:1}} onClick={checkRegister}>
+                    {processing?"확인 중":"가입여부 확인"}
                 </Button>
-                <Button 
-                    variant='contained'
-                    onClick={() => navigate('/')}
-                >취소</Button>
-            </ButtonSection>
-        </FormContainer>
+                <Button variant="btnInit" sx={{flex:1}} >취소</Button>
+            </div>
+        </div>
     )
 }
 

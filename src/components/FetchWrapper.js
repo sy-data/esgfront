@@ -31,19 +31,18 @@ export async function loginDev(payload) {
 }
 
 export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
-  return {};
   // const token = localStorage.getItem("token");
-  const token = getCookie("token");
+  // const token = getCookie("token");
 
-  if (requiredAuth && !token) {
-    // alert("401 페이지로 이동 필요");
-    window.location.href = "/unauthorized";
-  }
-  return fetch(`${host}${url}`, {
+  // if (requiredAuth && !token) {
+  //   // alert("401 페이지로 이동 필요");
+  //   window.location.href = "/unauthorized";
+  // }
+  return fetch(`${host}/api/v1${url}`, {
     method: method,
     headers: {
-      ...((method === "POST" || method == "PUT") && { "Content-Type": "application/json" }),
-      ...(requiredAuth && { Authorization: `Bearer ${token}` }),
+      ...((method === "POST" || method === "PUT") && { "Content-Type": "application/json" }),
+      // ...(requiredAuth && { Authorization: `Bearer ${token}` }),
     },
     ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
   });

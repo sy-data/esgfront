@@ -1,9 +1,9 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import PageFooter from "../components/PageFooter";
 
 const Index = lazy(() => import("../pages/0_opened/Index"));
 const SignUp = lazy(() => import('../pages/0_opened/Signup'))
+const SignUpFinished = lazy(() => import('../pages/0_opened/SignupFinished'))
 const Login = lazy(() => import("../pages/0_opened/Login"));
 const LoginFail = lazy(() => import("../pages/0_opened/LoginFail"));
 const PasswordUpdate = lazy(() => import("../pages/0_opened/PasswordUpdate"));
@@ -21,10 +21,10 @@ const OpenedPages = () => {
         <Route exact path="/passwordUpdate" element={<PasswordUpdate />} />
         <Route exact path="/UserFind" element={<UserFind />} />
         <Route exact path="/unauthorized" element={<Unauthorized />} />
+        <Route exact path='/signup/finished' element={<SignUpFinished />}/>
         <Route exact path='/signup/*' element={<SignUp />}/>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-      <PageFooter />
     </Suspense>
   );
 };

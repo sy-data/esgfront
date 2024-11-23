@@ -24,3 +24,48 @@ code {
   height: 100%;
   width: 100%;
 }
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.style-checkbox {
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: 1px solid #E5E5E5;
+  background: var(--Gray-fff, #FFF);
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 4px;
+  position: relative;
+}
+
+input[type="checkbox"]:checked+label .style-checkbox {
+  background: var(--Gray-eee, #EEE);
+}
+
+input[type="checkbox"]:checked+label .style-checkbox::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.MuiDataGrid-columnHeaders {
+  color: #757575;
+  font-size: 13px;
+}
+
+.MuiDataGrid-row {
+  color: #111111;
+  font-size: 13px;
+}
+
+.MuiDataGrid-row.Mui-selected {
+  font-weight: bold;
+}

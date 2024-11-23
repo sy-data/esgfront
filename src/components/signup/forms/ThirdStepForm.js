@@ -1,101 +1,43 @@
 import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { 
-    Divider,
-    InputLabel,
-    Autocomplete,
-    TextField,
-    Button,
-    Typography,
-    IconButton,
-    Dialog,
-} from "@mui/material";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { 
-    FormContainer, 
-    FormHeader, 
-    ButtonSection,
-    LabelSection,
-    ThirdFormSection,
-    InputAndButtonRow,
-    EmailSection,
-} from "../Styles";
-import { 
-   signupFormState,
-   isFirstStepCompleted,
-   isSecondStepCompleted,
-   activeStep
-} from "../State";
-import AddressModal from "../modal/Address";
-import EmailVerificationFailModal from "../modal/EmailVerficationFail";
+import {  TextField, Button, Typography, IconButton, Select, MenuItem, InputAdornment, OutlinedInput } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import {  activeStep, signupForm1, signupForm3 } from "../State";
 import countriesData from './country.json';
 import { esgFetch } from "../../FetchWrapper";
+import "./forms.css";
+import FormTitle from "./FormTitle";
 
 
 const countryNames = Object.values(countriesData).map((country) => country.CountryNameKR)
 
 const ThridStepForm = () => {
     const navigate = useNavigate();
-    const [fields, setFields] = useRecoilState(signupFormState);
-    const isFirstStepCompletedValue = useRecoilValue(isFirstStepCompleted);
-    const isSecondStepCompletedValue = useRecoilValue(isSecondStepCompleted);
+    const form1Value = useRecoilValue(signupForm1);
+    const [fields, setFields] = useRecoilState(signupForm3);
     const setActiveStep = useSetRecoilState(activeStep);
 
-    const [emailVerificationCode, setEmailVerificationCode] = useState('');
-    const [emailVerificationCodeInput, setEmailVerificationCodeInput] = useState('');
     const [isEmailVerified, setIsEmailVerified] = useState(false);
-    const [emailVerificationFailModalOpen, setEmailVerificationFailModalOpen] = useState(false);
-    const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
     const [isIdAvailable, setIsIdAvailable] = useState(false);
 
     useEffect(() => {
-        if (!isFirstStepCompletedValue) {
-            navigate('/signup');
-        }
-        if (!isSecondStepCompletedValue) {
-            navigate('/signup/step2');
-        }
         setActiveStep(2);
         window.scrollTo(0, 0);
+        
+        handleChange("name", form1Value.name);
+        setFields({
+            ...fields,
+            "name": form1Value.name,
+            "type": form1Value.type,
+            "country": form1Value.country,
+            "bizNumber1": form1Value.bizNumber.split('-')[0],
+            "bizNumber2": form1Value.bizNumber.split('-')[1],
+            "bizNumber3": form1Value.bizNumber.split('-')[2],
+        })
     }, []);
-
-    const formatBizNumber = (value) => {
-        const onlyNums = value.replace(/[^\d]/g, '');
-        if (onlyNums.length <= 3) {
-            return onlyNums;
-        }
-        if (onlyNums.length <= 5) {
-            return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
-        }
-        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 5)}-${onlyNums.slice(5, 10)}`;
-    };
-
-    const formatCompanyNumber = (value) => {
-        const onlyNums = value.replace(/[^\d]/g, '');
-        if (onlyNums.length <= 6) {
-            return onlyNums;
-        }
-        if (onlyNums.length <= 13) {
-            return `${onlyNums.slice(0, 6)}-${onlyNums.slice(6)}`;
-        }
-        return `${onlyNums.slice(0, 6)}-${onlyNums.slice(6, 13)}`;
-    };
-
-    const validateBizNumber = (number) => {
-        const regex = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
-        return regex.test(number);
-    }
-
-    const validateCompanyNumber = (number) => {
-        const regex = /^[0-9]{6}-[0-9]{7}$/;
-        return regex.test(number);
-    }
-
-    const validPhoneNumber = (phoneNumber) => {
-        const regex = /^\d{3}-\d{3,4}-\d{4}$/;
-        return regex.test(phoneNumber);
-    }
 
     const validEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -107,40 +49,43 @@ const ThridStepForm = () => {
         return regex.test(password);
     }
 
-    const sendEmailVerificationCode = () => {
-        if (validEmail(fields.representiveEmail.value)) {
-            // TODO: API 연결 필요
-            alert('인증번호가 발송되었습니다.(asdf)');
-            const tempVerificationCode = 'asdf';
-            setEmailVerificationCode(tempVerificationCode);
-        } else {
-            alert('이메일을 정확히 입력해 주세요');
+    // const sendEmailVerificationCode = () => {
+    //     if (validEmail(fields.representiveEmail.value)) {
+    //         // TODO: API 연결 필요
+    //         alert('인증번호가 발송되었습니다.(asdf)');
+    //         const tempVerificationCode = 'asdf';
+    //         setEmailVerificationCode(tempVerificationCode);
+    //     } else {
+    //         alert('이메일을 정확히 입력해 주세요');
+    //     }
+    // }
+
+    const handleChange = (field, value) => {
+        if(["phone1", "fax1", "managerPhone1"].includes(field)){
+            value = value.replace(/[^0-9]/g, "")
+            if(value.length > 3) return;
         }
-    }
-
-    const checkIdAvailability = () => {
-        // TODO: API 연결 필요
-        alert("사용 가능한 아이디 입니다.")
-        setIsIdAvailable(true);
-    }
-
-    const handleChange = (field, value, error=false) => {
-        setFields((prevFields) => ({
-            ...prevFields,
-            [field]: {...fields[field], value: value, error: error},
-        }));
+        if(["phone2", "phone3", "fax2", "fax3", "managerPhone2", "managerPhone3"].includes(field)){
+            value = value.replace(/[^0-9]/g, "")
+            if(value.length > 4) return;
+        }
+        setFields({
+            ...fields,
+            [field]: value
+        })
     }
 
     const handleSubmit = async () => {
-        if (checkErrorFields()) return;
-        const companyBody = convertCompanyFieldsToBody();
-        const companyId = await registerCompany(companyBody);
-        if (companyId === undefined) return
-        const userBody = convertUserFieldsToBody(companyId);
-        const jwt = await registerUser(userBody);
-        if (jwt === undefined) return
-        localStorage.setItem('token', jwt);
-        alert('회원가입이 완료되었습니다.');
+        // await registerUser();
+        // if (checkErrorFields()) return;
+        // const companyBody = convertCompanyFieldsToBody();
+        // const companyId = await registerCompany(companyBody);
+        // if (companyId === undefined) return
+        // const userBody = convertUserFieldsToBody(companyId);
+        // const jwt = await registerUser(userBody);
+        // if (jwt === undefined) return
+        // localStorage.setItem('token', jwt);
+        // alert('회원가입이 완료되었습니다.');
     }
 
     const checkErrorFields = () => {
@@ -160,431 +105,335 @@ const ThridStepForm = () => {
         return false;
     }
 
-    const convertCompanyFieldsToBody = () => {
-        const body = {
-            "data": {
-                "name": fields.companyName.value,
-                "country": convertToCountryCode(fields.country.value),
-                "type": fields.companyCategory.value === "개인사업체" ? "personal" : "company",
-                "brn": fields.bizNumber.value ? fields.bizNumber.value : 
-                    fields.foreignerBizNumber.value ? fields.foreignerBizNumber.value : null,
-                "lpn": fields.companyNumber.value ? fields.companyNumber.value : null,
-                "ceo": fields.representiveName.value,
-                "manager": fields.managerName.value ? fields.managerName.value : null,
-                "address": fields.address.value,
-                "address_detail": fields.addressDetail.value,
-                "phone": fields.representivePhone.value,
-                "fax": fields.fax.value ? fields.fax.value : null,
-                "email": fields.representiveEmail.value,
-                "homepage": fields.homepage.value ? fields.homepage.value : null,
-                "main_product": fields.mainItem.value,
-                "size": fields.companyScale.value ? fields.companyScale.value : null,
-            }
-        }
-        return body;
-    }
+    // const convertCompanyFieldsToBody = () => {
+    //     const body = {
+    //         "data": {
+    //             "name": fields.companyName.value,
+    //             "country": convertToCountryCode(fields.country.value),
+    //             "type": fields.companyCategory.value === "개인사업체" ? "personal" : "company",
+    //             "brn": fields.bizNumber.value ? fields.bizNumber.value : 
+    //                 fields.foreignerBizNumber.value ? fields.foreignerBizNumber.value : null,
+    //             "lpn": fields.companyNumber.value ? fields.companyNumber.value : null,
+    //             "ceo": fields.representiveName.value,
+    //             "manager": fields.managerName.value ? fields.managerName.value : null,
+    //             "address": fields.address.value,
+    //             "address_detail": fields.addressDetail.value,
+    //             "phone": fields.representivePhone.value,
+    //             "fax": fields.fax.value ? fields.fax.value : null,
+    //             "email": fields.representiveEmail.value,
+    //             "homepage": fields.homepage.value ? fields.homepage.value : null,
+    //             "main_product": fields.mainItem.value,
+    //             "size": fields.companyScale.value ? fields.companyScale.value : null,
+    //         }
+    //     }
+    //     return body;
+    // }
 
     const convertToCountryCode = (countryName) => {
         const country = Object.values(countriesData).find((country) => country.CountryNameKR === countryName);
         return country.Country2digitCode.toLowerCase();
     }
 
-    const registerCompany = async (companyBody) => {
-        const companyId = esgFetch('/api/companies', 'POST', companyBody, false)
-            .then((response) => response.json())
-            .then((data) => {
-                if ("error" in data) {
-                    console.error(data);
-                }
-                return data.data.id;
-            })
-        return companyId;
-    }
+    // const registerCompany = async (companyBody) => {
+    //     const companyId = esgFetch('/api/companies', 'POST', companyBody, false)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             if ("error" in data) {
+    //                 console.error(data);
+    //             }
+    //             return data.data.id;
+    //         })
+    //     return companyId;
+    // }
 
-    const convertUserFieldsToBody = (companyId) => {
-        const body = {
-            "username": fields.id.value,
-            "email": fields.representiveEmail.value,
-            "password": fields.password.value,
-            "company" : {
-                "id": companyId
+    // const convertUserFieldsToBody = (companyId) => {
+    //     const body = {
+    //         "username": fields.id.value,
+    //         "email": fields.representiveEmail.value,
+    //         "password": fields.password.value,
+    //         "company" : {
+    //             "id": companyId
+    //         }
+    //     }
+    //     return body;
+    // }
+
+    // const registerUser = async (userBody) => {
+    //     const jwt = esgFetch('/api/auth/local/register', 'POST', userBody, false)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             if ("error" in data) {
+    //                 console.error(data);
+    //             }
+    //             return data.jwt;
+    //         })
+    //     return jwt;
+    // }
+    
+    const checkIDuplicate = async () => {
+        const result = await esgFetch(`/registration/account/${fields.manager_id}`).then(res => res.json());
+        console.log(result);
+        if("data" in result) {
+            if(result.data.count === 0) {
+                handleChange("id_confirmed", true);
+            }
+            else {
+                alert("사용할 수 없는 아이디입니다");
             }
         }
-        return body;
     }
-
-    const registerUser = async (userBody) => {
-        const jwt = esgFetch('/api/auth/local/register', 'POST', userBody, false)
-            .then((response) => response.json())
-            .then((data) => {
-                if ("error" in data) {
-                    console.error(data);
-                }
-                return data.jwt;
-            })
-        return jwt;
+    const [showPassword, setShowPassword] = useState(false);
+ 
+    // err
+    // {
+    //     "url": "/api/v1/registration/company",
+    //     "statusCode": 500,
+    //     "statusMessage": "",
+    //     "message": "internal server error",
+    //     "stack": ""
+    // }
+    const submitRegister = async () => {
+        // const userResult = await esgFetch(
+        //     `/account/signup-id`,
+        //     "POST",
+        //     {provideruserid : fields.manager_id, password: fields.password}
+        // ).then(res=>res.json());
+        // /// userResult =>>
+        // // {
+        // //     "id": "4mchmtq7tp5pv3wws4jbe3vacdyqerqz",
+        // //     "user_id": "ID6",
+        // //     "expires_at": "2024-11-22T20:52:24.877Z",
+        // //     "userplatform": "E-SCOPE"
+        // // }
+        // if("user_id" in userResult) {
+        //     const companyResult = await esgFetch(
+        //         "/registration/company",
+        //         "POST",
+        //         {
+        //             title: fields.name,
+        //             company_type: fields.type,
+        //             bn: [fields.bizNumber1, fields.bizNumber2, fields.bizNumber3].join(''),
+        //             cn: fields.companyNumber,
+        //             owner_nm: fields.ceo,
+        //             manager_nm: fields.manager,
+        //             manager_id: userResult.user_id,
+        //             zip_code: fields.address1,
+        //             addr: fields.address2,
+        //             addr_detail: fields.address3,
+        //             rep_tel_destination_code: fields.phone1,
+        //             rep_tel_number: [fields.phone2, fields.phone3].join(''),
+        //             fax_destination_code: fields.fax1,
+        //             fax_number: [fields.fax2, fields.fax3].join(''),
+        //             emailverified: fields.emailConfirm,
+        //             business_type: fields.business_type,
+        //             business_item: fields.business_item,
+        //             main_item: fields.main_item,
+        //             company_size: fields.company_size
+        //         }
+        //     ).then(res=>res.json());
+        //     // if("" in companyResult) {
+        //     //     const managerPhone = await esgFetch("/account/user-info")
+        //     // }
+        // }
+        navigate("/signup/finish");
     }
 
     return (
-        <FormContainer>
-            <FormHeader>사업자정보 입력</FormHeader>
-            <Divider sx={{ borderBottomWidth: 5 }}/>
-            <ThirdFormSection>
-                <LabelSection>
-                    <InputLabel>회사명</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <TextField 
-                    required
-                    value={fields.companyName.value}
-                    onChange={({target: {value}}) => {
-                        const error = value === '';
-                        handleChange('companyName', value, error);
-                    }}
-                    placeholder="회사명을 입력하세요"
-                />
-                <InputLabel>회사 코드</InputLabel>
-                <TextField 
-                    disabled
-                    placeholder="가입 완료 후 자동생성"
-                >
-                </TextField>
-                <LabelSection>
-                    <InputLabel>회사 구분</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <Autocomplete
-                    disableClearable
-                    value={fields.companyCategory.value}
-                    options={['개인사업체', '법인사업체']}
-                    onChange={(_, value) => {
-                        const error = value === null;
-                        handleChange('companyCategory', value, error);
-                        if (value === '법인사업체') {
-                            handleChange('companyNumber', fields.companyNumber.value, true);
-                        } else {
-                            handleChange('companyNumber', '', false);
-                        }
-                    }}
-                    renderInput={(params) => <TextField {...params} label="회사 구분"/>}
-                />
-                <LabelSection>   
-                    <InputLabel>국가</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <Autocomplete
-                    disableClearable
-                    value={fields.country.value}
-                    options={countryNames}
-                    onChange={(_, value) => {
-                        const error = value === null
-                        handleChange('country', value, error);
-                        if (value === '대한민국') {
-                            const error = !validateBizNumber(fields.bizNumber.value);
-                            handleChange('bizNumber', fields.bizNumber.value, error);
-                        } else {
-                            handleChange('bizNumber', fields.bizNumber.value, false);
-                            handleChange('foreignerBizNumber', fields.foreignerBizNumber.value);
-                        }
-                    }}
-                    renderInput={(params) => <TextField {...params} label="국가"/>}
-                />
-                <LabelSection>
-                    <InputLabel>사업자등록번호</InputLabel>
-                    {fields.country.value === '대한민국' && <Typography color={'red'}>*</Typography>}
-                </LabelSection>
-                <TextField 
-                    required
-                    disabled={fields.country.value === '대한민국'}
-                    type="text"
-                    value={fields.country.value === '대한민국' ? 
-                            fields.bizNumber.value : fields.foreignerBizNumber.value}
-                    onChange={({target: {value}}) => {
-                        value = formatBizNumber(value);
-                        if (fields.country.value === '대한민국') {
-                            const error = !validateBizNumber(value);
-                            handleChange('bizNumber', value, error);
-                        } else {
-                            handleChange('foreignerBizNumber', value);
-                        }
-                    }}
-                    placeholder="사업자등록번호를 입력하세요"
-                />
-                <LabelSection>
-                    <InputLabel>법인등록번호</InputLabel>
-                    {fields.companyCategory.value === '법인사업체' && <Typography color={'red'}>*</Typography>}
-                </LabelSection>
-                <TextField 
-                    required
-                    disabled={fields.companyCategory.value !== '법인사업체'}
-                    type="text"
-                    value={fields.companyNumber.value}
-                    onChange={({target: {value}}) => {
-                        value = formatCompanyNumber(value);
-                        const error = !validateCompanyNumber(value);
-                        handleChange('companyNumber', value, error);
-                    }}
-                    placeholder="법인등록번호를 입력하세요"
-                />
-                <LabelSection>
-                    <InputLabel>대표자명</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <TextField 
-                    required
-                    value={fields.representiveName.value}
-                    onChange={({target: {value}}) => {
-                        const error = value === '';
-                        handleChange('representiveName', value, error);
-                    }}
-                    placeholder="대표자명을 입력하세요"
-                />
-                <InputLabel>담당자명</InputLabel>
-                <TextField
-                    value={fields.managerName.value}
-                    onChange={({target: {value}}) => handleChange('managerName', value)}
-                    placeholder="담당자명을 입력하세요"
-                />
-                <LabelSection>
-                    <InputLabel>주소</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <InputAndButtonRow style={{gridColumn: 'span 3'}}>
-                    <TextField 
-                        disabled 
-                        value={fields.zoneCode.value}
-                        placeholder="우편번호"/>
-                    <TextField 
-                        disabled 
-                        value={fields.address.value}
-                        sx={{flex: '1'}} 
-                        placeholder="주소"/>
-                    <IconButton 
-                        onClick={() => setIsPostcodeOpen(true)}
-                        sx={{
-                            border: '1px solid rgba(0, 0, 0, 0.38)',
-                            borderRadius: '4px',
-                        }}
-                    >
-                        <SearchOutlinedIcon />
-                    </IconButton>
-                </InputAndButtonRow>
-                <LabelSection>
-                    <InputLabel>상세주소</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <InputAndButtonRow style={{gridColumn: 'span 3'}}>
-                    <TextField 
-                        required 
-                        value={fields.addressDetail.value}
-                        onChange={({target: {value}}) => {
-                            const error = value === '';
-                            handleChange('addressDetail', value, error);
-                        }}
-                        sx={{flex: '1'}}
-                        placeholder="주소"
-                    />
-                </InputAndButtonRow>
-                <Dialog
-                    open={isPostcodeOpen}
-                    onClose={() => setIsPostcodeOpen(false)}
-                    fullWidth
-                >
-                    <AddressModal setIsOpen={setIsPostcodeOpen}/>
-                </Dialog>
-                <LabelSection>
-                    <InputLabel>대표전화번호</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <TextField
-                    required
-                    type="tel"
-                    value={fields.representivePhone.value}
-                    onChange={({target: {value}}) => {
-                        const error = !validPhoneNumber(value);
-                        handleChange('representivePhone', value, error);
-                    }}
-                    placeholder="대표전화번호를 입력하세요"
-                />
-                <InputLabel>Fax번호</InputLabel>
-                <TextField 
-                    value={fields.fax.value}
-                    onChange={({target: {value}}) => handleChange('fax', value)}
-                    placeholder="Fax번호를 입력하세요"
-                />
-                <LabelSection>
-                    <InputLabel>대표E-mail</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <EmailSection>
-                    <InputAndButtonRow>
-                        <TextField 
-                            required
-                            type="email"
-                            value={fields.representiveEmail.value}
-                            onChange={({target: {value}}) => {
-                                const error = !validEmail(value);
-                                handleChange('representiveEmail', value, error);
-                            }}
-                            sx={{width: '70%'}}
-                            placeholder="대표E-mail을 입력하세요"
-                        />
-                        <Button 
-                            variant="contained"
-                            onClick={sendEmailVerificationCode}
-                            sx={{width: '15%'}}
+        <div className="form-content">
+            <div className="form-label">사업자정보 입력</div>
+            <FormTitle title="회사명" required />
+            <TextField error={false} placeholder="회사명을 입력하세요" value={fields.name} size="small" onChange={event=>handleChange('name', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+            <FormTitle title="회사코드" />
+            <TextField disabled placeholder="가입 완료 후 자동생성" size="small" fullWidth sx={{marginBottom: '10px'}}/>
+            <FormTitle title="회사구분" required />
+            <Select
+                value={fields.type}
+                size="small"
+                IconComponent={ExpandMoreIcon}
+                sx={{marginBottom: '10px'}}
+                onChange={event => handleChange('type', event.target.value)}
+                displayEmpty
+                renderValue={selected => {
+                    if(!selected || selected.length === 0){
+                        return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>회사구분을 선택하세요</Typography>
+                    }
+                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                }}
+                fullWidth
+            >
+                <MenuItem value="법인사업체">법인사업체</MenuItem>
+            </Select>
+            <FormTitle title="국가" required />
+            <Select
+                value={fields.country}
+                size="small"
+                IconComponent={ExpandMoreIcon}
+                sx={{marginBottom: '10px'}}
+                onChange={event => handleChange('country', event.target.value)}
+                MenuProps={{
+                    PaperProps: {sx: {maxHeight: "240px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+                }}
+                displayEmpty
+                renderValue={selected => {
+                    if(!selected || selected.length === 0){
+                        return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>국가를 선택하세요</Typography>
+                    }
+                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                }}
+                fullWidth
+            >
+                {countryNames.map((option, idx) => <MenuItem key={`c-val${idx}`} value={option}>{option}</MenuItem>)}
+            </Select>
+            <FormTitle title="사업자등록번호" required />
+            <div style={{display: 'flex', alignItems: 'center'}}>
+                <TextField value={fields.bizNumber1} size="small" sx={{flex: 1}} disabled />
+                <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                <TextField value={fields.bizNumber2} size="small" sx={{flex: 1}} disabled />
+                <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                <TextField value={fields.bizNumber3} size="small" sx={{flex: 2}} disabled />
+            </div>
+            <div style={{display: 'flex', alignItems: 'center', marginTop: '10px', gap: '16px'}}>
+                <div>
+                    <FormTitle title="법인등록번호" />
+                    <TextField error={false} placeholder="법인등록번호를 입력하세요" value={fields.companyNumber} size="small" onChange={event=>handleChange('companyNumber', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+                </div>
+                <div>
+                    <FormTitle title="대표자명" required />
+                    <TextField error={false} placeholder="대표자명을 입력하세요" value={fields.ceo} size="small" onChange={event=>handleChange('ceo', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+                </div>
+                <div>
+                    <FormTitle title="담당자명" />
+                    <TextField error={false} placeholder="담당자명을 입력하세요" value={fields.manager} size="small" onChange={event=>handleChange('manager', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+                </div>
+            </div>
+            <FormTitle title="주소" required />
+            <div style={{display: 'flex', alignItems: 'center', margin: '4px 0', gap: '4px'}}>
+                <TextField error={false} placeholder="우편번호" value={fields.address1} size="small" onChange={event=>handleChange('address1', event.target.value)} sx={{flex: 1}}/>
+                <TextField error={false} placeholder="주소" value={fields.address2} size="small" onChange={event=>handleChange('address2', event.target.value)} sx={{flex: 4}}/>
+            </div>
+            <TextField error={false} placeholder="상세 주소를 입력해주세요" value={fields.address3} size="small" onChange={event=>handleChange('address3', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+            <div style={{display: 'flex', alignItems: 'center', marginBottom: '10px', gap: '16px'}}>
+                <div>
+                    <FormTitle title="대표자 전화번호" required />
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <TextField placeholder="010" value={fields.phone1} size="small" sx={{flex: 1}} onChange={event=>handleChange('phone1', event.target.value)} />
+                        <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                        <TextField placeholder="0000" value={fields.phone2} size="small" sx={{flex: 1}} onChange={event=>handleChange('phone2', event.target.value)} />
+                        <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                        <TextField placeholder="0000" value={fields.phone3} size="small" sx={{flex: 1}} onChange={event=>handleChange('phone3', event.target.value)} />
+                    </div>
+                </div>
+                <div>
+                    <FormTitle title="Fax 번호" />
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <TextField placeholder="010" value={fields.fax1} size="small" sx={{flex: 1}} onChange={event=>handleChange('fax1', event.target.value)} />
+                        <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                        <TextField placeholder="0000" value={fields.fax2} size="small" sx={{flex: 1}} onChange={event=>handleChange('fax2', event.target.value)} />
+                        <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                        <TextField placeholder="0000" value={fields.fax3} size="small" sx={{flex: 1}} onChange={event=>handleChange('fax3', event.target.value)} />
+                    </div>
+                </div>
+            </div>
+            <FormTitle title="대표자 E-mail" />
+            <div style={{display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px'}}>
+                <TextField placeholder="대표 E-mail을 입력하세요" value={fields.email} size="small" sx={{flex: 4}} onChange={event=>handleChange('email', event.target.value)} />
+                <Button variant="btnActive" size="small" sx={{flex: 1, height: '40px'}}>인증하기</Button>
+            </div>
+            <div style={{flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12px", marginBottom: "10px", color: "#757575"}}>
+                <div>인증번호가 도착하지 않으셨나요?</div>
+                <div style={{fontWeight: 'bold', textDecoration: 'underline'}}>다시 보내기</div>
+            </div>
+            <div style={{display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px'}}>
+                <TextField placeholder="E-mail에서 받은 인증 번호를 입력하세요" value={fields.emailConfirm} size="small" sx={{flex: 4}} onChange={event=>handleChange('emailConfirm', event.target.value)} />
+                <Button variant="btnInit" size="small" sx={{flex: 1, height: '40px'}}>확인</Button>
+            </div>
+            <FormTitle title="업종" />
+            <TextField error={false} placeholder="업종을 입력하세요" value={fields.business_item} size="small" onChange={event=>handleChange('business_item', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+            <FormTitle title="업태" />
+            <TextField error={false} placeholder="업태를 입력하세요" value={fields.business_type} size="small" onChange={event=>handleChange('business_type', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+            <FormTitle title="주거래품목" required />
+            <TextField error={false} placeholder="주거래품목을 입력하세요" value={fields.main_item} size="small" onChange={event=>handleChange('main_item', event.target.value)} fullWidth sx={{marginBottom: '10px'}}/>
+            <FormTitle title="회사규모" />
+            <Select
+                value={fields.company_size}
+                size="small"
+                IconComponent={ExpandMoreIcon}
+                sx={{marginBottom: '10px'}}
+                onChange={event => handleChange('company_size', event.target.value)}
+                displayEmpty
+                renderValue={selected => {
+                    if(!selected || selected.length === 0){
+                        return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>회사규모를 선택하세요</Typography>
+                    }
+                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                }}
+                fullWidth
+            >
+                <MenuItem value="회사규모">회사규모</MenuItem>
+            </Select>
+            <FormTitle title="아이디" required />
+            <div style={{display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px'}}>
+                <TextField placeholder="아이디를 입력하세요" value={fields.manager_id} size="small" sx={{flex: 4}} onChange={event=>handleChange('manager_id', event.target.value)} />
+                <Button variant="btnInit" size="small" sx={{flex: 1, height: '40px'}} onClick={checkIDuplicate}>중복 확인</Button>
+            </div>
+            <FormTitle title="비밀번호" required />
+            <OutlinedInput
+                error={false}
+                value={fields.password}
+                type={showPassword ? 'text' : 'password'}
+                sx={{marginBottom: '5px'}}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton
+                            onClick={() => setShowPassword(show => !show)}
+                            onMouseDown={e => e.preventDefault()}
+                            onMouseUp={e => e.preventDefault()}
+                            edge="end"
                         >
-                            인증하기
-                        </Button>
-                    </InputAndButtonRow>
-                    <InputAndButtonRow>
-                        <TextField 
-                            required
-                            type='text'
-                            value={emailVerificationCodeInput}
-                            onChange={({target: {value}}) => {
-                                setEmailVerificationCodeInput(value);
-                            }}
-                            sx={{width: '70%'}}
-                            placeholder="인증번호를 입력하세요"
-                        />
-                        <Button 
-                            variant="contained"
-                            onClick={() => {
-                                setEmailVerificationFailModalOpen(true);
-                                setIsEmailVerified(emailVerificationCodeInput === emailVerificationCode)
-                            }}
-                            sx={{width: '15%'}}
+                        {showPassword ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                        </IconButton>
+                    </InputAdornment>
+                }
+                onChange={event=>handleChange('password', event.target.value)}
+                size="small"
+                placeholder="비밀번호는 8자 이상의 영문, 숫자, 특수문자 조합으로 생성해주세요"
+                fullWidth
+            />
+            <OutlinedInput
+                error={false}
+                value={fields.passwordConfirm}
+                type={showPassword ? 'text' : 'password'}
+                sx={{marginBottom: '5px'}}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton
+                            onClick={() => setShowPassword(show => !show)}
+                            onMouseDown={e => e.preventDefault()}
+                            onMouseUp={e => e.preventDefault()}
+                            edge="end"
                         >
-                            확인
-                        </Button>
-                    </InputAndButtonRow>
-                    {emailVerificationCode !== '' && <Typography color='red'>*인증번호가 도착하지 않으셧나요? (클릭)</Typography>}
-                </EmailSection>
-                <Dialog
-                    open={emailVerificationFailModalOpen}
-                    onClose={() => setEmailVerificationFailModalOpen(false)}
-                >
-                    <EmailVerificationFailModal setIsOpen={setEmailVerificationFailModalOpen}/>
-                </Dialog>
-                <InputLabel>홈페이지</InputLabel>
-                <TextField 
-                    value={fields.homepage.value}
-                    onChange={({target: {value}}) => handleChange('homepage', value)}
-                    placeholder="홈페이지를 입력하세요"
-                />
-                <InputLabel>업종</InputLabel>
-                <TextField 
-                    value={fields.bizSector.value}
-                    onChange={({target: {value}}) => handleChange('bizSector', value)}
-                    placeholder="업종을 입력하세요"
-                />
-                <InputLabel>업태</InputLabel>
-                <TextField 
-                    value={fields.bizType.value}
-                    onChange={({target: {value}}) => handleChange('BizType', value)}
-                    placeholder="업태를 입력하세요"
-                />
-                <LabelSection>
-                    <InputLabel>주거래품목</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <TextField 
-                    required
-                    value={fields.mainItem.value}
-                    onChange={({target: {value}}) => {
-                        const error = value === '';
-                        handleChange('mainItem', value, error);
-                    }}
-                    placeholder="주거래품목을 입력하세요"
-                />
-                <InputLabel>회사규모</InputLabel>
-                <Autocomplete
-                    disableClearable
-                    value={fields.companyScale.value}
-                    options={['스타트업', '소기업', '중기업', '대기업']}
-                    onChange={(_, value) => handleChange('companyScale', value)}
-                    renderInput={(params) => <TextField {...params} label="회사 구분"/>}
-                    placeholder="회사규모를 선택하세요"
-                />
-                <LabelSection>
-                    <InputLabel>아이디</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <InputAndButtonRow>
-                    <TextField 
-                        required
-                        value={fields.id.value}
-                        onChange={({target: {value}}) => {
-                            const error = value === '';
-                            handleChange('id', value, error);
-                            setIsIdAvailable(false);
-                        }}
-                        placeholder="아이디를 입력하세요"
-                    />
-                    <Button 
-                        variant="contained"
-                        onClick={checkIdAvailability}
-                    >
-                        중복확인
-                    </Button>
-                </InputAndButtonRow>
-                <LabelSection>
-                    <InputLabel>비밀번호</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <InputAndButtonRow>
-                    <TextField 
-                        required
-                        type="password"
-                        value={fields.password.value}
-                        onChange={({target: {value}}) => {
-                            const error = !validPassword(value);
-                            handleChange('password', value, error);
-                        }}
-                        placeholder="비밀번호"
-                    />
-                    <TextField 
-                        required
-                        type="password"
-                        value={fields.passwordCheck.value}
-                        onChange={({target: {value}}) => {
-                            const error = fields.password.value !== value;
-                            handleChange('passwordCheck', value, error);
-                        }}
-                        placeholder="비밀번호 확인"
-                    />
-                </InputAndButtonRow>
-                <LabelSection>
-                    <InputLabel>담당자휴대폰</InputLabel>
-                    <Typography color={'red'}>*</Typography>
-                </LabelSection>
-                <TextField 
-                    required
-                    type="tel"
-                    value={fields.managerPhone.value}
-                    onChange={({target: {value}}) => {
-                        const error = !validPhoneNumber(value);
-                        handleChange('managerPhone', value, error);
-                    }}
-                    placeholder="담당자 휴대폰 번호를 입력하세요"
-                />
-                <Typography sx={{gridColumn: 'span 2'}}>* 비밀번호는 8자 이상의 영문, 숫자, 특수문자 조합으로 생성</Typography>
-            </ThirdFormSection>
-            <Divider sx={{ borderBottomWidth: 5 }}/>
-            <ButtonSection>
-                <Button 
-                    variant='contained' 
-                    onClick={handleSubmit}
-                >
-                    정보 입력
-                </Button>
-                <Button 
-                    variant='contained'
-                    onClick={() => navigate('/')}
-                >취소</Button>
-            </ButtonSection>
-        </FormContainer>
+                        {showPassword ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                        </IconButton>
+                    </InputAdornment>
+                }
+                onChange={event=>handleChange('passwordConfirm', event.target.value)}
+                size="small"
+                placeholder="입력하신 비밀번호를 다시 입력해주세요"
+                fullWidth
+            />
+            <FormTitle title="담당자 휴대폰" required />
+            <div style={{display: 'flex', alignItems: 'center', marginBottom: '40px'}}>
+                <TextField placeholder="010" value={fields.managerPhone1} size="small" sx={{flex: 1}} onChange={event=>handleChange('managerPhone1', event.target.value)} />
+                <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                <TextField placeholder="0000" value={fields.managerPhone2} size="small" sx={{flex: 1}} onChange={event=>handleChange('managerPhone2', event.target.value)} />
+                <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
+                <TextField placeholder="0000" value={fields.managerPhone3} size="small" sx={{flex: 1}} onChange={event=>handleChange('managerPhone3', event.target.value)} />
+            </div>
+            <div style={{display:"flex", gap: "10px"}}>
+                <Button variant="btnActive" sx={{flex:1}} onClick={submitRegister} >정보 입력</Button>
+                <Button variant="btnInit" sx={{flex:1}} >취소</Button>
+            </div>
+        </div>
     )
 }
 

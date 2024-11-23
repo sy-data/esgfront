@@ -5,6 +5,40 @@ export const activeStep = atom({
     default: 0
 });
 
+export const signupForm1 = atom({
+    key: 'signupForm1',
+    default: {
+        country: '',
+        type: '',
+        bizNumber: '',
+        name: ''
+    }
+});
+
+export const signupForm3 = atom({
+    key: 'signupForm3',
+    default: {
+        name: '',
+        type: '',
+        country: '',
+        bizNumber1: '', bizNumber2: '', bizNumber3: '',
+        companyNumber: '',
+        ceo: '',
+        manager: '',
+        address1: '', address2: '', address3: '',
+        phone1: '', phone2: '', phone3: '',
+        fax1: '', fax2: '', fax3: '',
+        email: '', emailConfirm: '',
+        business_type: '',
+        business_item: '',
+        main_item: '',
+        company_size: '',
+        manager_id: '', id_confirmed: '',
+        password: '', passwordConfirm: '',
+        managerPhone1: '', managerPhone2: '', managerPhone3: '',
+    }
+});
+
 export const signupFormState = atom({
     key: 'signupThirdFormState',
     default: {

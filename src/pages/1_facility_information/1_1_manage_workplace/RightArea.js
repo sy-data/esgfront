@@ -1,5 +1,5 @@
-import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
-import { FormControl, Button, TextField, styled, InputAdornment, Select, MenuItem } from "@mui/material";
+import { useState } from "react";
+import { Button, TextField, Select, MenuItem } from "@mui/material";
 import Search from "@mui/icons-material/Search";
 import SubTitle from "../../../components/SubTitle";
 import ContentBody from "../../../components/ContentBody";
@@ -12,46 +12,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useRecoilState } from 'recoil';
+import { workplaceDetailAtom } from "./states";
+import { ReactComponent as CalendarIcon } from "../../../assets/images/IconCalendar.svg";
+import { industry_type } from "./industryTypes";
 
-
-const ButtonContainer = styled('div')(() => ({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  padding: '10px 0',
-  maxWidth: '680px'
-}));
-const ButtonNewSave = styled(Button)(() => ({
-  marginLeft: '5px'
-}));
-const InputBlock = styled('div')(() => ({
-  display: 'flex',
-}));
-const InputContainer = styled(FormControl)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  height: '44px',
-  alignItems: 'center'
-}));
-const InputLabel = styled('div')(() => ({
-  padding: '0px 10px',
-  margin: '0px 10px',
-  height: '100%',
-  minWidth: '100px',
-  fontSize: '0.9em',
-  backgroundColor: '#999999',
-  display: 'flex',
-  alignItems: 'center'
-}));
-
-const InputField = props => {
-  return (
-    <InputContainer>
-      <InputLabel>{props.label}</InputLabel>
-      <TextField sx={{ width: 200 }} variant="outlined" size="small" value={props.value} onChange={props.change} />
-    </InputContainer>
-  )
-}
 
 const DetailField = ({ children, title, row = false, required = true }) => {
   return (
@@ -68,210 +35,164 @@ const DetailField = ({ children, title, row = false, required = true }) => {
 }
 
 
-const RightArea = forwardRef((props, ref) => {
-  const [workplaceName, setWorkplaceName] = useState('');
-  const [selectUse, setSelectUse] = useState('');
-  const [regNumber, setRegNumber] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [selectCategory, setSelectCategory] = useState('');
-  const [employees, setEmployees] = useState('');
-  const [thisSales, setThisSales] = useState('');
-  const [grossArea, setGrossArea] = useState('');
-  const [netArea, setNetArea] = useState('');
-  const [dateSince, setDateSince] = useState('');
-  const [dateUntil, setDateUntil] = useState('');
-  const [industryType, setIndustryType] = useState([]);
+const RightArea = props => {
+  const [detail, setDetail] = useRecoilState(workplaceDetailAtom);
+  const [valid, setValid] = useState(false);
+  const required_fields = [
+    "type",
+    "company_branch",
+    "company_name",
+    "company_use",
+    "company_number1",
+    "company_number2",
+    "company_number3",
+    "industry_type",
+    "company_size"
+  ]
   
-  
-  const datePickerFormat = "YYYY-MM-DD";
   const datePickerUtils = {
-    format: datePickerFormat,
-    parse: (value) => dayjs(value, datePickerFormat, true).toDate(),
+    format: "YYYY-MM-DD",
+    parse: (value) => dayjs(value, "YYYY-MM-DD", true).toDate(),
   };
-  const changeUntil = (date) => {
-    // formattedDate : 2023-11-11
-    const formattedDate = dayjs(date).format(datePickerFormat);
-    setDateUntil(formattedDate);
-  }
-  const changeSince = (date) => {
-    // formattedDate : 2023-11-11
-    const formattedDate = dayjs(date).format(datePickerFormat);
-    setDateSince(formattedDate);
-  }
-
-  useImperativeHandle(ref, () => ({
-    updateFields(values) {
-      setWorkplaceName(values.name ? values.name : '');
-      setSelectUse(true);
-      
-      setRegNumber(values.brn ? values.brn : '');
-      // TODO : catch
-      setCompanyName(values.company.data.attributes.name);
-      
-      setPhoneNumber(values.phone ? values.phone : '');
-      setSelectCategory(values.company.data.attributes.industry.data.id);
-      
-      // TODO : address
-      
-      setEmployees(values.number_of_employees ? values.number_of_employees : '');
-      setThisSales(values.sales ? values.sales : '');
-      
-      setGrossArea(values.gross_area ? values.gross_area : '');
-      setNetArea(values.net_area ? values.net_area : '');
-
-      setDateSince(values.since ? dayjs(values.since).format(datePickerFormat) : '');
-      setDateSince(values.until ? dayjs(values.until).format(datePickerFormat) : '');
+  
+  const handleChange = (value, key) => {
+    const newDetail = {
+      ...detail,
+      [key]: value
     }
-  }));
-  
-  function clearFields(){
-    props.setSelectedWorkplace(null)
-    setWorkplaceName('');
-    setSelectUse('');
-    setRegNumber('');
-    setCompanyName('');
-    setPhoneNumber('');
-    setSelectCategory('');
-    setEmployees('');
-    setThisSales('');
-    setGrossArea('');
-    setNetArea('');
-    setDateSince('');
-    setDateUntil('');
-  }
-  
-  function saveWorkspace(){
-    if(props.selectedWorkplace){
-      const updateData = {
-        updatedAt: new Date(),
-        ...(workplaceName && {name: workplaceName}),
-        // TODO : update with address input
-        ...(false && {address: null}),
-        ...(employees && {number_of_employees: employees}),
-        ...(thisSales && {sales: thisSales}),
-        ...(grossArea && {gross_area: grossArea}),
-        ...(netArea && {net_area: netArea}),
-        ...(dateUntil && {until: dateUntil}),
-        ...(phoneNumber && {phone: phoneNumber})
+    const isValid = k => {
+      if(k === "company_branch"){
+        return newDetail["type"] === "b" || newDetail["company_branch"].length > 0;
       }
-      esgFetch(`/api/factories/${props.selectedWorkplace}`, 'PUT', {
-        data: updateData
-      }).then(() => {
-        // // update datagrid values
-        // const updateListData = JSON.parse(JSON.stringify(props.workplaceList));
-        // const changeIndex = updateListData.find(w => w.id === props.selectedWorkplace).index;
-        
-        // for(let k of Object.keys(updateData)){
-        //   if(k in updateListData[changeIndex-1]){
-        //     updateListData[changeIndex-1][k] = updateData[k];
-        //   }
-        //   if(k in updateListData[changeIndex-1]['attributes']){
-        //     updateListData[changeIndex-1]['attributes'][k] = updateData[k];
-        //   }
-        // }
-        // props.setWorkplaceList(updateListData);
-        props.setWorkplaceList([]);
-      });
+      return /^-?\d+$/.test(newDetail[k]) ? parseInt(newDetail[k]) >= 0 : newDetail[k].length > 0;
     }
-    else{
-      const fetchCompany = Promise.resolve(esgFetch('/api/users/me?populate[0]=company', 'GET').then(res => res.json()).then(r=>r.company.id));
-      
-      fetchCompany.then(companyId => {
-        esgFetch('/api/factories', 'POST', {
-          data: {
-            name: workplaceName,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            // TODO : update with address input
-            address: null,
-            number_of_employees: employees,
-            sales: thisSales ? thisSales : null,
-            gross_area: grossArea,
-            net_area: netArea,
-            since: dateSince ? dateSince : null,
-            until: dateUntil ? dateUntil : null,
-            phone: phoneNumber,
-            brn: regNumber,
-            company: {
-              id: companyId
-            }
-          }
-        })
-      });
-    }
+    setDetail(newDetail);
+    setValid(required_fields.every(field => isValid(field)));
   }
   
-  useEffect(() => {
-    // esgFetch('/api/type-industries', 'GET')
-    //   .then(res => res.json())
-    //   .then(result => {
-    //     setIndustryType(result.data);
-    //   })
-  },[]);
+  const saveDetail = e => {
+    console.log(detail);
+  }
   
   return (
     <ContentBody width={props.width} padding="24px" gap="32px">
       <SubTitle title={"사업장 상세"}>
-        <CloseIcon />
+        <CloseIcon onClick={()=>setDetail({...detail, open: !detail["open"]})} />
       </SubTitle>
       <div style={{width: "100%", height: "auto", overflow: "scroll", display: "flex", flexDirection: "column", gap: "24px"}}>
         <DetailField title="회사구분" row={true}>
           <RadioGroup row name="company_type" sx={{flex: 1}}>
-            <FormControlLabel value="bs" control={<Radio />} label="본사" />
-            <FormControlLabel value="js" control={<Radio />} label="지사(지점)" />
+            <FormControlLabel checked={detail["type"] === 'b'} onChange={e=>handleChange(e.target.value, "type")} value='b' control={<Radio />} label="본사" />
+            <FormControlLabel checked={detail["type"] === 'j'} onChange={e=>handleChange(e.target.value, "type")} value='j' control={<Radio />} label="지사(지점)" />
           </RadioGroup>
-          <Select label="지사(지점) 선택" value="" size="small" IconComponent={ExpandMoreIcon} sx={{flex: 0.9}} disabled >
-            <MenuItem value={1}>사용</MenuItem>
-            <MenuItem value={0}>미사용</MenuItem>
+          <Select
+            value={detail["company_branch"]}
+            size="small"
+            IconComponent={ExpandMoreIcon}
+            sx={{flex: 0.9}}
+            disabled={detail["type"] !== 'j'}
+            onChange={e=>handleChange(e.target.value, "company_branch")}
+            displayEmpty
+            renderValue={selected => {
+              if(detail["type"] !== 'j' || selected.length === 0){
+                return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>지사(지점) 선택</Typography>
+              }
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+            }}
+          >
+            <MenuItem value="지점1">지점1</MenuItem>
+            <MenuItem value="지점2">지점2</MenuItem>
           </Select>
         </DetailField>
         
-        <DetailField title="사업장명">
-          <TextField placeholder="사업장명을 입력하세요" value="" size="small" fullWidth />
+        <DetailField title="사업자명">
+          <TextField error={false} placeholder="사업자명을 입력하세요" value={detail["company_name"]} size="small" onChange={e=>handleChange(e.target.value, "company_name")} fullWidth />
         </DetailField>
         
         <DetailField title="사업장사용">
-          <Select label="사용 여부를 선택해주세요" value="" size="small" fullWidth IconComponent={ExpandMoreIcon} >
+          <Select
+            value={detail["company_use"]}
+            size="small"
+            IconComponent={ExpandMoreIcon}
+            fullWidth
+            onChange={e=>handleChange(e.target.value, "company_use")}
+            displayEmpty
+            renderValue={selected => {
+              const options = ["미사용", "사용"]
+              if(selected < 0){
+                return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>사용 여부를 선택해주세요</Typography>
+              }
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{options[selected]}</Typography>
+            }}
+          >
             <MenuItem value={1}>사용</MenuItem>
             <MenuItem value={0}>미사용</MenuItem>
           </Select>
         </DetailField>
         
         <DetailField title="사업장 등록번호" row={true}>
-          <TextField placeholder="000" value="" size="small" sx={{width: "110px"}} />
+          <TextField placeholder="000" value={detail["company_number1"]} size="small" sx={{flex: 1}} onChange={e=>handleChange(e.target.value, "company_number1")} />
           <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
-          <TextField placeholder="00" value="" size="small" sx={{width: "110px"}} />
+          <TextField placeholder="00" value={detail["company_number2"]} size="small" sx={{flex: 1}} onChange={e=>handleChange(e.target.value, "company_number2")} />
           <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
-          <TextField placeholder="00000" value="" size="small" />
+          <TextField placeholder="00000" value={detail["company_number3"]} size="small" sx={{flex: 2}} onChange={e=>handleChange(e.target.value, "company_number3")} />
         </DetailField>
         
         <DetailField title="사업장명" required={false}>
-          <TextField placeholder="사업장명을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="사업장명을 입력해주세요" value={detail["workplace_name"]} size="small" onChange={e=>handleChange(e.target.value, "workplace_name")} fullWidth />
         </DetailField>
         
         <DetailField title="전화번호" row={true} required={false}>
-          <TextField placeholder="000" value="" size="small" />
+          <TextField placeholder="000" value={detail["phone_number1"]} size="small" onChange={e=>handleChange(e.target.value, "phone_number1")} />
           <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
-          <TextField placeholder="0000" value="" size="small" />
+          <TextField placeholder="0000" value={detail["phone_number2"]} size="small" onChange={e=>handleChange(e.target.value, "phone_number2")} />
           <div style={{margin: "0 4px", height: 0, width: "10px", borderTop: "1px solid black"}} />
-          <TextField placeholder="0000" value="" size="small" />
+          <TextField placeholder="0000" value={detail["phone_number3"]} size="small" onChange={e=>handleChange(e.target.value, "phone_number3")} />
         </DetailField>
         
         <DetailField title="산업군">
-          <Select value="" size="small" fullWidth IconComponent={ExpandMoreIcon}>
-            <MenuItem value={1}>산업군1</MenuItem>
+          <Select
+            value={detail["industry_type"]}
+            size="small"
+            IconComponent={ExpandMoreIcon}
+            fullWidth
+            onChange={e=>handleChange(e.target.value, "industry_type")}
+            displayEmpty
+            MenuProps={{
+              PaperProps: {sx: {maxHeight: "240px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+            }}
+            renderValue={selected => {
+              if(selected && selected.length === 0){
+                return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>산업군을 선택해주세요</Typography>
+              }
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+            }}
+          >
+            {industry_type.map(type => <MenuItem sx={{height: "40px", fontSize: "13px", padding: "10px"}} value={type}>{type}</MenuItem>)}
           </Select>
         </DetailField>
         
         <DetailField title="회사규모">
-          <Select value="" size="small" fullWidth IconComponent={ExpandMoreIcon}>
+          <Select
+            value={detail["company_size"]}
+            size="small"
+            IconComponent={ExpandMoreIcon}
+            fullWidth
+            onChange={e=>handleChange(e.target.value, "company_size")}
+            displayEmpty
+            renderValue={selected => {
+              if(selected && selected.length === 0){
+                return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>회사규모를 선택해주세요</Typography>
+              }
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+            }}
+          >
             <MenuItem value={1}>회사규모1</MenuItem>
           </Select>
         </DetailField>
         
         <DetailField title="종업원 수(명)" required={false}>
-          <TextField placeholder="종업원 수(명)을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="종업원 수(명)을 입력해주세요" value={detail["employee_number"]} size="small" onChange={e=>handleChange(e.target.value, "employee_number")} fullWidth />
         </DetailField>
         
         <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
@@ -287,35 +208,62 @@ const RightArea = forwardRef((props, ref) => {
         </div>
         
         <DetailField title="전년도 매출(원)" required={false}>
-          <TextField placeholder="전년도 매출액을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="전년도 매출액을 입력해주세요" value={detail["sales_last"]} onChange={e=>handleChange(e.target.value, "sales_last")} size="small" fullWidth />
         </DetailField>
         
         <DetailField title="당해년도 매출(원)" required={false}>
-          <TextField placeholder="당해년도 매출액을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="당해년도 매출액을 입력해주세요" value={detail["sales_now"]} onChange={e=>handleChange(e.target.value, "sales_now")} size="small" fullWidth />
         </DetailField>
         
         <DetailField title="전용면적 (㎡)" required={false}>
-          <TextField placeholder="전용면적 (㎡)을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="전용면적 (㎡)을 입력해주세요" value={detail["area_j"]} onChange={e=>handleChange(e.target.value, "area_j")} size="small" fullWidth />
         </DetailField>
         
         <DetailField title="연면적 (㎡)" required={false}>
-          <TextField placeholder="연면적 (㎡)을 입력해주세요" value="" size="small" fullWidth />
+          <TextField placeholder="연면적 (㎡)을 입력해주세요" value={detail["area_y"]} onChange={e=>handleChange(e.target.value, "area_y")} size="small" fullWidth />
         </DetailField>
         
         <DetailField title="사업장 등록일" required={false}>
-          <TextField placeholder="을 입력해주세요" value="" size="small" fullWidth />
+          <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={datePickerUtils}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              slots={{openPickerIcon: CalendarIcon}}
+              slotProps={{
+                textField: {size: 'small', sx: {width: "100%"}, placeholder: "yyyy-mm-dd"},
+              }}
+              value={detail["register_date"]}
+              onChange={e => handleChange(e.format('YYYY-MM-DD'), "register_date")}
+            />
+          </LocalizationProvider>
         </DetailField>
         
         <DetailField title="사업장 폐쇄일" required={false}>
-          <TextField placeholder="을 입력해주세요" value="" size="small" fullWidth />
+          <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={datePickerUtils}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              slots={{openPickerIcon: CalendarIcon}}
+              slotProps={{
+                textField: {size: 'small', sx: {width: "100%"}, placeholder: "yyyy-mm-dd"},
+              }}
+              value={detail["close_date"]}
+              onChange={e => handleChange(e.format('YYYY-MM-DD'), "close_date")}
+            />
+          </LocalizationProvider>
+        </DetailField>
+        
+        <DetailField title="생산품" required={false}>
+          <RadioGroup row name="product_yn" sx={{flex: 1}}>
+            <FormControlLabel checked={detail["product_yn"] === 'y'} onChange={e=>handleChange(e.target.value, "product_yn")} value='y' control={<Radio />} label="유" />
+            <FormControlLabel checked={detail["product_yn"] === 'n'} onChange={e=>handleChange(e.target.value, "product_yn")} value='n' control={<Radio />} label="무" />
+          </RadioGroup>
         </DetailField>
       </div>
       <div style={{display:"flex", gap: "8px"}}>
         <Button variant="btnInit" sx={{flex:1}}>초기화</Button>
-        <Button variant="btnDisabled" sx={{flex:1}}>저장</Button>
+        <Button variant={valid ? "btnActive":"btnDisabled"} disabled={!valid} sx={{flex:1}} onClick={saveDetail}>저장</Button>
       </div>
     </ContentBody>
   )
-});
+};
 
 export default RightArea;

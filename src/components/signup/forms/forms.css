@@ -1,0 +1,42 @@
+.form-content {
+  width: 100%;
+  font-family: Pretendard Variable;
+}
+
+.form-label {
+  font-family: Pretendard Variable;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 30px;
+}
+
+.field-title {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.form-terms {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.term-content {
+  width: 530px;
+  height: 140px;
+  border: 1px solid #EEEEEE;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  font-family: Pretendard Variable;
+  font-size: 13px;
+  overflow: auto;
+}
