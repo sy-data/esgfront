@@ -116,7 +116,7 @@ const ReportList = () => {
             if(selected.length === 0){
               return <Typography style={{fontSize: "13px", color: "#AAAAAA"}}>조직 범위</Typography>
             }
-            return <Typography style={{fontSize: "13px", color: "#111111", fontWeight: "bold"}}>selected</Typography>;
+            return <Typography style={{fontSize: "13px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>;
           }}
         >
           <MenuItem value={1}>전체</MenuItem>
@@ -124,7 +124,7 @@ const ReportList = () => {
           <MenuItem value={1}>지사</MenuItem>
           <MenuItem value={1}>사업장</MenuItem>
         </Select>
-        <BaseYearSelect ref={baseYearRef} />
+        <BaseYearSelect ref={baseYearRef} displayItemCount={5} />
       </div>
       <ContentBody padding={"24px"} gap="16px">
         <SubTitle title={"보고서 리스트"}>
