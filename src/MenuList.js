@@ -15,6 +15,12 @@ const MenuList = [
         type: "menu-child",
         name: "시설정보관리",
         link: "/facility/information"
+      },
+      {
+        id: "1-3",
+        type: "menu-child",
+        name: "생산품관리",
+        link: "/facility/information"
       }
     ]
   },
