@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button, Typography, TextField, Select, MenuItem } from "@mui/material";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -49,8 +49,8 @@ const FacilityRegister = props => {
   const [workplace, setWorkplace] = useState("");
   const [emission, setEmission] = useState("");
   const [facility, setFacility] = useState("");
-  const [description, setDescription] = useState("");
-  const [fuel, setFuel] = useState("");
+  const [description_gjType, setDescription_gjType] = useState("");
+  const [fuel_sebu, setFuel_sebu] = useState("");
   const [date, setDate] = useState("");
   const [govReport, setGovReport] = useState("");
   
@@ -65,6 +65,18 @@ const FacilityRegister = props => {
     "폐기물/소각": ["생활폐기물","사업장폐기물","하수슬러지"],
     "열/스팀": ["스팀(열전용)","스팀(열병합)","스팀(일반)"],
   }), []);
+  const gongjong_types = useMemo(() => (["석회_생산량","공정상_탄산염_사용량","유리_생산량","카바이드_생산량","소다회_생산량","합금철_생산량","아연_생산량","납_생산량"]),[]);
+  const sebu_types = useMemo(() => ([
+    "생석회","고토석회(경소백운석)","석회석(CaCO₃)","마그네사이트(MgCO₃)","백운석(CaMg·(CO₃)₂)","능철광(FeCO₃)","철백운석(Ca(Fe,Mg,Mn)(CaMg·(CO₃)₂)",
+    "망간광(MnCO₃)","소다회(Na2CO₃)","판유리","유리용기(납유리)","유리용기(착색유리)","유리장섬유","브라운관용유리(Panel)","브라운관용유리(Funnel)","가정용 유리제품",
+    "실험용기, 약병","전등용유리","칼슘카바이드(CaC₂)","소다회(Na₂CO₃)","합급철(Si 함량 45%)","합급철(Si 함량 65%)","합급철(Si 함량 75%)","합급철(Si 함량 90%)",
+    "망간철(C함량 7%)","망간철(C함량 1%)","실리콘망간","실리콘메탈","제련 공정 구분 불가","Waelz Kiln 제련 공정","전기 열 공정","건식야금법 공정","납"
+  ]), []);
+  
+  useEffect(() => {
+    setDescription_gjType("");
+    setFuel_sebu("");
+  }, [emission]);
   
   const datePickerUtils = {
     format: "YYYY-MM-DD",
@@ -167,38 +179,97 @@ const FacilityRegister = props => {
               </BlockFieldContent>
             </BlockField>
             
-            <BlockField>
-              <BlockFieldTitle>비고</BlockFieldTitle>
-              <BlockFieldContent>
-                <TextField placeholder="시설 및 차량에 대한 부연설명 입력" value={description} size="small" onChange={e=>setDescription(e.target.value)} fullWidth />
-              </BlockFieldContent>
-            </BlockField>
             
-            <BlockField>
-              <BlockFieldTitle>연료</BlockFieldTitle>
-              <BlockFieldContent>
-                <Select
-                  value={fuel}
-                  size="small"
-                  IconComponent={ExpandMoreIcon}
-                  disabled={emission === "전력"}
-                  fullWidth
-                  onChange={event=>setFuel(event.target.value)}
-                  displayEmpty
-                  renderValue={selected => {
-                    if(selected.length === 0){
-                      return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
-                    }
-                    return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
-                  }}
-                  MenuProps={{
-                    PaperProps: {sx: {maxHeight: "150px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
-                  }}
-                >
-                  {Object.keys(fuel_types).includes(emission) ? fuel_types[emission].map(m=><MenuItem value={m}>{m}</MenuItem>):""}
-                </Select>
-              </BlockFieldContent>
-            </BlockField>
+            {
+              emission === "공정배출" ?
+              <div style={{display: "flex", gap: "16px", flexDirection: "column"}}>
+                <BlockField>
+                  <BlockFieldTitle>공정구분</BlockFieldTitle>
+                  <BlockFieldContent>
+                    <Select
+                      value={description_gjType}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      fullWidth
+                      onChange={event=>setDescription_gjType(event.target.value)}
+                      displayEmpty
+                      renderValue={selected => {
+                        if(selected.length === 0){
+                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
+                        }
+                        return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                      }}
+                      MenuProps={{
+                        PaperProps: {sx: {maxHeight: "150px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+                      }}
+                    >
+                      {gongjong_types.map(m=><MenuItem value={m}>{m}</MenuItem>)}
+                    </Select>
+                  </BlockFieldContent>
+                </BlockField>
+                
+                <BlockField>
+                  <BlockFieldTitle>세부구분</BlockFieldTitle>
+                  <BlockFieldContent>
+                    <Select
+                      value={fuel_sebu}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      fullWidth
+                      onChange={event=>setFuel_sebu(event.target.value)}
+                      displayEmpty
+                      renderValue={selected => {
+                        if(selected.length === 0){
+                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
+                        }
+                        return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                      }}
+                      MenuProps={{
+                        PaperProps: {sx: {maxHeight: "150px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+                      }}
+                    >
+                      {sebu_types.map(m=><MenuItem value={m}>{m}</MenuItem>)}
+                    </Select>
+                  </BlockFieldContent>
+                </BlockField>
+              </div>
+              :
+              <div style={{display: "flex", gap: "16px", flexDirection: "column"}}>
+                <BlockField>
+                  <BlockFieldTitle>비고</BlockFieldTitle>
+                  <BlockFieldContent>
+                    <TextField placeholder="시설 및 차량에 대한 부연설명 입력" value={description_gjType} size="small" onChange={e=>setDescription_gjType(e.target.value)} fullWidth />
+                  </BlockFieldContent>
+                </BlockField>
+                
+                <BlockField>
+                  <BlockFieldTitle>연료</BlockFieldTitle>
+                  <BlockFieldContent>
+                    <Select
+                      value={fuel_sebu}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      disabled={emission === "전력"}
+                      fullWidth
+                      onChange={event=>setFuel_sebu(event.target.value)}
+                      displayEmpty
+                      renderValue={selected => {
+                        if(selected.length === 0){
+                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
+                        }
+                        return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+                      }}
+                      MenuProps={{
+                        PaperProps: {sx: {maxHeight: "150px", borderRadius: "8px", border: "1px solid #DADFDF", '& ul': {padding: 0}}}
+                      }}
+                    >
+                      {Object.keys(fuel_types).includes(emission) ? fuel_types[emission].map(m=><MenuItem value={m}>{m}</MenuItem>):""}
+                    </Select>
+                  </BlockFieldContent>
+                </BlockField>
+              </div>
+            }
+            
             
             <BlockField>
               <BlockFieldTitle>시설 증설일</BlockFieldTitle>
