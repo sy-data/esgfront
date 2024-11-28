@@ -7,7 +7,7 @@ const cookies = new Cookies();
 export const setCookie = (name, value, options) => {
   options = {
     path: "/",
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 60 * 4,
     ...options,
   };
   cookies.set(name, value, options);
@@ -22,10 +22,6 @@ export const removeCookie = (name, options) => {
 };
 
 export const useAuth = () => {
-  const [cookies] = useCookies(["token"]);
   const userState = useRecoilValue(userStateAtom);
-
-  const isLoggedIn = cookies.token ? true : false || userState ? true : false;
-
-  return isLoggedIn;
+  return "expires_at" in userState && userState.expires_at > new Date().toISOString();
 };

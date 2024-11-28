@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { TextField, Button, Grid, Typography, Container, Checkbox, FormControlLabel, Link, Paper } from "@mui/material";
 import "../../style/auth/login.css";
-import { loginDev } from "../../components/FetchWrapper";
+import { esgFetch } from "../../components/FetchWrapper";
 import { userStateAtom, loginFailCountAtom } from "../../States/auth/auth";
 import { Router, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -19,8 +19,8 @@ import loginLogo from "./images/loginLogo.svg"
 
 const Login = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const [id, setId] = useState("esguser1");
+  const [password, setPassword] = useState("123456");
   const [isChecked, setIsChecked] = useState(true);
   const [userState, setUserState] = useRecoilState(userStateAtom);
   const [loginFailCount, setLoginFailCount] = useRecoilState(loginFailCountAtom);
@@ -46,36 +46,68 @@ const Login = () => {
   };
 
   const onLogin = async (e) => {
-    localStorage.setItem("token", "tempToken");
-    setCookie("token", "tempToken");
-    const user = {
-      email: "test@test.test",
-    }
-    // e.preventDefault();
-    // const loginData = { id, password };
-
-    // if (id === "" || password === "") {
-    //   if (id === "") alert("아이디를 입력해주세요");
-    //   if (password === "") alert("비밀번호를 입력해주세요");
-    //   return;
+    // localStorage.setItem("token", "tempToken");
+    // setCookie("token", "tempToken");
+    // const user = {
+    //   email: "test@test.test",
     // }
-
-    // const user = await loginDev(loginData);
-
-    if (user) {
-      // checkPasswordDate(user.password_date);
-      // setUserState(user);
-      // saveId(user.email);
-      // setLoginFailCount(0);
-      // navigate("/emissions");
-    } else if (user === undefined) {
-      setLoginFailCount(loginFailCount + 1);
-      navigate("/loginFaile");
+    // e.preventDefault();
+    if (id === "" || password === "") {
+      if (id === "") alert("아이디를 입력해주세요");
+      if (password === "") alert("비밀번호를 입력해주세요");
+      return;
     }
+    
+    const session = await esgFetch("/account/login-id", "POST", {provideruserid : id, password: password}).then(res=>res.json());
+    if("id" in session) {
+      localStorage.setItem("__session", session.id);
+      setCookie("__session", session.id);
+      
+      const userInfo = await esgFetch("/account/user-info").then(res=>res.json());
+      //userInfo ==>>
+      // {
+      //     "id": "ID6",
+      //     "uid": "e56bfca0487b46a",
+      //     "providerid": "id",
+      //     "email": null,
+      //     "displayname": "담당",
+      //     "emailverified": null,
+      //     "photourl": null,
+      //     "disabled": null,
+      //     "isadmin": null,
+      //     "platform": "E-SCOPE",
+      //     "metadata": {
+      //         "company_id": "COM5"
+      //     }
+      // }
+      if("displayname" in userInfo){
+        setLoginFailCount(0);
+        setUserState({
+          ...userInfo,
+          expires_at: session.expires_at
+        });
+        navigate("/");
+        return;
+      }
+      alert("유저 정보 업데이트 실패");
+    }
+    setLoginFailCount(loginFailCount + 1);
+    navigate("/loginFaile");
+
+    // if (user) {
+    //   // checkPasswordDate(user.password_date);
+    //   // setUserState(user);
+    //   // saveId(user.email);
+    //   // setLoginFailCount(0);
+    //   // navigate("/emissions");
+    // } else if (user === undefined) {
+    //   setLoginFailCount(loginFailCount + 1);
+    //   navigate("/loginFaile");
+    // }
   };
-  useEffect(() => {
-    onLogin();
-  }, []);
+  // useEffect(() => {
+  //   onLogin();
+  // }, []);
 
   const onJoin = () => {
     navigate("/signup");
@@ -113,6 +145,7 @@ const Login = () => {
               로그인
             </Typography>
             <input
+              value={id}
               type="text"
               placeholder="아이디를 입력하세요"
               onChange={(e) => setId(e.target.value)}
@@ -133,7 +166,8 @@ const Login = () => {
               비밀번호
             </Typography>
             <input
-              type="text"
+              value={password}
+              type="password"
               placeholder="비밀번호를 입력하세요"
               onChange={(e) => setPassword(e.target.value)}
               style={{display: "flex", width: "460px", padding: "10px 16px", alignItems: "center",
