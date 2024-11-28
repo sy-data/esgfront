@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { Button, styled } from "@mui/material";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { activeStep, signupForm3 } from "../../components/signup/State";
+import { activeStep } from "../../components/signup/State";
 import SignUpMain from "../../components/signup/Main";
 import SignUpStepper from "../../components/signup/Stepper";
+import { useLocation } from "react-router-dom";
 
 const StyledSignUpPage = styled('div')(() => ({
     padding: '50px', display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'auto', alignItems: 'center'
@@ -20,7 +21,8 @@ const SignUpTitle = styled('div')(() => ({
 
 const SignUpFinished = () => {
     const setActiveStep = useSetRecoilState(activeStep);
-    const form3Value = useRecoilValue(signupForm3);
+    const location = useLocation();
+    const {user_id} = location.state || {};
     
     useEffect(() => {
         setActiveStep(3);
@@ -38,7 +40,7 @@ const SignUpFinished = () => {
                     <div style={{backgroundColor: '#F9F9F9', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: '18px', fontWeight: 'bold', color: "#111111", height: "68px", boxSizing: "border-box"
                     }}>
-                      {form3Value.manager_id}
+                      {user_id}
                     </div>
                     <div style={{display:'flex', gap: '10px'}}>
                       <Button variant="btnInit" fullWidth>메인으로 가기</Button>

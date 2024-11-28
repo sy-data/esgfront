@@ -41,9 +41,19 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   return fetch(`${host}/api/v1${url}`, {
     method: method,
     headers: {
-      ...((method === "POST" || method === "PUT") && { "Content-Type": "application/json" }),
+      ...(method !== "GET" && { "Content-Type": "application/json" }),
       // ...(requiredAuth && { Authorization: `Bearer ${token}` }),
     },
     ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
   });
+}
+
+export async function esgLogin(id, pw) {
+  const session = await esgFetch("/account/login-id", "POST", {provideruserid : id, password: pw}).then(res=>res.json());
+  if("id" in session) {
+    localStorage.setItem("__session", session.id);
+    setCookie("__session", session.id);
+    return session;
+  }
+  return null;
 }

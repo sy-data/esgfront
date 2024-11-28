@@ -8,6 +8,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import {  activeStep, signupForm1, signupForm3 } from "../State";
 import countriesData from './country.json';
 import { esgFetch } from "../../FetchWrapper";
+import { setCookie } from "../../../States/storage/Cookie";
 import "./forms.css";
 import FormTitle from "./FormTitle";
 
@@ -69,23 +70,24 @@ const ThridStepForm = () => {
             value = value.replace(/[^0-9]/g, "")
             if(value.length > 4) return;
         }
+        if(field === "companyNumber"){
+            const input = value.replace(/[^0-9]/g, "")
+            if(input.length >= 14) return;
+            
+            let result = input.slice(0,6);
+            if(input.length > 6){
+                result = result + "-" + input.slice(6,13);
+            }
+            setFields({
+                ...fields,
+                "companyNumber": result
+            });
+            return;
+        }
         setFields({
             ...fields,
             [field]: value
         })
-    }
-
-    const handleSubmit = async () => {
-        // await registerUser();
-        // if (checkErrorFields()) return;
-        // const companyBody = convertCompanyFieldsToBody();
-        // const companyId = await registerCompany(companyBody);
-        // if (companyId === undefined) return
-        // const userBody = convertUserFieldsToBody(companyId);
-        // const jwt = await registerUser(userBody);
-        // if (jwt === undefined) return
-        // localStorage.setItem('token', jwt);
-        // alert('회원가입이 완료되었습니다.');
     }
 
     const checkErrorFields = () => {
@@ -105,74 +107,8 @@ const ThridStepForm = () => {
         return false;
     }
 
-    // const convertCompanyFieldsToBody = () => {
-    //     const body = {
-    //         "data": {
-    //             "name": fields.companyName.value,
-    //             "country": convertToCountryCode(fields.country.value),
-    //             "type": fields.companyCategory.value === "개인사업체" ? "personal" : "company",
-    //             "brn": fields.bizNumber.value ? fields.bizNumber.value : 
-    //                 fields.foreignerBizNumber.value ? fields.foreignerBizNumber.value : null,
-    //             "lpn": fields.companyNumber.value ? fields.companyNumber.value : null,
-    //             "ceo": fields.representiveName.value,
-    //             "manager": fields.managerName.value ? fields.managerName.value : null,
-    //             "address": fields.address.value,
-    //             "address_detail": fields.addressDetail.value,
-    //             "phone": fields.representivePhone.value,
-    //             "fax": fields.fax.value ? fields.fax.value : null,
-    //             "email": fields.representiveEmail.value,
-    //             "homepage": fields.homepage.value ? fields.homepage.value : null,
-    //             "main_product": fields.mainItem.value,
-    //             "size": fields.companyScale.value ? fields.companyScale.value : null,
-    //         }
-    //     }
-    //     return body;
-    // }
-
-    const convertToCountryCode = (countryName) => {
-        const country = Object.values(countriesData).find((country) => country.CountryNameKR === countryName);
-        return country.Country2digitCode.toLowerCase();
-    }
-
-    // const registerCompany = async (companyBody) => {
-    //     const companyId = esgFetch('/api/companies', 'POST', companyBody, false)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             if ("error" in data) {
-    //                 console.error(data);
-    //             }
-    //             return data.data.id;
-    //         })
-    //     return companyId;
-    // }
-
-    // const convertUserFieldsToBody = (companyId) => {
-    //     const body = {
-    //         "username": fields.id.value,
-    //         "email": fields.representiveEmail.value,
-    //         "password": fields.password.value,
-    //         "company" : {
-    //             "id": companyId
-    //         }
-    //     }
-    //     return body;
-    // }
-
-    // const registerUser = async (userBody) => {
-    //     const jwt = esgFetch('/api/auth/local/register', 'POST', userBody, false)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             if ("error" in data) {
-    //                 console.error(data);
-    //             }
-    //             return data.jwt;
-    //         })
-    //     return jwt;
-    // }
-    
     const checkIDuplicate = async () => {
         const result = await esgFetch(`/registration/account/${fields.manager_id}`).then(res => res.json());
-        console.log(result);
         if("data" in result) {
             if(result.data.count === 0) {
                 handleChange("id_confirmed", true);
@@ -192,50 +128,153 @@ const ThridStepForm = () => {
     //     "message": "internal server error",
     //     "stack": ""
     // }
+    const [processing, setProcessing] = useState(false);
     const submitRegister = async () => {
-        // const userResult = await esgFetch(
-        //     `/account/signup-id`,
-        //     "POST",
-        //     {provideruserid : fields.manager_id, password: fields.password}
-        // ).then(res=>res.json());
-        // /// userResult =>>
-        // // {
-        // //     "id": "4mchmtq7tp5pv3wws4jbe3vacdyqerqz",
-        // //     "user_id": "ID6",
-        // //     "expires_at": "2024-11-22T20:52:24.877Z",
-        // //     "userplatform": "E-SCOPE"
-        // // }
-        // if("user_id" in userResult) {
-        //     const companyResult = await esgFetch(
-        //         "/registration/company",
-        //         "POST",
-        //         {
-        //             title: fields.name,
-        //             company_type: fields.type,
-        //             bn: [fields.bizNumber1, fields.bizNumber2, fields.bizNumber3].join(''),
-        //             cn: fields.companyNumber,
-        //             owner_nm: fields.ceo,
-        //             manager_nm: fields.manager,
-        //             manager_id: userResult.user_id,
-        //             zip_code: fields.address1,
-        //             addr: fields.address2,
-        //             addr_detail: fields.address3,
-        //             rep_tel_destination_code: fields.phone1,
-        //             rep_tel_number: [fields.phone2, fields.phone3].join(''),
-        //             fax_destination_code: fields.fax1,
-        //             fax_number: [fields.fax2, fields.fax3].join(''),
-        //             emailverified: fields.emailConfirm,
-        //             business_type: fields.business_type,
-        //             business_item: fields.business_item,
-        //             main_item: fields.main_item,
-        //             company_size: fields.company_size
-        //         }
-        //     ).then(res=>res.json());
-        //     // if("" in companyResult) {
-        //     //     const managerPhone = await esgFetch("/account/user-info")
-        //     // }
+        setProcessing(true);
+        const userResult = await esgFetch(
+            `/account/signup-id`,
+            "POST",
+            {provideruserid : fields.manager_id, password: fields.password}
+        ).then(res=>res.json());
+        /// userResult =>>
+        // {
+        //     "id": "4mchmtq7tp5pv3wws4jbe3vacdyqerqz",
+        //     "user_id": "ID6",
+        //     "expires_at": "2024-11-22T20:52:24.877Z",
+        //     "userplatform": "E-SCOPE"
         // }
-        navigate("/signup/finish");
+        if("user_id" in userResult) {
+            localStorage.setItem("__session", userResult.id);
+            setCookie("__session", userResult.id);
+            
+            const companyResult = await esgFetch(
+                "/registration/company",
+                "POST",
+                {
+                    title: fields.name,
+                    company_type: fields.type,
+                    bn: [fields.bizNumber1, fields.bizNumber2, fields.bizNumber3].join(''),
+                    cn: fields.companyNumber.split('-').join(''),
+                    owner_nm: fields.ceo,
+                    manager_nm: fields.manager,
+                    manager_id: userResult.user_id,
+                    zip_code: fields.address1,
+                    addr: fields.address2,
+                    addr_detail: fields.address3,
+                    rep_tel_destination_code: fields.phone1,
+                    rep_tel_number: [fields.phone2, fields.phone3].join(''),
+                    fax_destination_code: fields.fax1,
+                    fax_number: [fields.fax2, fields.fax3].join(''),
+                    emailverified: true,//fields.emailConfirm,
+                    business_type: fields.business_type,
+                    business_item: fields.business_item,
+                    main_item: fields.main_item,
+                    company_size: fields.company_size
+                }
+            ).then(res=>res.json());
+            //companyResult===>>>
+            // {
+            //     "data": {
+            //         "seq": "5",
+            //         "id": "COM5",
+            //         "title": "test",
+            //         "company_type": "대기업",
+            //         "country_nm": null,
+            //         "bn": "1231231231",
+            //         "cn": "1111112222222",
+            //         "owner_nm": "대표",
+            //         "manager_nm": "담당",
+            //         "manager_id": "ID6",
+            //         "zip_code": "12345",
+            //         "addr": "서울시 한국길 82",
+            //         "addr_detail": "1층 101호",
+            //         "rep_tel_country_code": "82",
+            //         "rep_tel_destination_code": "010",
+            //         "rep_tel_number": "12123434",
+            //         "rep_tel_full": "+8201012123434",
+            //         "fax_country_code": "82",
+            //         "fax_destination_code": "02",
+            //         "fax_number": "56567878",
+            //         "fax_full": "+820256567878",
+            //         "rep_email": null,
+            //         "emailverified": true,
+            //         "business_type": "업태",
+            //         "business_item": "업종",
+            //         "main_item": "주거래품목",
+            //         "company_size": "회사규모",
+            //         "created_at": "2024-11-28T10:01:20.846Z",
+            //         "created_by": "apiuser",
+            //         "updated_at": null,
+            //         "updated_by": null,
+            //         "deleted_at": null,
+            //         "deleted_by": null,
+            //         "remark": null
+            //     }
+            // }
+            if("data" in companyResult && "rep_tel_country_code" in companyResult.data) {
+                const managerPhone = await esgFetch(
+                    "/account/user-info",
+                    "PATCH",
+                    {
+                        displayname: fields.manager,
+                        hp_country_code: companyResult.data.rep_tel_country_code,
+                        hp_destination_code: fields.managerPhone1,
+                        hp_number: [fields.managerPhone2, fields.managerPhone2].join('')
+                    }
+                ).then(res=>res.json());
+                //managerPhone ==>>
+                // {
+                //     "data": {
+                //         "seq": "6",
+                //         "user_id": "ID6",
+                //         "uid": "e56bfca0487b46a",
+                //         "providerid": "id",
+                //         "email": null,
+                //         "emailverified": null,
+                //         "displayname": "담당",
+                //         "photourl": null,
+                //         "disabled": null,
+                //         "isadmin": null,
+                //         "platform": "E-SCOPE",
+                //         "privacypolicies": null,
+                //         "gender": null,
+                //         "birth_dt": null,
+                //         "country_code": null,제
+                //         "hp_country_code": "82",
+                //         "hp_destination_code": "010",
+                //         "hp_number": "12123434",
+                //         "hp_full": "+8201012123434",
+                //         "hpverified": false,
+                //         "alarmallow": true,
+                //         "acceptmarketing": true,
+                //         "created_at": "2024-11-23T01:52:24.783Z",
+                //         "created_by": "adminuser",
+                //         "updated_at": "2024-11-28T10:18:37.075Z",
+                //         "updated_by": "ID6",
+                //         "deleted_at": null,
+                //         "deleted_by": null,
+                //         "remark": null,
+                //         "metadata": null
+                //     }
+                // }
+                if("data" in managerPhone && "user_id" in managerPhone.data){
+                    navigate("/signup/finished", {state: {user_id: fields.manager_id}});
+                }
+                else{
+                    setProcessing(false);
+                    alert("담당자정보 업데이트에 실패했습니다");
+                    return;
+                }
+            }
+            else{
+                setProcessing(false);
+                alert("회사 등록에 실패했습니다");
+                return;
+            }
+        }
+        setProcessing(false);
+        alert("유저 등록에 실패했습니다");
+        return;
     }
 
     return (
@@ -261,6 +300,7 @@ const ThridStepForm = () => {
                 }}
                 fullWidth
             >
+                <MenuItem value="개인사업체">개인사업체</MenuItem>
                 <MenuItem value="법인사업체">법인사업체</MenuItem>
             </Select>
             <FormTitle title="국가" required />
@@ -430,8 +470,11 @@ const ThridStepForm = () => {
                 <TextField placeholder="0000" value={fields.managerPhone3} size="small" sx={{flex: 1}} onChange={event=>handleChange('managerPhone3', event.target.value)} />
             </div>
             <div style={{display:"flex", gap: "10px"}}>
-                <Button variant="btnActive" sx={{flex:1}} onClick={submitRegister} >정보 입력</Button>
-                <Button variant="btnInit" sx={{flex:1}} >취소</Button>
+                {processing ?
+                    <Button disabled variant="btnDisabled" sx={{flex:1}} onClick={submitRegister} >처리중 입니다</Button> :
+                    <Button variant="btnActive" sx={{flex:1}} onClick={submitRegister} >정보 입력</Button>
+                }
+                <Button variant="btnInit" sx={{flex:1}} onClick={()=>navigate("/login")}>취소</Button>
             </div>
         </div>
     )
