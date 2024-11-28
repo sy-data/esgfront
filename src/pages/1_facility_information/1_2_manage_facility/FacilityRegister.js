@@ -195,7 +195,7 @@ const FacilityRegister = props => {
                       displayEmpty
                       renderValue={selected => {
                         if(selected.length === 0){
-                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
+                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>공정 선택</Typography>
                         }
                         return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
                       }}
@@ -220,7 +220,7 @@ const FacilityRegister = props => {
                       displayEmpty
                       renderValue={selected => {
                         if(selected.length === 0){
-                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>연료 선택</Typography>
+                          return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>세부항목 선택</Typography>
                         }
                         return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
                       }}
