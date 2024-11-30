@@ -24,6 +24,7 @@ const Login = () => {
   const [isChecked, setIsChecked] = useState(true);
   const [userState, setUserState] = useRecoilState(userStateAtom);
   const [loginFailCount, setLoginFailCount] = useRecoilState(loginFailCountAtom);
+  const [processing, setProcessing] = useState(false);
 
   const saveId = (id) => {
     setCookie("user_id", id);
@@ -57,7 +58,7 @@ const Login = () => {
       if (password === "") alert("비밀번호를 입력해주세요");
       return;
     }
-    
+    setProcessing(true);
     const session = await esgFetch("/account/login-id", "POST", {provideruserid : id, password: password}).then(res=>res.json());
     if("id" in session) {
       localStorage.setItem("__session", session.id);
@@ -86,11 +87,12 @@ const Login = () => {
           ...userInfo,
           expires_at: session.expires_at
         });
-        navigate("/");
+        navigate("/facility/workplace");
         return;
       }
       alert("유저 정보 업데이트 실패");
     }
+    setProcessing(false);
     setLoginFailCount(loginFailCount + 1);
     navigate("/loginFaile");
 
@@ -194,16 +196,26 @@ const Login = () => {
               아이디저장
             </label>
           </div>
-          <Button
-            fullWidth
-            onClick={onLogin}
-            {...{
-              disabled: !(id && password),
-              variant: (id && password) ? "btnActive": "btnDisabled"
-            }}
-          >
-            로그인
-          </Button>
+          {processing ? 
+            <Button
+              fullWidth
+              disabled
+              variant="btnDisabled"
+            >
+              처리중 입니다
+            </Button>
+            :
+            <Button
+              fullWidth
+              onClick={onLogin}
+              {...{
+                disabled: !(id && password),
+                variant: (id && password) ? "btnActive": "btnDisabled"
+              }}
+            >
+              로그인
+            </Button>
+          }
         </div>
         <div
           style={{

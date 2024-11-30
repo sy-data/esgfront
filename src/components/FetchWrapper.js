@@ -40,6 +40,7 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   // }
   return fetch(`${host}/api/v1${url}`, {
     method: method,
+    credentials: "include",
     headers: {
       ...(method !== "GET" && { "Content-Type": "application/json" }),
       // ...(requiredAuth && { Authorization: `Bearer ${token}` }),

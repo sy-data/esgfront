@@ -8,6 +8,8 @@ export const setCookie = (name, value, options) => {
   options = {
     path: "/",
     maxAge: 60 * 60 * 4,
+    secure: true,
+    sameSite: "None",
     ...options,
   };
   cookies.set(name, value, options);

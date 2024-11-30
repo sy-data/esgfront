@@ -1,7 +1,6 @@
-import { Suspense, lazy, useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
 import Box from "@mui/material/Box";
-import { getCookie } from "../States/storage/Cookie";
 import { MainContent } from "../components/Styles";
 import NavigationTree from "../components/navigationTree/NavigationTree";
 
@@ -10,14 +9,6 @@ const ManageFacility = lazy(() => import('../pages/1_facility_information/1_2_ma
 const FacilityHistory = lazy(() => import('../pages/1_facility_information/1_3_facility_history/FacilityHistory'));
 
 const FacilityInformation = props => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = getCookie('token');
-    if (!token) {
-      navigate('/unauthorized');
-    }
-  }, []);
 
   return (
     <MainContent>
