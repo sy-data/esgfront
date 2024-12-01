@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo, useCallback } from "react";
 import { useSetRecoilState } from "recoil";
 
-import { Button, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
+import { Button, OutlinedInput, InputAdornment, IconButton, Modal, Box } from "@mui/material";
 
 import BaseYearSelect from "../../../components/filters/BaseYearSelect";
 import { SelectedYear, SelectedFactoryId } from "./States";
@@ -10,6 +10,7 @@ import SubTitle from "../../../components/SubTitle";
 import { DataGrid } from "@mui/x-data-grid";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
 const FacilityList = props => {
   const baseYearRef = useRef(null);
@@ -24,6 +25,7 @@ const FacilityList = props => {
     }
   }
 
+  const [openModal, setOpenModal] = useState(false);
   const setSelectedYear = useSetRecoilState(SelectedYear);
   // const resetSelectedYear = useResetRecoilState(SelectedYear);
   // const resetSelectedFacotyId = useSetRecoilState(SelectedFactoryId);
@@ -111,9 +113,14 @@ const FacilityList = props => {
     { field: 'j_rate', headerName: '배출 적용등급' },
     {
       field: 'parameter', headerName: '파라미터',
-      renderCell: params => {console.log(params); return <Button variant="btnInit">상세보기{params.id}</Button>}
+      renderCell: params => <Button variant="btnInit" onClick={()=>openParameter(params.row)}>상세보기</Button>
     },
   ]), []);
+  
+  const openParameter = e => {
+    console.log(e)
+    setOpenModal(true);
+  }
   
   const [rows, setRows] = useState([
     {
@@ -205,6 +212,58 @@ const FacilityList = props => {
           />
         </form>
       </ContentBody>
+      <Modal
+        open={openModal}
+        onClose={()=>setOpenModal(false)}
+      >
+        <Box sx={{
+          padding: "24px", borderRadius: "8px", backgroundColor: "white", border: '1px solid #EEEEEE',
+          position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          width: "812px", display: "flex", flexDirection: "column", gap: "32px"
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "18px", fontWeight: "bold"
+          }}>파라미터 조회</div>
+          <CloseIcon sx={{position: "absolute", top:20, right:20, width: "24px", height: "24px", cursor: "pointer"}} onClick={()=>setOpenModal(false)} />
+          <DataGrid
+            sx={{maxHeight: '630px'}}
+            columns={[
+              { field: 'id', headerName: 'No', sortable: false, width: 50 },
+              { field: 'c2', headerName: '파라미터', sortable: false },
+              { field: 'c3', headerName: '입력구분', sortable: false },
+              { field: 'c4', headerName: '배출 규정등급', sortable: false },
+              { field: 'c5', headerName: '배출 적용등급', sortable: false },
+              { field: 'c6', headerName: '파라미터 버전', sortable: false },
+              { field: 'c7', headerName: '파라미터 값', sortable: false },
+              { field: 'c8', headerName: '단위', sortable: false },
+              { field: 'c9', headerName: '불확도(%)', sortable: false },
+            ]}
+            rows={[
+              {id: '1', c2: '활동량', c3:'사용자 입력 값', c4: 'Tier1', c5: '1', c6: '0', c7: 'ℓ', c8: '', c9: ''},
+              {id: '2', c2: 'CO2 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
+              {id: '3', c2: 'CH4 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
+              {id: '4', c2: 'N2O 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
+              {id: '5', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '6', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '7', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '8', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '9', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '10', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
+              {id: '11', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''}
+            ]}
+            slots={{
+              noRowsOverlay: NoRowsOverlay,
+              // loadingOverlay: LinearProgress,
+            }}
+            pagination={false}
+            disableColumnFilter
+            disableColumnSelector
+            disableColumnMenu
+            disableRowSelectionOnClick
+          />
+        </Box>
+      </Modal>
     </div>
   )
 };
