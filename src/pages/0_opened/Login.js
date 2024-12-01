@@ -62,7 +62,6 @@ const Login = () => {
     const session = await esgFetch("/account/login-id", "POST", {provideruserid : id, password: password}).then(res=>res.json());
     if("id" in session) {
       localStorage.setItem("__session", session.id);
-      setCookie("__session", session.id);
       
       const userInfo = await esgFetch("/account/user-info").then(res=>res.json());
       //userInfo ==>>

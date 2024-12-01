@@ -31,8 +31,7 @@ export async function loginDev(payload) {
 }
 
 export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
-  // const token = localStorage.getItem("token");
-  // const token = getCookie("token");
+  const session = localStorage.getItem("__session");
 
   // if (requiredAuth && !token) {
   //   // alert("401 페이지로 이동 필요");
@@ -40,10 +39,9 @@ export function esgFetch(url, method = "GET", body = {}, requiredAuth = true) {
   // }
   return fetch(`${host}/api/v1${url}`, {
     method: method,
-    credentials: "include",
     headers: {
       ...(method !== "GET" && { "Content-Type": "application/json" }),
-      // ...(requiredAuth && { Authorization: `Bearer ${token}` }),
+      ...(session && { Authorization: `Bearer ${session}` }),
     },
     ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
   });
