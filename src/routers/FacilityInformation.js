@@ -6,7 +6,7 @@ import NavigationTree from "../components/navigationTree/NavigationTree";
 
 const ManageWorkplace = lazy(() => import('../pages/1_facility_information/1_1_manage_workplace/ManageWorkplace'));
 const ManageFacility = lazy(() => import('../pages/1_facility_information/1_2_manage_facility/ManageFacility'));
-const FacilityHistory = lazy(() => import('../pages/1_facility_information/1_3_facility_history/FacilityHistory'));
+const ManageProduct = lazy(() => import('../pages/1_facility_information/1_3_manage_product/ManageProduct'));
 
 const FacilityInformation = props => {
 
@@ -23,7 +23,7 @@ const FacilityInformation = props => {
         <Routes>
           <Route exact path="workplace" element={<ManageWorkplace />} />
           <Route exact path="information" element={<ManageFacility />} />
-          <Route exact path="history" element={<FacilityHistory />} />
+          <Route exact path="product" element={<ManageProduct />} />
         </Routes>
       </Suspense>
     </MainContent>

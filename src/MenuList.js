@@ -20,7 +20,7 @@ const MenuList = [
         id: "1-3",
         type: "menu-child",
         name: "생산품관리",
-        link: "/facility/information"
+        link: "/facility/product"
       }
     ]
   },
@@ -33,13 +33,13 @@ const MenuList = [
         id: "2-1",
         type: "menu-child",
         name: "배출연료관리",
-        link: "/management/fuel"
+        link: "/emissions/fuel"
       },
       {
         id: "2-2",
         type: "menu-child",
         name: "배출등록모니터링",
-        link: "/management/monitor"
+        link: "/emissions/monitoring"
       }
     ]
   },

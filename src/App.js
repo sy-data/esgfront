@@ -5,7 +5,7 @@ import OpenedPages from './routers/OpenedPages';
 import FacilityInformation from './routers/FacilityInformation';
 import EmissionSource from './routers/EmissionSource';
 import ActivityData from './routers/ActivityData';
-import EmissionAmount from './routers/EmissionAmount';
+import EmissionManagement from './routers/2_Emission_management';
 import EnergyUsage from './routers/EnergeUsage';
 import TargetResult from './routers/TargetResult';
 import Statistics from './routers/Statistics';
@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/facility/*" element={<FacilityInformation items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
         <Route exact path="/source/*" element={<EmissionSource items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
         <Route exact path="/activity/*" element={<ActivityData items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
-        <Route exact path="/emissions/*" element={<EmissionAmount items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
+        <Route exact path="/emissions/*" element={<EmissionManagement items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
         <Route exact path="/usage/*" element={<EnergyUsage items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
         <Route exact path="/target_result/*" element={<TargetResult items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
         <Route exact path="/statistics/*" element={<Statistics items={MenuList} stateAtom={menuStateAtom} leafAtom={menuOpenedLeaf} />} />
