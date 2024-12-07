@@ -1,3 +1,4 @@
+import { useState, useRef, useCallback } from 'react';
 import { Button, Checkbox, FormControlLabel, LinearProgress, FormGroup, Typography, Switch } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import SubTitle from "../../../components/SubTitle";
@@ -53,8 +54,12 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 const LeftArea = props => {
+  const formRef = useRef();
   const setWorkplaceDetail = useSetRecoilState(workplaceDetailAtom);
-  
+  const handleHeaderChecked = useCallback(e => {
+    const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+  }, []);
   const columns = [
     { 
       field: "id",
@@ -62,14 +67,13 @@ const LeftArea = props => {
       sortable: false, 
       renderHeader: () => (
         <>
-          <input type="checkbox" id="checkbox-No" />
+          <input type="checkbox" id="checkbox-header" onChange={handleHeaderChecked} />
           <label 
-            for="checkbox-No"
+            for="checkbox-header"
             style={{
               color: "#757575",
               fontFamily: "Pretendard Variable",
               fontSize: "13px",
-              // fontWeight: 600,
               marginLeft: "6px",
               display: "flex",
               gap: "10px"
@@ -85,7 +89,7 @@ const LeftArea = props => {
           <>
             <input type="checkbox" id={`checkbox-${params.id}`} />
             <label 
-              for="rememberId"
+              for={`checkbox-${params.id}`}
               style={{
                 color: "#111111",
                 fontFamily: "Pretendard Variable",
@@ -94,6 +98,7 @@ const LeftArea = props => {
                 display: "flex",
                 gap: "10px"
               }}
+              onClick={e=>e.stopPropagation()}
             >
               <span className="style-checkbox"></span>
               <div style={{height: "20px"}}>
@@ -110,7 +115,13 @@ const LeftArea = props => {
     {
       field: 'company_use', headerName: '사업장 사용',
       renderCell: params => {
-        return <Android12Switch onClick={e => console.log(params)} />
+        return <Android12Switch checked={rows[rows.findIndex(item=>item.id===params.row.id)]["company_use"]} onClick={e => {
+          e.stopPropagation();
+          let newRows = [...rows];
+          const idx = newRows.findIndex(item=>item.id===params.row.id);
+          newRows[idx]["company_use"] = !newRows[idx]["company_use"];
+          setRows(newRows);
+        }} />
       }
     },
     { field: 'company_size', headerName: '회사규모' },
@@ -119,59 +130,82 @@ const LeftArea = props => {
     { field: 'product_yn', headerName: '생산품' }
   ]
   
-  const rows = [
+  const [rows, setRows] = useState([
     {
-      id: 1,
+      id: '1',
       type: '본사(본점)',
       company_name: "경기 정밀 산업",
       company_number: "123-45-67890",
-      company_use: 1,
+      company_use: true,
+      company_size: "대기업",
+      industry_type: "제조업/건설업",
+      register_date: "1111-11-11",
+      product_yn: "유"
+    },
+    {
+      id: '6',
+      type: '본사(본점)',
+      company_name: "경기 정밀 산업",
+      company_number: "123-45-67890",
+      company_use: false,
       company_size: "대기업",
       industry_type: "제조업/건설업",
       register_date: "1111-11-11",
       product_yn: "유"
     }
-  ]
+  ]);
   
   const handleSelectRow = rowId => {
-    setWorkplaceDetail({
-      open: true,
-      id: rows[rowId-1].id,
-      type: rows[rowId-1].type,
-      company_name: rows[rowId-1].company_name,
-      company_number1: rows[rowId-1].company_number.split('-')[0],
-      company_number2: rows[rowId-1].company_number.split('-')[1],
-      company_number3: rows[rowId-1].company_number.split('-')[2],
-      company_use: rows[rowId-1].company_use,
-      company_size: rows[rowId-1].company_size,
-      industry_type: rows[rowId-1].industry_type,
-      // register_date: rows[rowId-1].register_date
-    })
+    const selectedRow = rows.filter(f=>f.id===rowId[0])[0]
+    if(selectedRow && Object.keys(selectedRow).length > 0){
+      setWorkplaceDetail({
+        open: true,
+        id: selectedRow.id,
+        type: selectedRow.type,
+        company_name: selectedRow.company_name,
+        company_number1: selectedRow.company_number.split('-')[0],
+        company_number2: selectedRow.company_number.split('-')[1],
+        company_number3: selectedRow.company_number.split('-')[2],
+        company_use: selectedRow.company_use,
+        company_size: selectedRow.company_size,
+        industry_type: selectedRow.industry_type,
+        // register_date: "2024-12-23"
+      });
+    }
   }
   
-  const fetchTest = async () => {
-    const asdf = await esgFetch("/account/user-sessions").then(res => res.json());
-    console.log(asdf)
-  }
+  const handleDeleteChecked = useCallback(() => {
+    console.log("delete")
+    const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]:checked');
+    const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-","")).filter(f=>f!=='');
+    setRows(rows.filter(r => !checked.includes(r.id.toString())));
+  }, [rows]);
   
   return (
     <ContentBody padding={"24px"} flex={props.flex} width={props.width} gap="16px">
       <SubTitle title={"사업장 목록"}>
         <div style={{display:"flex", gap:"8px"}}>
           <Button sx={{width: "122px", fontSize: "14px"}} variant="btnActive">신규 등록</Button>
-          <Button onClick={fetchTest} sx={{width: "122px", fontSize: "14px"}} variant="btnInit">선택 삭제</Button>
+          <Button onClick={handleDeleteChecked} sx={{width: "122px", fontSize: "14px"}} variant="btnInit">선택 삭제</Button>
         </div>
       </SubTitle>
-      <DataGrid
-        columns={columns}
-        rows={rows}
-        columnHeaderHeight={40}
-        onRowSelectionModelChange={handleSelectRow}
-        slots={{
-          noRowsOverlay: NoRowsOverlay,
-          loadingOverlay: LinearProgress,
-        }}
-      />
+      <form style={{height: "100%"}} ref={formRef}>
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          columnHeaderHeight={40}
+          onRowSelectionModelChange={handleSelectRow}
+          onCellClick={(params, event) => {
+            if(event.target.tagName === "INPUT"){
+              event.stopPropagation();
+            }
+          }}
+          slots={{
+            noRowsOverlay: NoRowsOverlay,
+            loadingOverlay: LinearProgress,
+          }}
+        />
+      </form>
     </ContentBody>
   )
 }
