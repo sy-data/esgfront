@@ -42,13 +42,14 @@ const FacilityGroups = props => {
     );
   }
   return (
-    <div style={{padding: "24px", display: "flex", flex: 1, flexDirection: "column", gap: "14px", borderRight: "1px solid #EEEEEE", backgroundColor: "#FFFFFF"}}>
+    <div style={{padding: "24px", display: "flex", flex: 1, flexDirection: "column", gap: "14px", borderRight: "1px solid #EEEEEE", borderRadius: "8px", backgroundColor: "#FFFFFF"}}>
       <SubTitle title={"조직명"} />
       <List component="nav" aria-label="secondary mailbox folder">
         <GroupListItem index={1} type={"법인"} name={"(주) 이스코프"} count={5} />
         <GroupListItem index={2} type={"법인"} name={"(주) 하우스코프"} count={3} />
         <GroupListItem index={3} type={"개인"} name={"(주) 에스물류"} count={4} />
         <GroupListItem index={4} type={"법인"} name={"(주) 미국 CA 사무소"} count={2} />
+        {props.groupList.map((group, index)=><GroupListItem index={index} type={group.type} name={group.name} count={group.count} onClick={props.updateFacilityList} />)}
       </List>
     </div>
   )

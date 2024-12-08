@@ -12,6 +12,7 @@ import { ReactComponent as CalendarIcon } from "../../../assets/images/IconCalen
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { esgFetch } from "../../../components/FetchWrapper";
 
 const BlockGroup =  styled("div")(() => ({
   display: "flex", flexDirection: "column", gap: "16px"
@@ -44,14 +45,14 @@ const BlockFieldContent = styled("div")(() => ({
 
 
 const FacilityRegister = props => {
-  const [valid, setValid] = useState(false);
+  // const [valid, setValid] = useState(false);
   const [group, setGroup] = useState("");
   const [workplace, setWorkplace] = useState("");
   const [emission, setEmission] = useState("");
   const [facility, setFacility] = useState("");
   const [description_gjType, setDescription_gjType] = useState("");
   const [fuel_sebu, setFuel_sebu] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [govReport, setGovReport] = useState("");
   
   const emisstion_types = useMemo(() => (["고정연소", "이동연소", "폐기물/소각","공정배출","전력","열/스팀"]),[]);
@@ -82,6 +83,15 @@ const FacilityRegister = props => {
     format: "YYYY-MM-DD",
     parse: (value) => dayjs(value, "YYYY-MM-DD", true).toDate(),
   };
+  
+  const [processing, setProcessing] = useState(false);
+  const handleRegister = async () => {
+    setProcessing(true)
+    const result = await esgFetch().then(res=>{
+      setProcessing(false);
+      return res.json();
+    });
+  }
   
   return (
     <ContentBody width={props.width} padding="24px" gap="32px" flex={1}>
@@ -300,7 +310,7 @@ const FacilityRegister = props => {
           </BlockFieldGroup>
         </BlockGroup>
       </div>
-      <Button variant={valid ? "btnActive":"btnDisabled"} size="small" disabled={!valid} sx={{height:"40px"}} fullWidth onClick={()=>console.log("a")}>등록</Button>
+      <Button variant={processing ? "btnDisabled" : "btnActive"} size="small" sx={{height:"40px"}} disabled={processing} fullWidth onClick={handleRegister}>등록</Button>
     </ContentBody>
   )
 }

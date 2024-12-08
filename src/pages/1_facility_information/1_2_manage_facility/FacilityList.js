@@ -11,6 +11,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import { esgFetch } from "../../../components/FetchWrapper";
 
 const FacilityList = props => {
   const baseYearRef = useRef(null);
@@ -167,6 +168,34 @@ const FacilityList = props => {
     setRows(rows.filter(r => !checked.includes(r.id)));
   }, [rows]);
   
+  const [paramRows, setParamRows] = useState([]);
+  const handleCloseParamModal = () => {
+    setOpenModal(false);
+    setParamRows([]);
+  }
+  const [paramLoading, setParamLoading] = useState(false);
+  const updateParameter = async id => {
+    setParamLoading(true)
+    const result = await esgFetch().then(res=>{
+      setParamLoading(false);
+      return res.json;
+    });
+    if("data" in result){
+      result.data.items.map(param=>({
+        id: param.id,
+        c2: param.name,
+        c3: param.gubun,
+        c4: param.g_rate,
+        c5: param.j_rate,
+        c6: param.version,
+        c7: param.value,
+        c8: param.unit,
+        c9: param.bulhwakdo
+        // id: '2', c2: 'CO2 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: '',
+      }))
+    }
+  }
+  
   return (
     <div style={{display: "flex", flexDirection: "column", width: props.width, gap: "24px"}}>
       <div style={{display: "flex", gap: "6px"}}>
@@ -209,12 +238,13 @@ const FacilityList = props => {
               noRowsOverlay: NoRowsOverlay,
               // loadingOverlay: LinearProgress,
             }}
+            loading={props.listLoading}
           />
         </form>
       </ContentBody>
       <Modal
         open={openModal}
-        onClose={()=>setOpenModal(false)}
+        onClose={handleCloseParamModal}
       >
         <Box sx={{
           padding: "24px", borderRadius: "8px", backgroundColor: "white", border: '1px solid #EEEEEE',
@@ -225,7 +255,7 @@ const FacilityList = props => {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: "18px", fontWeight: "bold"
           }}>파라미터 조회</div>
-          <CloseIcon sx={{position: "absolute", top:20, right:20, width: "24px", height: "24px", cursor: "pointer"}} onClick={()=>setOpenModal(false)} />
+          <CloseIcon sx={{position: "absolute", top:20, right:20, width: "24px", height: "24px", cursor: "pointer"}} onClick={handleCloseParamModal} />
           <DataGrid
             sx={{maxHeight: '630px'}}
             columns={[
@@ -239,23 +269,12 @@ const FacilityList = props => {
               { field: 'c8', headerName: '단위', sortable: false },
               { field: 'c9', headerName: '불확도(%)', sortable: false },
             ]}
-            rows={[
-              {id: '1', c2: '활동량', c3:'사용자 입력 값', c4: 'Tier1', c5: '1', c6: '0', c7: 'ℓ', c8: '', c9: ''},
-              {id: '2', c2: 'CO2 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
-              {id: '3', c2: 'CH4 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
-              {id: '4', c2: 'N2O 배출량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'CO2-eq ton', c8: '', c9: ''},
-              {id: '5', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '6', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '7', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '8', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '9', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '10', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''},
-              {id: '11', c2: '에너지 사용량', c3:'시스템 결과 값', c4: 'Tier1', c5: '1', c6: '', c7: 'TJ', c8: '', c9: ''}
-            ]}
+            rows={paramRows}
             slots={{
               noRowsOverlay: NoRowsOverlay,
               // loadingOverlay: LinearProgress,
             }}
+            loading={paramLoading}
             pagination={false}
             disableColumnFilter
             disableColumnSelector
