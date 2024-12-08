@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button, Checkbox, FormControlLabel, LinearProgress, FormGroup, Typography, Switch } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import SubTitle from "../../../components/SubTitle";
@@ -115,12 +115,12 @@ const LeftArea = props => {
     {
       field: 'company_use', headerName: '사업장 사용',
       renderCell: params => {
-        return <Android12Switch checked={rows[rows.findIndex(item=>item.id===params.row.id)]["company_use"]} onClick={e => {
+        return <Android12Switch checked={props.rows[props.rows.findIndex(item=>item.id===params.row.id)]["company_use"]} onClick={e => {
           e.stopPropagation();
-          let newRows = [...rows];
+          let newRows = [...props.rows];
           const idx = newRows.findIndex(item=>item.id===params.row.id);
           newRows[idx]["company_use"] = !newRows[idx]["company_use"];
-          setRows(newRows);
+          props.setRows(newRows);
         }} />
       }
     },
@@ -130,71 +130,64 @@ const LeftArea = props => {
     { field: 'product_yn', headerName: '생산품' }
   ]
   
-  const [rows, setRows] = useState([
-    {
-      id: '1',
-      type: '본사(본점)',
-      company_name: "경기 정밀 산업",
-      company_number: "123-45-67890",
-      company_use: true,
-      company_size: "대기업",
-      industry_type: "제조업/건설업",
-      register_date: "1111-11-11",
-      product_yn: "유"
-    },
-    {
-      id: '6',
-      type: '본사(본점)',
-      company_name: "경기 정밀 산업",
-      company_number: "123-45-67890",
-      company_use: false,
-      company_size: "대기업",
-      industry_type: "제조업/건설업",
-      register_date: "1111-11-11",
-      product_yn: "유"
-    }
-  ]);
-  
-  const handleSelectRow = rowId => {
-    const selectedRow = rows.filter(f=>f.id===rowId[0])[0]
-    if(selectedRow && Object.keys(selectedRow).length > 0){
-      setWorkplaceDetail({
-        open: true,
-        id: selectedRow.id,
-        type: selectedRow.type,
-        company_name: selectedRow.company_name,
-        company_number1: selectedRow.company_number.split('-')[0],
-        company_number2: selectedRow.company_number.split('-')[1],
-        company_number3: selectedRow.company_number.split('-')[2],
-        company_use: selectedRow.company_use,
-        company_size: selectedRow.company_size,
-        industry_type: selectedRow.industry_type,
-        // register_date: "2024-12-23"
-      });
-    }
-  }
+  // const handleSelectRow = rowId => {
+  //   console.log(rowId);
+  //   const selectedRow = props.rows.filter(f=>f.id===rowId[0])[0]
+    
+  //   if(selectedRow && Object.keys(selectedRow).length > 0){
+  //     setWorkplaceDetail({
+  //       open: true,
+  //       id: selectedRow.id || "",
+  //       type: selectedRow.type || "",
+  //       company_branch: selectedRow.company_branch || "",
+  //       company_name: selectedRow.company_name || "",
+  //       company_use: selectedRow.company_use || "",
+  //       company_number1: selectedRow.company_number1 || "",
+  //       company_number2: selectedRow.company_number2 || "",
+  //       company_number3: selectedRow.company_number3 || "",
+  //       workplace_name: selectedRow.workplace_name || "",
+  //       phone_number1: selectedRow.phone_number1 || "",
+  //       phone_number2: selectedRow.phone_number2 || "",
+  //       phone_number3: selectedRow.phone_number3 || "",
+  //       industry_type: selectedRow.industry_type || "",
+  //       company_size: selectedRow.company_size || "",
+  //       employee_number: selectedRow.employee_number || "",
+  //       address1: selectedRow.address1 || "",
+  //       address2: selectedRow.address2 || "",
+  //       address3: selectedRow.address3 || "",
+  //       sales_last: selectedRow.sales_last || "",
+  //       sales_now: selectedRow.sales_now || "",
+  //       area_j: selectedRow.area_j || "",
+  //       area_y: selectedRow.area_y || "",
+  //       register_date: selectedRow.register_date || null,
+  //       close_date: selectedRow.close_date || null,
+  //       product_yn: selectedRow.product_yn || ""
+  //     });
+  //   }
+  // }
   
   const handleDeleteChecked = useCallback(() => {
-    console.log("delete")
     const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]:checked');
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-","")).filter(f=>f!=='');
-    setRows(rows.filter(r => !checked.includes(r.id.toString())));
-  }, [rows]);
+    props.setRows(props.rows.filter(r => !checked.includes(r.id.toString())));
+    
+    props.refreshList();
+  }, [props.rows]);
   
   return (
     <ContentBody padding={"24px"} flex={props.flex} width={props.width} gap="16px">
       <SubTitle title={"사업장 목록"}>
         <div style={{display:"flex", gap:"8px"}}>
-          <Button sx={{width: "122px", fontSize: "14px"}} variant="btnActive">신규 등록</Button>
+          <Button onClick={()=>props.handleSelectRow(null)} sx={{width: "122px", fontSize: "14px"}} variant="btnActive">신규 등록</Button>
           <Button onClick={handleDeleteChecked} sx={{width: "122px", fontSize: "14px"}} variant="btnInit">선택 삭제</Button>
         </div>
       </SubTitle>
       <form style={{height: "100%"}} ref={formRef}>
         <DataGrid
           columns={columns}
-          rows={rows}
+          rows={props.rows}
           columnHeaderHeight={40}
-          onRowSelectionModelChange={handleSelectRow}
+          onRowSelectionModelChange={props.handleSelectRow}
           onCellClick={(params, event) => {
             if(event.target.tagName === "INPUT"){
               event.stopPropagation();
@@ -204,6 +197,7 @@ const LeftArea = props => {
             noRowsOverlay: NoRowsOverlay,
             loadingOverlay: LinearProgress,
           }}
+          loading={props.loading}
         />
       </form>
     </ContentBody>

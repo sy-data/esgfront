@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, TextField, Select, MenuItem } from "@mui/material";
-import Search from "@mui/icons-material/Search";
 import SubTitle from "../../../components/SubTitle";
 import ContentBody from "../../../components/ContentBody";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -62,7 +61,7 @@ const RightArea = props => {
     }
     const isValid = k => {
       if(k === "company_branch"){
-        return newDetail["type"] === "b" || newDetail["company_branch"].length > 0;
+        return newDetail["type"] === "본사" || newDetail["company_branch"].length > 0;
       }
       return /^-?\d+$/.test(newDetail[k]) ? parseInt(newDetail[k]) >= 0 : newDetail[k].length > 0;
     }
@@ -70,34 +69,98 @@ const RightArea = props => {
     setValid(required_fields.every(field => isValid(field)));
   }
   
-  const saveDetail = e => {
+  const handleReset = () => {
+    props.handleSelectRow(detail.id)
+  }
+  // const handleReset = async () => {
+  //   const orgValue = await esgFetch().then(res=>res.json());
+    
+  //   setDetail({
+  //     open: true,
+  //     // id: selectedRow.id || "",
+  //     type: orgValue.type || "",
+  //     company_branch: orgValue.company_branch || "",
+  //     company_name: orgValue.company_name || "",
+  //     company_use: orgValue.company_use || "",
+  //     company_number1: orgValue.company_number.split('-')[0] || "",
+  //     company_number2: orgValue.company_number.split('-')[1] || "",
+  //     company_number3: orgValue.company_number.split('-')[2] || "",
+  //     workplace_name: orgValue.workplace_name || "",
+  //     phone_number1: orgValue.phone_number1 || "",
+  //     phone_number2: orgValue.phone_number2 || "",
+  //     phone_number3: orgValue.phone_number3 || "",
+  //     industry_type: orgValue.industry_type || "",
+  //     company_size: orgValue.company_size || "",
+  //     employee_number: orgValue.employee_number || "",
+  //     address1: orgValue.address1 || "",
+  //     address2: orgValue.address2 || "",
+  //     address3: orgValue.address3 || "",
+  //     sales_last: orgValue.sales_last || "",
+  //     sales_now: orgValue.sales_now || "",
+  //     area_j: orgValue.area_j || "",
+  //     area_y: orgValue.area_y || "",
+  //     register_date: orgValue.register_date || null,
+  //     close_date: orgValue.close_date || null,
+  //     product_yn: orgValue.product_yn || ""
+  //   })
+  // }
+  
+  const saveDetail = async () => {
     console.log(detail);
+    
+    const result = await esgFetch("", "POST", {
+      id: detail.id || "",
+      지점: detail.type,
+      지점선택: detail.company_branch,
+      title: detail.company_name,
+      사용: detail.company_use,
+      bn: [detail.company_number1,detail.company_number2,detail.company_number3].join(''),
+      사업장명: detail.workplace_name,
+      rep_tel_destination_code: detail.phone_number1,
+      rep_tel_number: [detail.phone_number2, detail.phone_number3].join(''),
+      산업군: detail.industry_type,
+      company_type: detail.company_size,
+      종업원수: detail.employee_number,
+      zip_code: detail.address1,
+      addr: detail.address2,
+      addr_detail: detail.address3,
+      전년도매출: detail.sales_last,
+      당해년도매출: detail.sales_now,
+      전용면적: detail.area_j,
+      연면적: detail.area_y,
+      등록일: detail.register_date,
+      폐쇄일: detail.close_date,
+      생산품: detail.product_yn
+    }).then(res=>res.json());
+    
+    props.refreshList();
   }
   
   return (
     <ContentBody width={props.width} padding="24px" gap="32px">
       <SubTitle title={"사업장 상세"}>
-        <CloseIcon onClick={()=>setDetail({...detail, open: !detail["open"]})} />
+        <CloseIcon onClick={()=>setDetail({...detail, open: !detail["open"]})} sx={{cursor: "pointer"}} />
       </SubTitle>
       <div style={{width: "100%", height: "auto", overflow: "scroll", display: "flex", flexDirection: "column", gap: "24px"}}>
         <DetailField title="회사구분" row={true}>
           <RadioGroup row name="company_type" sx={{flex: 1}}>
-            <FormControlLabel checked={detail["type"] === 'b'} onChange={e=>handleChange(e.target.value, "type")} value='b' control={<Radio />} label="본사" />
-            <FormControlLabel checked={detail["type"] === 'j'} onChange={e=>handleChange(e.target.value, "type")} value='j' control={<Radio />} label="지사(지점)" />
+            <FormControlLabel checked={detail["type"] === '본사'} onChange={e=>handleChange(e.target.value, "type")} value='본사' control={<Radio />} label="본사" />
+            <FormControlLabel checked={detail["type"] === '지사'} onChange={e=>handleChange(e.target.value, "type")} value='지사' control={<Radio />} label="지사(지점)" />
           </RadioGroup>
           <Select
             value={detail["company_branch"]}
             size="small"
             IconComponent={ExpandMoreIcon}
             sx={{flex: 0.9}}
-            disabled={detail["type"] !== 'j'}
+            disabled={detail["type"] !== '지사'}
             onChange={e=>handleChange(e.target.value, "company_branch")}
             displayEmpty
             renderValue={selected => {
-              if(detail["type"] !== 'j' || selected.length === 0){
+              const s = selected || detail["company_branch"];
+              if(detail["type"] !== '지사' || s.length === 0){
                 return <Typography style={{fontSize: "15px", color: "#AAAAAA", fontWeight: 600}}>지사(지점) 선택</Typography>
               }
-              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{s}</Typography>
             }}
           >
             <MenuItem value="지점1">지점1</MenuItem>
@@ -118,15 +181,14 @@ const RightArea = props => {
             onChange={e=>handleChange(e.target.value, "company_use")}
             displayEmpty
             renderValue={selected => {
-              const options = ["미사용", "사용"]
               if(selected < 0){
                 return <Typography style={{fontSize: "15px", color: "#AAAAAA"}}>사용 여부를 선택해주세요</Typography>
               }
-              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{options[selected]}</Typography>
+              return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
             }}
           >
-            <MenuItem value={1}>사용</MenuItem>
-            <MenuItem value={0}>미사용</MenuItem>
+            <MenuItem value="사용">사용</MenuItem>
+            <MenuItem value="미사용">미사용</MenuItem>
           </Select>
         </DetailField>
         
@@ -187,7 +249,7 @@ const RightArea = props => {
               return <Typography style={{fontSize: "15px", color: "#111111", fontWeight: "bold"}}>{selected}</Typography>
             }}
           >
-            <MenuItem value={1}>회사규모1</MenuItem>
+            {["대기업","중견기업","중소기업","중기업","소기업"].map(v=><MenuItem sx={{height: "40px", fontSize: "13px", padding: "10px"}} value={v}>{v}</MenuItem>)}
           </Select>
         </DetailField>
         
@@ -231,7 +293,7 @@ const RightArea = props => {
               slotProps={{
                 textField: {size: 'small', sx: {width: "100%"}, placeholder: "yyyy-mm-dd"},
               }}
-              value={detail["register_date"]}
+              value={detail["register_date"] ? dayjs(detail["register_date"]) : null}
               onChange={e => handleChange(e.format('YYYY-MM-DD'), "register_date")}
             />
           </LocalizationProvider>
@@ -245,7 +307,7 @@ const RightArea = props => {
               slotProps={{
                 textField: {size: 'small', sx: {width: "100%"}, placeholder: "yyyy-mm-dd"},
               }}
-              value={detail["close_date"]}
+              value={detail["close_date"] ? dayjs(detail["close_date"]) : null}
               onChange={e => handleChange(e.format('YYYY-MM-DD'), "close_date")}
             />
           </LocalizationProvider>
@@ -259,7 +321,7 @@ const RightArea = props => {
         </DetailField>
       </div>
       <div style={{display:"flex", gap: "8px"}}>
-        <Button variant="btnInit" sx={{flex:1}}>초기화</Button>
+        <Button variant="btnInit" sx={{flex:1}} onClick={handleReset}>초기화</Button>
         <Button variant={valid ? "btnActive":"btnDisabled"} disabled={!valid} sx={{flex:1}} onClick={saveDetail}>저장</Button>
       </div>
     </ContentBody>

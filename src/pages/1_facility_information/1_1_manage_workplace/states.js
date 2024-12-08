@@ -8,7 +8,7 @@ export const workplaceDetailAtom = atom({
     type: '',
     company_branch: '',
     company_name: '',
-    company_use: -1,
+    company_use: '',
     company_number1: '',
     company_number2: '',
     company_number3: '',
