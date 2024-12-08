@@ -48,7 +48,7 @@ const ManageWorkplace = () => {
         return res.json();
       });
     
-    if("data" in result){
+    if(Array.isArray(result.data?.items)){
       setRows(result.data.items.map(m=>({
         id: m.id || '',
         type: m.type || '',

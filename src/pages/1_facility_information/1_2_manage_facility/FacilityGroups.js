@@ -5,19 +5,19 @@ import SvgIcon from "@mui/material/SvgIcon";
 import SubTitle from "../../../components/SubTitle";
 
 const FacilityGroups = props => {
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  // const [selectedIndex, setSelectedIndex] = useState(1);
   
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    props.setSelectedIndex(index);
   };
   
   const GroupListItem = ({index, name, type, count}) => {
-    const color = selectedIndex === index ? "#00B096" : "#757575";
+    const color = props.selectedIndex === index ? "#00B096" : "#757575";
     
     return (
       <ListItemButton
         sx={{borderRadius: "8px", padding: "11px 16px", height: 48}}
-        selected={selectedIndex === index}
+        selected={props.selectedIndex === index}
         onClick={(event) => handleListItemClick(event, index)}
       >
         <div style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
@@ -49,7 +49,7 @@ const FacilityGroups = props => {
         <GroupListItem index={2} type={"법인"} name={"(주) 하우스코프"} count={3} />
         <GroupListItem index={3} type={"개인"} name={"(주) 에스물류"} count={4} />
         <GroupListItem index={4} type={"법인"} name={"(주) 미국 CA 사무소"} count={2} />
-        {props.groupList.map((group, index)=><GroupListItem index={index} type={group.type} name={group.name} count={group.count} onClick={props.updateFacilityList} />)}
+        {props.groupList.map((group, index)=><GroupListItem index={index} type={group.type} name={group.name} count={group.count} onClick={props.updateFacilityList(group.id)} />)}
       </List>
     </div>
   )

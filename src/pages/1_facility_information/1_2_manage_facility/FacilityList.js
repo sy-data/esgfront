@@ -123,28 +123,28 @@ const FacilityList = props => {
     setOpenModal(true);
   }
   
-  const [rows, setRows] = useState([
-    {
-      id: '1', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
-      version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
-    },
-    {
-      id: '2', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
-      version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
-    },
-    {
-      id: '3', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
-      version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
-    },
-    {
-      id: '4', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
-      version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
-    },
-    {
-      id: '5', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
-      version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
-    },
-  ]);
+  // const [rows, setRows] = useState([
+  //   {
+  //     id: '1', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
+  //     version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
+  //   },
+  //   {
+  //     id: '2', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
+  //     version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
+  //   },
+  //   {
+  //     id: '3', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
+  //     version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
+  //   },
+  //   {
+  //     id: '4', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
+  //     version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
+  //   },
+  //   {
+  //     id: '5', facility_name: "내연발전기", description: "사업장 원자력발전기", emission_type: "고정연소", fuel: "부생연료2호", industry_group: "제조업",
+  //     version: "Ver1", g_rate: "Tier2", j_rate: "Tier2"
+  //   },
+  // ]);
   
   const NoRowsOverlay = () => {
     return (
@@ -165,8 +165,10 @@ const FacilityList = props => {
   const handleDeleteChecked = useCallback(() => {
     const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]:checked');
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-",""));
-    setRows(rows.filter(r => !checked.includes(r.id)));
-  }, [rows]);
+    props.setFacilityList(props.facilityList.filter(r => !checked.includes(r.id)));
+    
+    props.refreshList()
+  }, [props.facilityList]);
   
   const [paramRows, setParamRows] = useState([]);
   const handleCloseParamModal = () => {
@@ -180,7 +182,7 @@ const FacilityList = props => {
       setParamLoading(false);
       return res.json;
     });
-    if("data" in result){
+    if(Array.isArray(result.data?.items)){
       result.data.items.map(param=>({
         id: param.id,
         c2: param.name,
@@ -233,7 +235,8 @@ const FacilityList = props => {
         <form style={{height: "100%"}} ref={formRef}>
           <DataGrid
             columns={columns}
-            rows={rows.filter(r=>r.facility_name.includes(searchTerm))}
+            // rows={rows.filter(r=>r.facility_name.includes(searchTerm))}
+            rows={props.facilityList.filter(r=>r.facility_name.includes(searchTerm))}
             slots={{
               noRowsOverlay: NoRowsOverlay,
               // loadingOverlay: LinearProgress,

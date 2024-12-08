@@ -18,7 +18,7 @@ const ManageFacility = () => {
 
   React.useEffect(() => {
     setHeaderTitle("시설정보관리");
-    
+    updateGroupList();
   }, []);
   
 
@@ -26,28 +26,32 @@ const ManageFacility = () => {
   const handleRegister = () => setDisplayGroups(false);
   const handleCloseRegister = () => setDisplayGroups(true);
   
+  const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
   const [groupList, setGroupList] = useState([]);
   const updateGroupList = async () => {
     const result = await esgFetch("").then(res=>res.json());
-    if("data" in result){
-      setGroupList(result.data.items.map(group=>({
+    if(Array.isArray(result.data?.items)){
+      setGroupList(result.data?.items?.map(group=>({
+        id: group.id,
         type: group.type,
         name: group.name,
         count: group.count
-      })))
+      })));
+      if(result.data.items.length>0)
+        updateFacilityList(result.data.items[0].id);
     }
   }
   
   const [facilityList, setFacilityList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
-  const updateFacilityList = async group => {
+  const updateFacilityList = async groupId => {
     setListLoading(true);
     const result = await esgFetch("").then(res=>{
       setListLoading(false);
       return res.json();
     });
-    if("data" in result){
-      setFacilityList(result.data.items.map(f=>({
+    if(Array.isArray(result.data?.items)){
+      setFacilityList(result.data?.items?.map(f=>({
         id: f.id,
         name: f.name,
         description: f.description,
@@ -65,12 +69,16 @@ const ManageFacility = () => {
       })));
     }
   }
+  
+  const refreshList = () => {
+    updateFacilityList(groupList[selectedGroupIndex].id);
+  }
 
   return (
     <div style={{ backgroundColor: "#eee", width: "calc(100% - 236px)", padding: "24px", boxSizing: "border-box" }}>
       <Stack direction="row" spacing={3} height={"100%"} width={"100%"}>
-        {displayGroups && <FacilityGroups groupList={groupList} setGroupList={setGroupList} updateFacilityList={updateFacilityList} />}
-        <FacilityList width={displayGroups?"75%":"66%"} register={handleRegister} listLoading={listLoading} />
+        {displayGroups && <FacilityGroups selectedIndex={selectedGroupIndex} setSelectedIndex={setSelectedGroupIndex} groupList={groupList} setGroupList={setGroupList} updateFacilityList={updateFacilityList} />}
+        <FacilityList width={displayGroups?"75%":"66%"} register={handleRegister} facilityList={facilityList} setFacilityList={setFacilityList} refreshList={refreshList} listLoading={listLoading} />
         {!displayGroups && <FacilityRegister closeRegister={handleCloseRegister} />}
       </Stack>
     </div>
