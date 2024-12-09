@@ -55,6 +55,7 @@ const ManageWorkplace = () => {
         company_branch: m.company_branch || '',
         company_name: m.title || '',
         company_use: m.company_use || '',
+        company_number: `${m.bn.substring(0,3)}-${m.bn.substring(3,5)}-${m.bn.substring(5)}`,
         company_number1: m.bn.substring(0,3),
         company_number2: m.bn.substring(3,5),
         company_number3: m.bn.substring(5),
