@@ -3,24 +3,30 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button, TextField, Modal, Box } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { esgFetch } from "../../../components/FetchWrapper";
 
 const HsModal = props => {
   const termRef = useRef();
   const manualRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
-  const handleSearchButtonClick = () => setSearchTerm(termRef.current.value);
+  const handleSearchButtonClick = () => handleSearchCode(termRef.current.value);
   const handleTermKeyDown = e => {
     if(e.key === "Enter"){
       e.preventDefault();
-      handleSearchButtonClick();
+      handleSearchCode(termRef.current.value);
     }
   }
-
-  const [openModal, setOpenModal] = useState(false);
   
-  const openParameter = e => {
-    console.log(e)
-    setOpenModal(true);
+  const [loading, setLoading] = useState(false);
+  const handleSearchCode = async term => {
+    setLoading(true);
+    setSearchTerm(term);
+    
+    const result = await esgFetch().then(res => {
+      setLoading(false);
+      
+      setSearchResult(res.json());
+    })
   }
   
   const NoRowsOverlay = () => {
@@ -133,11 +139,11 @@ const HsModal = props => {
                 { field: 'c5', headerName: '신성질별 분류 해설', sortable: false, width: 220 },
                 { field: 'c6', headerName: '기본 세율', sortable: false },
               ]}
-              rows={[
-                {id: '1', c2: '9032.89-4091', c3:'55.88%', c4: '반도체 제조용 기기의 것', c5: '기타 정밀기계', c6: '3%'},
-                {id: '2', c2: '9032.89-4099', c3:'44.12%', c4: '기타', c5: '기타 정밀기계', c6: '5%'},
-              ]}
-              // rows={[]}
+              // rows={[
+              //   {id: '1', c2: '9032.89-4091', c3:'55.88%', c4: '반도체 제조용 기기의 것', c5: '기타 정밀기계', c6: '3%'},
+              //   {id: '2', c2: '9032.89-4099', c3:'44.12%', c4: '기타', c5: '기타 정밀기계', c6: '5%'},
+              // ]}
+              rows={searchResult}
               slots={{
                 noRowsOverlay: NoRowsOverlay,
                 // loadingOverlay: LinearProgress,
@@ -146,6 +152,7 @@ const HsModal = props => {
                 setSearchTerm("");
                 props.onSelect(params);
               }}
+              loading={loading}
               disableColumnFilter
               disableColumnSelector
               disableColumnMenu
