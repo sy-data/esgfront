@@ -9,9 +9,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import HsModal from './HsModal';
+import { esgFetch } from "../../../components/FetchWrapper";
 
 const ProductList = props => {
-  const baseYearRef = useRef(null);
   const formRef = useRef();
   const termRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,29 +124,46 @@ const ProductList = props => {
   const handleDeleteChecked = useCallback(() => {
     const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]:checked');
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-",""));
-    setRows(rows.filter(r => !checked.includes(r.id)));
-  }, [rows]);
+    props.setProductList(props.productList.filter(r => !checked.includes(r.id)));
+    
+    props.refreshList();
+  }, [props.facilityList]);
   
   
   const [openHsModal, setOpenHsModal] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState("");
   const handleOpenModal = idx => {
-    console.log("handle", idx);
     setActiveIndex(idx);
     setOpenHsModal(true);
   }
   const handleCloseModal = () => setOpenHsModal(false);
   const handleSelectValue = value => {
-    // const prevValues = [...values];
-    // prevValues[activeIndex].code = `${value.row.c2}(${value.row.c4})`;
-    // setValues(prevValues);
-    // setOpenHsModal(false);
+    setOpenHsModal(false);
+    // value.row ->
+    // {
+    //   c2: "9032.89-4099",
+    //   c3: "44.12%",
+    //   c4: "기타",
+    //   c5: "기타 정밀기계",
+    //   c6: "5%",
+    //   id: "2"
+    // }
+    const prevRow = [...props.productList];
+    prevRow.forEach(r => {
+      if(r.id === activeIndex){
+        r.hs_code = `${value.row.c2}(${value.row.c5})`;
+        setActiveIndex("");
+      }
+    })
+    props.setProductList(prevRow)
+    
+    // db에서 hs code 업데이트
   }
   
   return (
     <div style={{display: "flex", flexDirection: "column", width: props.width, gap: "24px"}}>
       <div style={{display: "flex", gap: "6px"}}>
-        <BaseYearSelect ref={baseYearRef} displayItemCount={5} />
+        <BaseYearSelect ref={props.baseYearRef} displayItemCount={5} />
         <OutlinedInput
           error={false}
           inputRef={termRef}
@@ -179,11 +196,13 @@ const ProductList = props => {
         <form style={{height: "100%"}} ref={formRef}>
           <DataGrid
             columns={columns}
-            rows={rows.filter(r=>r.product_name.includes(searchTerm))}
+            // rows={rows.filter(r=>r.product_name.includes(searchTerm))}
+            rows={props.productList.filter(r=>r.product_name.includes(searchTerm))}
             slots={{
               noRowsOverlay: NoRowsOverlay,
               // loadingOverlay: LinearProgress,
             }}
+            loading={props.listLoading}
           />
         </form>
       </ContentBody>

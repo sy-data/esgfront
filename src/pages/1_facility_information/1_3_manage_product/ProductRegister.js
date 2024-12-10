@@ -7,6 +7,7 @@ import SubTitle from "../../../components/SubTitle";
 import ContentBody from "../../../components/ContentBody";
 import CloseIcon from '@mui/icons-material/Close';
 import HsModal from "./HsModal";
+import { esgFetch } from "../../../components/FetchWrapper";
 
 const BlockGroup =  styled("div")(() => ({
   display: "flex", flexDirection: "column", gap: "24px"
@@ -114,6 +115,12 @@ const ProductRegister = props => {
     setOpenHsModal(false);
   }
   
+  const handleRegisterProduct = async () => {
+    // data -> values
+    // [{amount: ..., code: ..., name: ..., unit: ...}, {...}, ...]
+    const result = await esgFetch().then(res=>res.json());
+  }
+  
   return (
     <ContentBody width={props.width} padding="24px" gap="32px" flex={1}>
       <SubTitle title={"생산품 정보"}>
@@ -122,7 +129,7 @@ const ProductRegister = props => {
       <div style={{width: "100%", height: "auto", overflow: "scroll", display: "flex", flex: 1, flexDirection: "column", gap: "24px"}}>
         {values.map((value, index) => <RegisterDataGroup key={index} index={index} values={values} handleChange={handleChange} handleOpenModal={handleOpenModal} addField={addField} />)}
       </div>
-      <Button variant={valid ? "btnActive":"btnDisabled"} size="small" sx={{height:"40px"}} fullWidth onClick={handleOpenModal}>등록</Button>
+      <Button variant={valid ? "btnActive":"btnDisabled"} size="small" sx={{height:"40px"}} fullWidth onClick={handleRegisterProduct}>등록</Button>
       <HsModal open={openHsModal} onClose={handleCloseModal} onSelect={handleSelectValue} />
     </ContentBody>
   )
