@@ -117,8 +117,21 @@ const FacilityList = props => {
     },
   ]), []);
   
-  const openParameter = e => {
-    console.log(e)
+  const openParameter = async e => {
+    // e =
+    // {
+    //   description: "사업장 원자력발전기"
+    //   emission_type: "고정연소"
+    //   facility_name: "내연발전기"
+    //   fuel: "부생연료2호"
+    //   g_rate: "Tier2"
+    //   id: "1"
+    //   industry_group: "제조업"
+    //   j_rate: "Tier2"
+    //   version: "Ver1"
+    // }
+    const result = await esgFetch().then(res=>res.json());
+    setParamRows(result);
     setOpenModal(true);
   }
   
