@@ -51,6 +51,14 @@ const ExternalFuelRegister = props => {
   }, [workplace, facility, company, workplace_facility, fuel, unit, gs]);
   
   const handleRegister = async () => {
+    // 사용 데이터 ->
+    // workplace
+    // facility
+    // company
+    // workplace_facility
+    // fuel
+    // unit
+    // gs
     const response = await esgFetch("", "POST", {}).then(res=>res.json());
   }
   

@@ -179,7 +179,7 @@ const FacilityList = props => {
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-",""));
     props.setFacilityList(props.facilityList.filter(r => !checked.includes(r.id)));
     
-    props.refreshList()
+    // props.refreshList()
   }, [props.facilityList]);
   
   const [paramRows, setParamRows] = useState([]);

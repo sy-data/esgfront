@@ -62,7 +62,6 @@ const FuelInformation = props => {
     }
   }
   const { getRootProps, getInputProps, open } = useDropzone({ onDrop, multiple: false, maxFiles: 1, noClick: true });
-  const baseYearRef = useRef(null);
   const formRef = useRef();
   const termRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
@@ -135,7 +134,7 @@ const FuelInformation = props => {
       renderCell: params => {
         if(!params.row.hs_code || params.row.hs_code.length === 0){
           return (
-            <Button variant="btnInit" sx={{padding: 0, minWidth: "110px", height: "40px"}} onClick={()=>console.log(params.row.id)}>
+            <Button variant="btnInit" sx={{padding: 0, minWidth: "110px", height: "40px"}} onClick={()=>openParamDetail(params.row)}>
               <div style={{display: "flex", alignItems: "center", height: "100%", gap: "5px"}}>
                 <Typography sx={{fontSize: "14px", fontWeight: "bold"}}>상세보기</Typography>
               </div>
@@ -210,13 +209,13 @@ const FuelInformation = props => {
     { field: 'c8', headerName: '' },
   ]), []);
   
-  const [rows0, setRows0] = useState([
-    {id:'1',c1:"유리생산",c2:"공정배출",c3:"제조업∙건설업",c4:"유리생산량",c5:"Ver1",c6:"유리장섬유",c7:"Tier 1",c8:"Tier 1"},
-    {id:'2',c1:"특수차량(1톤)",c2:"이동연소",c3:"제조업∙건설업",c4:"이동연소",c5:"Ver1",c6:"경유",c7:"Tier 1",c8:"Tier 1"},
-  ]);
-  const [rows1, setRows1] = useState([
-    {id:'1',c1:"하폐수 처리기",c2:"스팀사용시설",c3:"A회사",c4:"AA사업장",c5:"스팀",c6:"Ton",c7:"0.133245"}
-  ])
+  // const [rows0, setRows0] = useState([
+  //   {id:'1',c1:"유리생산",c2:"공정배출",c3:"제조업∙건설업",c4:"유리생산량",c5:"Ver1",c6:"유리장섬유",c7:"Tier 1",c8:"Tier 1"},
+  //   {id:'2',c1:"특수차량(1톤)",c2:"이동연소",c3:"제조업∙건설업",c4:"이동연소",c5:"Ver1",c6:"경유",c7:"Tier 1",c8:"Tier 1"},
+  // ]);
+  // const [rows1, setRows1] = useState([
+  //   {id:'1',c1:"하폐수 처리기",c2:"스팀사용시설",c3:"A회사",c4:"AA사업장",c5:"스팀",c6:"Ton",c7:"0.133245"}
+  // ])
   
   const columnDetail = useMemo(() => ([
     { field: "id", headerName: "No", width: 50, sortable: false },
@@ -235,27 +234,54 @@ const FuelInformation = props => {
   ]), []);
   
   const [rowDetail, setRowDetail] = useState([
-    {id: '1', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '2', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '3', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '4', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '5', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '6', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '7', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '8', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '9', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '10', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '11', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
-    {id: '12', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '1', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '2', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '3', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '4', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '5', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '6', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '7', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '8', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '9', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '10', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '11', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
+    // {id: '12', c1:"에너지 사용량", c2:"시스템 입력값", c3:"Tier 1", c4:"Tier 1", c5:"1", c6:"0", c7:"CO2-eq ton",c8:"23"},
   ]);
   
-  const NoRowsOverlay = () => {
+  const openParamDetail = async row => {
+    // 입력값 row ->
+    // {
+    //   c1: "특수차량(1톤)",
+    //   c2: "이동연소",
+    //   c3: "제조업∙건설업",
+    //   c4: "이동연소",
+    //   c5: "Ver1",
+    //   c6: "경유",
+    //   c7: "Tier 1",
+    //   c8: "Tier 1",
+    //   id: "2"
+    // }
+    const result = await esgFetch().then(res=>setRowDetail(res.json()));
+  }
+  
+  const NoRowsOverlay0 = () => {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", padding: '5px 0px', backgroundColor: '#FFFFFF' }}>
+        <div style={{ height: "20px", display: "flex", alignItems: "center", gap: "4px" }}>
+          <InfoOutlinedIcon sx={{size: "18px", color: "#757575"}} />
+          <div style={{ height: "20px", display: "flex", alignItems: "center", color: "#757575" }}>조회된 배출활동 연료가 없습니다.</div>
+        </div>
+      </div>
+    )
+  }
+  
+  const NoRowsOverlay1 = () => {
     return (
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", padding: '5px 0px', backgroundColor: '#FFFFFF' }}>
         <div style={{ height: "20px", display: "flex", flexDirection: 'column', alignItems: "center", gap: "4px" }}>
           <InfoOutlinedIcon sx={{size: "18px", color: "#757575"}} />
-          <div style={{ height: "20px", display: "flex", alignItems: "center", color: "#757575" }}>등록된 생산품 정보가 없습니다.</div>
-          <div style={{ height: "20px", display: "flex", alignItems: "center", color: "#757575" }}>신규 등록을 진행해주세요.</div>
+          <div style={{ height: "20px", display: "flex", alignItems: "center", color: "#757575" }}>조회된 정보가 없습니다.</div>
+          <div style={{ height: "20px", display: "flex", alignItems: "center", color: "#757575" }}>외부 업체에서 사용하는 스팀이 있을 경우 신규등록을 진행해주세요.</div>
         </div>
       </div>
     )
@@ -268,8 +294,15 @@ const FuelInformation = props => {
   const handleDeleteChecked = useCallback(() => {
     const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]:checked');
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-",""));
-    setRows0(rows0.filter(r => !checked.includes(r.id)));
-  }, [rows0]);
+    if(tabIndex === 0){
+      props.setFuelActivityList(props.fuelActivityList.filter(r => !checked.includes(r.id)));
+    }
+    else{
+      props.setExternalFuelList(props.externalFuelList.filter(r => !checked.includes(r.id)));
+    }
+    
+    // props.updateFuelList();
+  }, [props.fuelActivityList, props.externalFuelList]);
   
   const [uploadModal, setUploadModal] = useState(false);
   const [detailModal, setDetailModal] = useState(false);
@@ -282,17 +315,18 @@ const FuelInformation = props => {
   }
   
   const [fileName, setFileName] = useState("");
+  const [searchType, setSearchType] = useState("");
   
   return (
     <div style={{display: "flex", flexDirection: "column", width: props.width, gap: "24px"}}>
       <div style={{display: "flex", gap: "6px"}}>
-        <BaseYearSelect ref={baseYearRef} displayItemCount={5} width={222} />
+        <BaseYearSelect ref={props.baseYearRef} displayItemCount={5} width={222} />
         <Select
-          value={""}
+          value={searchType}
           size="small"
           IconComponent={ExpandMoreIcon}
           sx={{width: 222}}
-          // onChange={e=>handleChange(index, "unit", e.target.value)}
+          onChange={e=>setSearchType(e.target.value)}
           displayEmpty
           renderValue={selected => {
             if(selected.length === 0){
@@ -347,9 +381,23 @@ const FuelInformation = props => {
           {tabIndex === 0 ?
             <DataGrid
               columns={column0}
-              rows={rows0.filter(r=>r.c1.includes(searchTerm))}
+              // rows={rows0.filter(r=>r.c1.includes(searchTerm))}
+              rows={props.fuelActivityList.filter(r => {
+                if(searchType === "배출시설"){
+                  return r.c1.includes(searchTerm);
+                }
+                else if(searchType === "배출활동"){
+                  return r.c2.includes(searchTerm);
+                }
+                else if(searchType === "연료명"){
+                  return r.c6.includes(searchTerm);
+                }
+                else{
+                  return r.c1.includes(searchTerm) || r.c2.includes(searchTerm) || r.c6.includes(searchTerm);
+                }
+              })}
               slots={{
-                noRowsOverlay: NoRowsOverlay,
+                noRowsOverlay: NoRowsOverlay0,
                 // loadingOverlay: LinearProgress,
               }}
               disableColumnFilter
@@ -360,9 +408,23 @@ const FuelInformation = props => {
             :
             <DataGrid
               columns={column1}
-              rows={rows1.filter(r=>r.c1.includes(searchTerm))}
+              // rows={rows1.filter(r=>r.c1.includes(searchTerm))}
+              rows={props.externalFuelList.filter(r => {
+                if(searchType === "배출시설"){
+                  return r.c1.includes(searchTerm) || r.c2.includes(searchTerm);
+                }
+                else if(searchType === "배출활동"){
+                  return r.c1.includes(searchTerm) || r.c2.includes(searchTerm);
+                }
+                else if(searchType === "연료명"){
+                  return r.c5.includes(searchTerm);
+                }
+                else{
+                  return r.c1.includes(searchTerm) || r.c2.includes(searchTerm) || r.c5.includes(searchTerm);
+                }
+              })}
               slots={{
-                noRowsOverlay: NoRowsOverlay,
+                noRowsOverlay: NoRowsOverlay1,
                 // loadingOverlay: LinearProgress,
               }}
               disableColumnFilter
@@ -455,7 +517,7 @@ const FuelInformation = props => {
             columns={columnDetail}
             rows={rowDetail}
             slots={{
-              noRowsOverlay: NoRowsOverlay,
+              noRowsOverlay: NoRowsOverlay0,
               // loadingOverlay: LinearProgress,
             }}
             disableColumnFilter

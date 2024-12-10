@@ -126,7 +126,7 @@ const ProductList = props => {
     const checked = Array.from(checkboxes).map((checkbox) => checkbox.id.replace("checkbox-",""));
     props.setProductList(props.productList.filter(r => !checked.includes(r.id)));
     
-    props.refreshList();
+    // props.refreshList();
   }, [props.facilityList]);
   
   
