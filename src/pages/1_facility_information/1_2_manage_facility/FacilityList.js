@@ -14,7 +14,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { esgFetch } from "../../../components/FetchWrapper";
 
 const FacilityList = props => {
-  const baseYearRef = useRef(null);
   const formRef = useRef();
   const termRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
@@ -201,7 +200,7 @@ const FacilityList = props => {
   return (
     <div style={{display: "flex", flexDirection: "column", width: props.width, gap: "24px"}}>
       <div style={{display: "flex", gap: "6px"}}>
-        <BaseYearSelect ref={baseYearRef} displayItemCount={5} />
+        <BaseYearSelect ref={props.baseYearRef} displayItemCount={5} />
         <OutlinedInput
           error={false}
           inputRef={termRef}

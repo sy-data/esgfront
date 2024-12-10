@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { headerTitleAtom } from "../../../States/header/Title";
 
@@ -46,6 +46,7 @@ const ManageFacility = () => {
   const [listLoading, setListLoading] = useState(false);
   const updateFacilityList = async groupId => {
     setListLoading(true);
+    // 기준년도 -> baseYearRef.current.baseYear;
     const result = await esgFetch("").then(res=>{
       setListLoading(false);
       return res.json();
@@ -73,12 +74,14 @@ const ManageFacility = () => {
   const refreshList = () => {
     updateFacilityList(groupList[selectedGroupIndex].id);
   }
+  
+  const baseYearRef = useRef();
 
   return (
     <div style={{ backgroundColor: "#eee", width: "calc(100% - 236px)", padding: "24px", boxSizing: "border-box" }}>
       <Stack direction="row" spacing={3} height={"100%"} width={"100%"}>
         {displayGroups && <FacilityGroups selectedIndex={selectedGroupIndex} setSelectedIndex={setSelectedGroupIndex} groupList={groupList} setGroupList={setGroupList} updateFacilityList={updateFacilityList} />}
-        <FacilityList width={displayGroups?"75%":"66%"} register={handleRegister} facilityList={facilityList} setFacilityList={setFacilityList} refreshList={refreshList} listLoading={listLoading} />
+        <FacilityList baseYearRef={baseYearRef} width={displayGroups?"75%":"66%"} register={handleRegister} facilityList={facilityList} setFacilityList={setFacilityList} refreshList={refreshList} listLoading={listLoading} />
         {!displayGroups && <FacilityRegister closeRegister={handleCloseRegister} />}
       </Stack>
     </div>
