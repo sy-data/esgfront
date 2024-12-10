@@ -42,7 +42,7 @@ const BaseYearSelect = (props, ref) => {
   }));
   
   return (
-    <Select value={baseYear} size="small" IconComponent={ExpandMoreIcon} sx={{width: "width" in props?props.width:338}} >
+    <Select value={baseYear} onChange={handleChange} size="small" IconComponent={ExpandMoreIcon} sx={{width: "width" in props?props.width:338}} >
       {arrayYear.map(a => <MenuItem key={'by'+a} value={a}>{a}</MenuItem>)}
       {/* <MenuItem value={1}>사용</MenuItem>
       <MenuItem value={0}>미사용</MenuItem> */}
