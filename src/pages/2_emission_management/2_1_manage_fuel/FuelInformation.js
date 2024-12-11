@@ -261,7 +261,7 @@ const FuelInformation = props => {
     //   c8: "Tier 1",
     //   id: "2"
     // }
-    const result = await esgFetch().then(res=>setRowDetail(res.json()));
+    const result = await esgFetch("/emission/info/parameter","GET").then(res=>setRowDetail(res.json()));
   }
   
   const NoRowsOverlay0 = () => {

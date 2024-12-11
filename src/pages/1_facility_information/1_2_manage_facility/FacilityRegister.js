@@ -87,7 +87,19 @@ const FacilityRegister = props => {
   const [processing, setProcessing] = useState(false);
   const handleRegister = async () => {
     setProcessing(true)
-    const result = await esgFetch().then(res=>{
+
+    const payload = {
+      "title": "새시설", //사업장명
+      "description": "새로운 시설 등록", //사업장사용 
+      "premises_id": "BPS1",  // 사업장아이디
+      "cat_id": null, 
+      "fuel_id": null, 
+      "expension_dt": null,
+      "is_gov_reporting": true,
+      "emission_id": "EM4",
+      "tier": 1
+  }
+    const result = await esgFetch("/premises/facility","POST",payload).then(res=>{
       setProcessing(false);
       return res.json();
     });

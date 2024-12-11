@@ -107,8 +107,38 @@ const RightArea = props => {
   
   const saveDetail = async () => {
     console.log(detail);
-    
-    const result = await esgFetch("", "POST", {
+    const payload = {
+              "title": "새사업장", //사업장명
+              "isactive": true, //사업장사용 
+              "office_type": "본사", //본사, 지사  
+              "office_bn": "123-45-67890", //사업장등록번호
+              "zip_code": "12345", //우편번호
+              "addr": "서울시", //주소
+              "addr_detail": "서울동 0번길", //상세주소
+              "tel_destination_code": "386", //국번 02, 010 
+              "tel_number": "4613", //전화번호
+              "sector": "정보통신업", //산업군 ( 코드api ?code_type=sector)
+              "office_size": "Cubic", //회사규모
+              "employees_cnt": 5, //종업원수
+              "revenue_current_year": 100, //당해년도 매출
+              "revenue_previous_year": 99, //전년도 매출
+              "floor_area_net": 62, //전용면적
+              "floor_area_gross": 84, //연면적
+              "registration_dt": "2024-11-26", //사업장 등록일
+              "relocation_dt": "2024-11-26", //사업장 이전일 
+              "closure_dt": null //사업장 폐쇄일
+          } ;
+    /**
+     * 사업장 업데이트 PATCH
+     * const result = await esgFetch("/premises/office/:id", "PATCH", {
+     *  "employees_cnt": 10
+     * })
+     * 
+     * :id 값은 POST 하면 오브젝트에 포함되어 리턴 또는 get
+     *  */ 
+
+    // 신규등록 POST          
+    const result = await esgFetch("/premises/office", "POST", {
       id: detail.id || "",
       지점: detail.type,
       지점선택: detail.company_branch,

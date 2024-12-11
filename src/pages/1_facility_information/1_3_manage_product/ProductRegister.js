@@ -118,7 +118,18 @@ const ProductRegister = props => {
   const handleRegisterProduct = async () => {
     // data -> values
     // [{amount: ..., code: ..., name: ..., unit: ...}, {...}, ...]
-    const result = await esgFetch().then(res=>res.json());
+    const payload = {
+      "title": "새시설", //사업장명
+      "description": "새로운 시설 등록", //사업장사용 
+      "premises_id": "BPS1",  // 사업장아이디
+      "emission_type": null,
+      "fuel_cd": null,
+      "expension_dt": null,
+      "is_gov_reporting": true,
+      "emission_id": "EM4",
+      "tier": 1
+  }
+    const result = await esgFetch("/premises/output","POST",payload).then(res=>res.json());
   }
   
   return (

@@ -59,7 +59,15 @@ const ExternalFuelRegister = props => {
     // fuel
     // unit
     // gs
-    const response = await esgFetch("", "POST", {}).then(res=>res.json());
+    const payload = {
+      "title": "원자력에너지",
+      "unit" : "MW",
+      "cat_id": "CAT1051",
+      "emission_factor_co2" : "0.00", //이산화탄소 배출계수 
+      "emission_factor_ch4" : "0.00", //메탄 배출계수 
+      "emission_factor_n2o" : "0.00" //아산화질소 배출계수 
+  }
+    const response = await esgFetch("/emission/info/fuel", "POST", {}).then(res=>res.json());
   }
   
   return (

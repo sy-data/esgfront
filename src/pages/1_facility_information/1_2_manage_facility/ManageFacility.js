@@ -29,7 +29,7 @@ const ManageFacility = () => {
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
   const [groupList, setGroupList] = useState([]);
   const updateGroupList = async () => {
-    const result = await esgFetch("").then(res=>res.json());
+    const result = await esgFetch("/premises/office","GET").then(res=>res.json());
     if(Array.isArray(result.data?.items)){
       setGroupList(result.data?.items?.map(group=>({
         id: group.id,
@@ -47,7 +47,8 @@ const ManageFacility = () => {
   const updateFacilityList = async groupId => {
     setListLoading(true);
     // 기준년도 -> baseYearRef.current.baseYear;
-    const result = await esgFetch("").then(res=>{
+    const premises_id = "BPS4";
+    const result = await esgFetch(`/premises/facility?premises_id=${premises_id}`, "GET").then(res=>{
       setListLoading(false);
       return res.json();
     });

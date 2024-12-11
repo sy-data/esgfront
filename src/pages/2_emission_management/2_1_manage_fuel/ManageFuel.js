@@ -19,7 +19,7 @@ const ManageFuel = () => {
   
   const [groupList, setGroupList] = useState([]);
   const updateGroupList = async () => {
-    const result = await esgFetch("").then(res=>res.json());
+    const result = await esgFetch("/premises/office","GET").then(res=>res.json());
     if(Array.isArray(result.data?.items)){
       setGroupList(result.data.items.map(group=>({
         id: group.id,
@@ -41,7 +41,8 @@ const ManageFuel = () => {
   }
   const updateFuelActivityList = async groupId => {
     // 기준년도 -> baseYearRef.current.baseYear;
-    const result = await esgFetch("").then(res=>res.json());
+    const premises_id = "BPS4"; //사업장 ID 
+    const result = await esgFetch(`/emission/info/${premises_id}`,"GET").then(res=>res.json());
     if(Array.isArray(result.data?.items)){
       setFuelActivityList(result.data.items.map(f=>({
         id: f.id,
@@ -58,7 +59,7 @@ const ManageFuel = () => {
   }
   const updateExternalFuelList = async groupId => {
     // 기준년도 -> baseYearRef.current.baseYear;
-    const result = await esgFetch("").then(res=>res.json());
+    const result = await esgFetch("/emission/info/fuel","GET").then(res=>res.json());
     if(Array.isArray(result.data?.items)){
       setExternalFuelList(result.data.items.map(f=>({
         id: f.id,

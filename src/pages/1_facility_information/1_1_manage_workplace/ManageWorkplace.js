@@ -42,7 +42,8 @@ const ManageWorkplace = () => {
   
   const refreshList = async () => {
     const bn = "12345678";
-    const result = await esgFetch(`/registration/company/${bn}`)
+    //const result = await esgFetch(`/registration/company/${bn}`)
+    const result = await esgFetch(`/premises/office`) //사업장 목록
       .then(res=>{
         setLoading(false);
         return res.json();
